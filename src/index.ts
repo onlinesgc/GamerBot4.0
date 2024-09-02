@@ -8,8 +8,9 @@ dot_env.config();
 
 const TOKEN = process.env.TOKEN;
 const GAMERBOT_API_TOKEN = process.env.GAMERBOT_API_TOKEN;
+const API_DEBUG_LOCAL = true
 
-export const GamerBotAPIInstance = new GamerBotAPI(GAMERBOT_API_TOKEN,true);
+export const GamerBotAPIInstance = new GamerBotAPI(GAMERBOT_API_TOKEN,API_DEBUG_LOCAL);
 
 //Extends the client to add new properties
 export interface GamerbotClient extends Client {
