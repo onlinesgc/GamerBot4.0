@@ -13,6 +13,7 @@ export default class ready implements Event{
             `Hosting ${client.users.cache.size} users, `+
             `in ${client.channels.cache.size} `+
             `channels of ${client.guilds.cache.size} guilds.`);
+        
         await GamerBotAPIInstance.getAPIStatus();
         let config_data : ConfigData = await GamerBotAPIInstance.models.get_config_data(Number.parseInt(process.env.CONFIG_ID as string));
         this.regiser_commands(client as GamerbotClient,config_data);

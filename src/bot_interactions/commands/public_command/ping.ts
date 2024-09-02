@@ -2,7 +2,7 @@ import { CommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.j
 import { Command } from "../../../classes/command";
 
 /**
- * Ping command that replies with pong!
+ * Ping command that replies with pong! and the time it took to respond.
  */
 export default class pingCommand implements Command {
     constructor(){};
