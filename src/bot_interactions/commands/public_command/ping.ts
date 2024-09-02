@@ -4,7 +4,8 @@ import { Command } from "../../../classes/command";
 /**
  * Ping command that replies with pong!
  */
-export class pingCommand implements Command {
+export default class pingCommand implements Command {
+    constructor(){};
     name = "ping";
     ephemeral = false;
     description = "Replies with pong!";

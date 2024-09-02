@@ -1,8 +1,12 @@
 import { Command } from "../classes/command";
-import { handler } from "../classes/handler";
+import { Handler } from "../classes/handler";
 import fs from 'fs';
 
-export class command_handler implements handler {
+/**
+ * Loops over all command files and imports them
+ */
+export default class command_handler implements Handler {
+    constructor(){}
     async run(client:any){
         const command_files_and_dirs = fs.readdirSync('./src/bot_interactions/commands', {withFileTypes:true});
         //Get all directories
@@ -20,14 +24,14 @@ export class command_handler implements handler {
         //Import all files
         command_files.forEach(file => {
             import(file).then(_command => {
-                let command : Command = (_command as unknown) as Command;
+                let command : Command = new _command.default();
                 client.commands.set(command.name,command);
                 command.aliases.forEach(alias => {
                     let alias_command = command.data.toJSON();
                     alias_command.name = alias;
                     client.command_array.push(alias_command);
                 });
-                client.command_array.push(command.data.toJSON );
+                client.command_array.push(command.data.toJSON() );
             });
         });
     }

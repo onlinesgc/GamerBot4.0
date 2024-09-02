@@ -1,6 +1,6 @@
 import { Client } from "discord.js";
 
-export interface handler {
+export interface Handler {
     /**
      * Handler interface
      * @param client Discord client

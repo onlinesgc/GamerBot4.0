@@ -2,12 +2,14 @@ import { Client, GatewayIntentBits, Collection, Partials } from "discord.js";
 import dot_env from "dotenv";
 import { GamerBotAPI } from "gamerbot-module";
 import { Command } from "./classes/command";
+import fs from "fs";
+import { Handler } from "./classes/handler";
 dot_env.config();
 
 const TOKEN = process.env.TOKEN;
 const GAMERBOT_API_TOKEN = process.env.GAMERBOT_API_TOKEN;
 
-const GamerBotAPIInstance = new GamerBotAPI(GAMERBOT_API_TOKEN,true);
+export const GamerBotAPIInstance = new GamerBotAPI(GAMERBOT_API_TOKEN,true);
 
 //Extends the client to add new properties
 export interface GamerbotClient extends Client {
@@ -31,10 +33,17 @@ const client = new Client({
     ]
 }) as GamerbotClient;
 
+//Create collections
 client.commands = new Collection();
 client.command_array = [];
 
-client.login(TOKEN).then(() => {
-    console.log("Bot is ready!");
-    GamerBotAPIInstance.getAPIStatus();
+//load and run all handlers
+let files = fs.readdirSync('./src/handlers');
+files.forEach(async file => {
+    await import(`./handlers/${file}`).then(handler_file => {
+        let handler : Handler = new handler_file.default();
+        handler.run(client);
+    });
 });
+
+client.login(TOKEN);
