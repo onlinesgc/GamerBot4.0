@@ -4,7 +4,7 @@ import { Command } from "../../../classes/command";
 /**
  * Ping command that replies with pong! and the time it took to respond.
  */
-export default class pingCommand implements Command {
+export default class PingCommand implements Command {
     constructor(){};
     name = "ping";
     ephemeral = false;

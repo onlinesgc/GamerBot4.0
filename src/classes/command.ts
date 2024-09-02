@@ -5,7 +5,7 @@ export interface Command {
     ephemeral: boolean;
     description: string;
     aliases: string[];
-    data: SlashCommandBuilder;
+    data: SlashCommandBuilder | any;
     /**
      * Run the command
      * @param interaction Discord interaction

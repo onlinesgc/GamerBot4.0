@@ -6,7 +6,7 @@ import { PorfileData } from "gamerbot-module/dist/classes/ProfileData";
 /**
  * Xptoplist command that shows the top list of xp
  */
-export default class xptoplistCommand implements Command {
+export default class XptoplistCommand implements Command {
     name= "xptoplist"
     ephemeral = false
     description = "Vissar topplistan för xp"
