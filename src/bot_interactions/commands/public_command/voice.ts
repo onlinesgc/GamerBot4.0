@@ -35,7 +35,7 @@ export default class VoiceCommand implements Command{
             interaction.editReply("Du måste vara i din privata kanal som tillhör dig för att använda det här kommandot");
             return;
         }
-        
+
         let voiceChannel: VoiceChannel = guildMember.voice.channel as VoiceChannel;
 
         if(interaction.options.data.length == 0){
@@ -97,6 +97,11 @@ export default class VoiceCommand implements Command{
             case "unlock":
                 voiceChannel.permissionOverwrites.edit(interaction.guild?.roles.everyone.id as string, {ViewChannel:true,Speak:true,Connect:true});
                 interaction.editReply("Kanalen är nu upplåst!");
+                break;
+            case "limit":
+                let limit = interaction.options.get("limit", true).value as number;
+                voiceChannel.setUserLimit(limit);
+                interaction.editReply(`Du har satt en gräns på ${limit} personer i kanalen!`);
                 break;
             case "inviterole":
                 const MultipleRoles = [

@@ -19,7 +19,7 @@ export default class VoiceEvents implements CustomEvent{
         const guild_data = await GamerBotAPIInstance.models.get_guild_data(newState.guild.id);
         this.removeCustomVoiceChannel(newState.channelId as string, newState.member as GuildMember, client);
 
-        if(newState.channelId != guild_data.privateVoiceChannel || newState.channelId != guild_data.publicVoiceChannel) return;
+        if(newState.channelId != guild_data.privateVoiceChannel && newState.channelId != guild_data.publicVoiceChannel) return;
         this.createCustomVoiceChannel(newState, client);
 
     }
@@ -69,7 +69,7 @@ export default class VoiceEvents implements CustomEvent{
         const profile_data = await GamerBotAPIInstance.models.get_profile_data(member.id);
         const voice_channel : VoiceChannel = member.guild.channels.cache.get(channelId) as VoiceChannel;
         const threed_channel = (member.guild.channels.cache.get(guild_data.infoVoiceChannel) as TextChannel).threads.cache.get(profile_data.privateVoiceThreadID);
-
+        if(voice_channel.id != profile_data.privateVoiceID && voice_channel.id != profile_data.privateVoiceThreadID) return;
         if(voice_channel == undefined) return;
         if(voice_channel.members.size <= 0) {
             await voice_channel.delete();
