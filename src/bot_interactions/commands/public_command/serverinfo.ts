@@ -1,7 +1,10 @@
 import { CommandInteraction, EmbedBuilder, Guild, PresenceUpdateStatus, SlashCommandBuilder } from "discord.js";
 import { Command } from "../../../classes/command";
 
-export default class serverinfo implements Command{
+/**
+ * Serverinfo command that shows information about the server
+ */
+export default class ServerInfoCommand implements Command{
     name = "serverinfo"
     ephemeral = false;
     description = "Visar information om servern";

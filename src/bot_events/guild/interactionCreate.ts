@@ -2,8 +2,7 @@ import { Client, CommandInteraction, Interaction } from "discord.js";
 import { Event } from "../../classes/event";
 import { Command } from "../../classes/command";
 import { GamerBotAPIInstance, GamerbotClient } from "../..";
-import { PorfileData } from "gamerbot-module/dist/classes/profile_data";
-
+import { PorfileData } from "gamerbot-module";
 export default class interactionCreate implements Event{
     constructor(){};
     run_event(client:Client, interaction:Interaction){
@@ -21,10 +20,10 @@ export default class interactionCreate implements Event{
             });
         }
         if(!command) return;
-        let profileData : PorfileData = await GamerBotAPIInstance.models.get_profile_data(interaction.member?.user.id as string);
+        let profile_data : PorfileData = await GamerBotAPIInstance.models.get_profile_data(interaction.member?.user.id as string);
         try{
             await interaction.deferReply({ephemeral:command.ephemeral});
-            await command.execute(interaction,profileData);
+            await command.execute(interaction,profile_data);
         }catch(error){
             console.error(error);
             interaction.reply({content:"There was an error while executing this command.", ephemeral:true});

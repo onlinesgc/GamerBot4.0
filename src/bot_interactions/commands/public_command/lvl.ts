@@ -3,6 +3,9 @@ import { Command } from "../../../classes/command";
 import { GamerBotAPIInstance } from "../../..";
 import { PorfileData } from "gamerbot-module";
 
+/**
+ * Lvl command that shows the level of the user in a frame
+ */
 export default class LvlCommand implements Command {
     name = "lvl";
     ephemeral= false;

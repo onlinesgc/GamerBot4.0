@@ -1,7 +1,10 @@
 import { CommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { Command } from "../../../classes/command";
 
-export default class calc implements Command {
+/**
+ * Calc command that calculates a math expression.
+ */
+export default class CalcCommand implements Command {
     name = "calc";
     ephemeral = false;
     description = "Räkna ut en matematisk uttryck";

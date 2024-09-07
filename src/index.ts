@@ -16,6 +16,7 @@ export const GamerBotAPIInstance = new GamerBotAPI(GAMERBOT_API_TOKEN,API_DEBUG_
 export interface GamerbotClient extends Client {
     commands: Collection<string, Command>;
     command_array: any;
+    reminder_list : Array<object>;
 }
 
 //Creates the client that is going to do all actions!
@@ -37,6 +38,7 @@ const client = new Client({
 //Create collections
 client.commands = new Collection();
 client.command_array = [];
+client.reminder_list = [];
 
 //load and run all handlers
 let files = fs.readdirSync('./src/handlers');
