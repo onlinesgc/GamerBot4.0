@@ -31,7 +31,7 @@ export default class event_handler implements Handler{
             console.log(`Loading ${dir}/${file}`);
             import(`../bot_events/${dir}/${file}`).then(_event => {
                 let event : CustomEvent = new _event.default();
-                event.emitor(client, () => event.run_event(client));
+                event.emitor(client);
             });
         }
     }

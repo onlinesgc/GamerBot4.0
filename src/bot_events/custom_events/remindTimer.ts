@@ -25,9 +25,9 @@ export default class remindTimer implements CustomEvent{
             }
         });
     }
-    emitor(client: Client, call_back:any): void {
+    emitor(client: Client): void {
         setInterval(() => {
-            call_back();
+            this.run_event(client as GamerbotClient);
         }, 1000*5);
     }
 }
