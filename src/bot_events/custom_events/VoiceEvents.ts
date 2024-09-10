@@ -7,32 +7,32 @@ export default class VoiceEvents implements CustomEvent{
         client.on("voiceStateUpdate", async (oldState, newState) => {
             if(oldState.channelId == newState.channelId) return;
             if (oldState.channelId === null && newState.channelId !== null) {
-                this.onJoin(oldState, newState, client);
+                this.onJoin(oldState, newState);
             } else if (oldState.channelId !== null && newState.channelId === null) {
-                this.onLeave(oldState, newState, client);
+                this.onLeave(oldState);
             } else if (oldState.channelId !== null && newState.channelId !== null) {
-                this.onSwitch(oldState, newState, client);
+                this.onSwitch(oldState, newState);
             }
         });
     }
-    async onJoin(oldState:VoiceState, newState:VoiceState, client:Client){
+    async onJoin(oldState:VoiceState, newState:VoiceState){
         const guild_data = await GamerBotAPIInstance.models.get_guild_data(newState.guild.id);
-        this.removeCustomVoiceChannel(newState.channelId as string, newState.member as GuildMember, client);
+        this.removeCustomVoiceChannel(newState.channelId as string, newState.member as GuildMember);
 
         if(newState.channelId != guild_data.privateVoiceChannel && newState.channelId != guild_data.publicVoiceChannel) return;
-        this.createCustomVoiceChannel(newState, client);
+        this.createCustomVoiceChannel(newState);
 
     }
-    onLeave(oldState:VoiceState, newState:VoiceState, client:Client){
-        this.removeCustomVoiceChannel(oldState.channelId as string, oldState.member as GuildMember, client);
+    onLeave(oldState:VoiceState){
+        this.removeCustomVoiceChannel(oldState.channelId as string, oldState.member as GuildMember);
     }
-    async onSwitch(oldState:VoiceState, newState:VoiceState, client:Client){
+    async onSwitch(oldState:VoiceState, newState:VoiceState){
         const guild_data = await GamerBotAPIInstance.models.get_guild_data(newState.guild.id);
         if(oldState.channelId == guild_data.privateVoiceChannel || oldState.channelId == guild_data.publicVoiceChannel) return;
-        this.removeCustomVoiceChannel(oldState.channelId as string, oldState.member as GuildMember, client);
+        this.removeCustomVoiceChannel(oldState.channelId as string, oldState.member as GuildMember);
     }
 
-    async createCustomVoiceChannel(member:VoiceState, client:Client){
+    async createCustomVoiceChannel(member:VoiceState){
         const custom_voice_channel = await member.guild.channels.create({name: `${member.member?.user.username}'s röstkanal`, type:ChannelType.GuildVoice});
         await custom_voice_channel.setParent(member.channel?.parentId as string);
 
@@ -64,7 +64,7 @@ export default class VoiceEvents implements CustomEvent{
         await member.setChannel(custom_voice_channel);
     }
 
-    async removeCustomVoiceChannel(channelId:string, member:GuildMember, client:Client){
+    async removeCustomVoiceChannel(channelId:string, member:GuildMember){
         const guild_data = await GamerBotAPIInstance.models.get_guild_data(member.guild.id);
         const profile_data = await GamerBotAPIInstance.models.get_profile_data(member.id);
         const voice_channel : VoiceChannel = member.guild.channels.cache.get(channelId) as VoiceChannel;

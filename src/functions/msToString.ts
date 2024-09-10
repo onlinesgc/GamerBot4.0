@@ -1,8 +1,8 @@
 export function msToString(input:number):string{
-    let days = Math.floor(input / (1000 * 60 * 60 * 24));
-    let hours = Math.floor((input % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    let minutes = Math.floor((input % (1000 * 60 * 60)) / (1000 * 60));
-    let seconds = Math.floor((input % (1000 * 60)) / 1000);
+    const days = Math.floor(input / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((input % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((input % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((input % (1000 * 60)) / 1000);
     let output = "";
     if(days > 0){
         output += days + " dagar, ";

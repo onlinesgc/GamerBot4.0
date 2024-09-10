@@ -12,8 +12,8 @@ export default class CalcCommand implements Command {
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description)
-        .addStringOption((option:any) => option.setName("expression").setDescription("Det matematiska uttrycket").setRequired(true));
-    async execute(interaction: CommandInteraction, profileData: any){
+        .addStringOption((option) => option.setName("expression").setDescription("Det matematiska uttrycket").setRequired(true));
+    async execute(interaction: CommandInteraction){
         const expression = interaction.options.get("expression", false)?.value as string;
         
         const math_embed = new EmbedBuilder()
@@ -22,7 +22,7 @@ export default class CalcCommand implements Command {
             .setDescription(`Calculating ${"`"}${expression.trim()}${"`"}`)
             .setFooter({text:this.name,iconURL:interaction.client.user.avatarURL()?.toString()})
             .setTimestamp();
-        let message = await interaction.editReply({embeds:[math_embed]});
+        await interaction.editReply({embeds:[math_embed]});
 
         fetch(`http://api.mathjs.org/v4/?expr=${encodeURIComponent(expression)}`)
             .then(async data => {

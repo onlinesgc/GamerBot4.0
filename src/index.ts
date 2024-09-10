@@ -3,7 +3,7 @@ import dot_env from "dotenv";
 import { GamerBotAPI } from "gamerbot-module";
 import { Command } from "./classes/command";
 import fs from "fs";
-import { Handler } from "./classes/handler";
+
 dot_env.config();
 
 const TOKEN = process.env.TOKEN;
@@ -15,7 +15,7 @@ export const GamerBotAPIInstance = new GamerBotAPI(GAMERBOT_API_TOKEN,API_DEBUG_
 //Extends the client to add new properties
 export interface GamerbotClient extends Client {
     commands: Collection<string, Command>;
-    command_array: any;
+    command_array: Array<object>;
     reminder_list : Array<object>;
 }
 
@@ -41,10 +41,10 @@ client.command_array = [];
 client.reminder_list = [];
 
 //load and run all handlers
-let files = fs.readdirSync('./src/handlers');
+const files = fs.readdirSync('./src/handlers');
 files.forEach(async file => {
     await import(`./handlers/${file}`).then(handler_file => {
-        let handler : Handler = new handler_file.default();
+        const handler = new handler_file.default();
         handler.run(client);
     });
 });

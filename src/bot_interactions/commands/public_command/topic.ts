@@ -12,9 +12,9 @@ export default class TopicCommand implements Command {
         .setName(this.name)
         .setDescription(this.description)
         .addStringOption(option => option.setName("topic").setDescription("Lägg till en ny (Admin command)").setRequired(false));
-    async execute(interaction: CommandInteraction, profileData: any){
-        let guild_config = await GamerBotAPIInstance.models.get_guild_data(interaction.guildId as string);
-        let topic = interaction.options.get("topic", false)?.value;
+    async execute(interaction: CommandInteraction){
+        const guild_config = await GamerBotAPIInstance.models.get_guild_data(interaction.guildId as string);
+        const topic = interaction.options.get("topic", false)?.value;
         if(topic!=undefined){
             if(!(interaction.member as GuildMember).permissions.has(PermissionFlagsBits.Administrator)){
                 interaction.reply("Du måste vara admin för att kunna lägga till ett nytt ämne!");

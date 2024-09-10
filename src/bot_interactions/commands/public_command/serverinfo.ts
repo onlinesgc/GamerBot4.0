@@ -12,8 +12,8 @@ export default class ServerInfoCommand implements Command{
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description);
-    execute(interaction: CommandInteraction, profileData: any){
-        let guild = interaction.guild as Guild;
+    execute(interaction: CommandInteraction){
+        const guild = interaction.guild as Guild;
         const server_info_embed = new EmbedBuilder()
             .setColor("#2DD21C")
             .setTitle(`Serverinfo`)

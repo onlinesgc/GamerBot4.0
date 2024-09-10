@@ -14,9 +14,9 @@ export default class UptimeCommand implements Command {
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description);
-    async execute(interaction: CommandInteraction, profileData:any) {
-        let currentTime = new Date().getTime();
-        let restartTime = new Date(currentTime - interaction.client.uptime);
+    async execute(interaction: CommandInteraction) {
+        const currentTime = new Date().getTime();
+        const restartTime = new Date(currentTime - interaction.client.uptime);
         
         const embed = new EmbedBuilder()
             .setColor("#2DD21C")

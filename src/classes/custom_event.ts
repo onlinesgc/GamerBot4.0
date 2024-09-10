@@ -6,5 +6,5 @@ export interface CustomEvent{
      * @param client 
      * @returns 
      */
-    emitor : (client:Client | any) => void;
+    emitor : (client:Client) => void;
 }

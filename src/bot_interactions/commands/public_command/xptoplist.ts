@@ -14,7 +14,7 @@ export default class XptoplistCommand implements Command {
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description)
-    async execute (interaction: CommandInteraction, profileData: any){
+    async execute (interaction: CommandInteraction){
         const max_users = 300;
         const users_per_page = 10;
         let pointer = 0;
@@ -40,8 +40,8 @@ export default class XptoplistCommand implements Command {
                     .setCustomId("xptoplist_next")
                     .setDisabled(false)
             ]);
-        let xp_toplist_message = await interaction.editReply({embeds:[xp_toplist_embed], components:[directionButtons]});
-        let collector = xp_toplist_message.createMessageComponentCollector({time: 1000 * 60 * 5});
+        const xp_toplist_message = await interaction.editReply({embeds:[xp_toplist_embed], components:[directionButtons]});
+        const collector = xp_toplist_message.createMessageComponentCollector({time: 1000 * 60 * 5});
 
         collector.on('collect', async (buttonInteraction) => {
             switch(buttonInteraction.customId){
@@ -67,16 +67,16 @@ export default class XptoplistCommand implements Command {
             xp_toplist_embed.setFields(await this.generate_fields(profiles, pointer, users_per_page));
             buttonInteraction.update({embeds:[xp_toplist_embed], components:[directionButtons]});
         })
-        collector.on('end', async (collected, reason) => {
+        collector.on('end', async () => {
             directionButtons.components[0].setDisabled(true);
             directionButtons.components[1].setDisabled(true);
             xp_toplist_message.edit({embeds:[xp_toplist_embed], components:[directionButtons]});
         });
     }
     private async generate_fields(profiles:PorfileData[], starterPointer:number, userCount:number){
-        let fields = [];
+        const fields = [];
         let i = 1;
-        for(let profile of profiles.slice(starterPointer,starterPointer+userCount)){
+        for(const profile of profiles.slice(starterPointer,starterPointer+userCount)){
             fields.push({
                 name: (starterPointer + i).toString(), value: `
                 Användare: <@!${profile.userID}>

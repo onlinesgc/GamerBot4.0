@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CommandInteraction, ComponentType, ModalBuilder, SlashCommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CommandInteraction, ComponentType, ModalBuilder, ModalSubmitInteraction, SlashCommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import { Command } from "../../../classes/command";
 import { GamerBotAPIInstance } from "../../..";
 import { PorfileData } from "gamerbot-module";
@@ -14,7 +14,7 @@ export default class SverokCommand implements Command {
     async execute(interaction: CommandInteraction, profileData: PorfileData){
         const sverok_role_id = "1016685055357222942";
         const SVEROK_FRAME_ID = "19";
-        let email_modal = new ModalBuilder()
+        const email_modal = new ModalBuilder()
             .setTitle("Sverok koppling")
             .setCustomId(`sverok:${interaction.id}`)
             .addComponents(
@@ -26,7 +26,7 @@ export default class SverokCommand implements Command {
                 )
             );
         
-        let confermationButton = new ActionRowBuilder<ButtonBuilder>()
+        const confermationButton = new ActionRowBuilder<ButtonBuilder>()
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId("ok")
@@ -37,7 +37,7 @@ export default class SverokCommand implements Command {
         const message = await interaction.editReply({content:"Hej innan du skriver in din mail så måste vi göra det tydligt att vi sparar din mailadress du skriver in på en intern hemlig lista. Vi sparar INTE vilket konto som skickat in vilken mailadress. Anledningen till att vi sparar är för att ingen mailadress ska kunna användas två gånger. Uppgifterna hanteras enligt GDPR. Mer information finns i https://docs.google.com/document/d/1PlTUOCm61SVMGd0nxxGWKIUSNuc-zK7lXdqecGZGJMs/edit?usp=sharing",components:[confermationButton]});
         message.awaitMessageComponent({componentType:ComponentType.Button,time:1000*5*60}).then(async (button)=>{
             await button.showModal(email_modal);
-            const filter = (i:any) => i.customId.split(":")[1] === interaction.id;
+            const filter = (i:ModalSubmitInteraction) => i.customId.split(":")[1] === interaction.id;
             button.awaitModalSubmit({filter,time:1000*5*60}).then(async (modal)=>{
                 const email = modal.fields.getTextInputValue("email");
                 const TOKEN = process.env.SVEROK_API_TOKEN;
@@ -76,7 +76,10 @@ export default class SverokCommand implements Command {
                     }else{
                         data.reply("Du är inte medlem i sverok föreningen just nu!\nDu kan bli det med denna länk: https://ebas.sverok.se/blimedlem/SGC")
                     }
-                }).catch((err)=>{})
+                }).catch((err)=>{
+                    console.log(err);
+                    interaction.editReply("Något gick fel när vi försökte koppla ditt konto, försök igen senare!");
+                })
             })
         })
     }

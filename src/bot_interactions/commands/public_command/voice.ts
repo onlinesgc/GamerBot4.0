@@ -1,4 +1,4 @@
-import { CommandInteraction, EmbedBuilder, GuildMember, PermissionFlagsBits, PermissionOverwrites, SlashCommandBuilder, TextChannel, VoiceChannel } from "discord.js";
+import { CommandInteraction, EmbedBuilder, GuildMember, PermissionFlagsBits, SlashCommandBuilder, TextChannel, VoiceChannel } from "discord.js";
 import { Command } from "../../../classes/command";
 import { PorfileData } from "gamerbot-module";
 import { GamerBotAPIInstance } from "../../..";
@@ -29,14 +29,14 @@ export default class VoiceCommand implements Command{
         ))
         .addIntegerOption(option => option.setName("limit").setDescription("Max antal personer i kanalen").setRequired(false));
     async execute(interaction: CommandInteraction, profileData: PorfileData) {
-        let guildMember : GuildMember = interaction.member as GuildMember;
+        const guildMember = interaction.member as GuildMember;
 
         if(profileData.privateVoiceID !== guildMember.voice.channelId){
             interaction.editReply("Du måste vara i din privata kanal som tillhör dig för att använda det här kommandot");
             return;
         }
 
-        let voiceChannel: VoiceChannel = guildMember.voice.channel as VoiceChannel;
+        const voiceChannel = guildMember.voice.channel as VoiceChannel;
 
         if(interaction.options.data.length == 0){
             const voice_members_embed = new EmbedBuilder()
@@ -53,30 +53,32 @@ export default class VoiceCommand implements Command{
 
         let member;
 
-        let guild_data = await GamerBotAPIInstance.models.get_guild_data(interaction.guildId as string);
+        const guild_data = await GamerBotAPIInstance.models.get_guild_data(interaction.guildId as string);
         const info_voice_channel = interaction.guild?.channels.cache.get(guild_data.infoVoiceChannel) as TextChannel
 
         switch(interaction.options.data[0].name){
-            case "invite":
+            case "invite": {
                 member = interaction.options.get("invite", true).member as GuildMember;
 
                 await info_voice_channel.threads.cache.get(profileData.privateVoiceThreadID)?.members.add(member.id);
                 await voiceChannel.permissionOverwrites.edit(member.id, {ViewChannel:true,Speak:true,Connect:true});
                 interaction.editReply(`Du har bjudit in ${member.displayName} till din kanal!`);
                 break;
-            case "kick":
+            }
+            case "kick":{
                 member = interaction.options.get("kick", true).member as GuildMember;
                 await info_voice_channel.threads.cache.get(profileData.privateVoiceThreadID)?.members.remove(member.id);
                 await voiceChannel.permissionOverwrites.delete(member.id);
                 await member.voice.disconnect();
                 interaction.editReply(`Du har sparkat ${member.displayName} från din kanal!`);
                 break;
-            case "give":
+            }
+            case "give":{
                 member = interaction.options.get("give", true).member as GuildMember;
                 if(!voiceChannel.members.has(member.id)) return interaction.editReply("Personen du vill ge ägandeskapet till är inte i kanalen");
                 profileData.privateVoiceID = "";
                 await profileData.save();
-                let give_member = await GamerBotAPIInstance.models.get_profile_data(member.id);
+                const give_member = await GamerBotAPIInstance.models.get_profile_data(member.id);
                 give_member.privateVoiceID = voiceChannel.id;
                 give_member.privateVoiceThreadID = profileData.privateVoiceThreadID;
                 await give_member.save();
@@ -85,25 +87,30 @@ export default class VoiceCommand implements Command{
                 await info_voice_channel.threads.cache.get(profileData.privateVoiceThreadID)?.members.add(member.id);
                 interaction.editReply(`Du har gett ägandeskapet till ${member.displayName}`);
                 break;
-            case "name":
-                let name = interaction.options.get("name", true).value as string;
+            }
+            case "name":{
+                const name = interaction.options.get("name", true).value as string;
                 voiceChannel.setName(name);
                 interaction.editReply(`Du har bytt namn på kanalen till ${name}`);
                 break;
-            case "lock":
+            }
+            case "lock":{
                 voiceChannel.permissionOverwrites.edit(interaction.guild?.roles.everyone.id as string, {ViewChannel:false,Speak:false,Connect:false});
                 interaction.editReply("Kanalen är nu låst!");
                 break;
-            case "unlock":
+            }
+            case "unlock":{
                 voiceChannel.permissionOverwrites.edit(interaction.guild?.roles.everyone.id as string, {ViewChannel:true,Speak:true,Connect:true});
                 interaction.editReply("Kanalen är nu upplåst!");
                 break;
-            case "limit":
-                let limit = interaction.options.get("limit", true).value as number;
+            }
+            case "limit":{
+                const limit = interaction.options.get("limit", true).value as number;
                 voiceChannel.setUserLimit(limit);
                 interaction.editReply(`Du har satt en gräns på ${limit} personer i kanalen!`);
                 break;
-            case "inviterole":
+            }
+            case "inviterole":{
                 const MultipleRoles = [
 					{
 						value:"AllTrusted",
@@ -114,31 +121,32 @@ export default class VoiceCommand implements Command{
 						roles:["813804280741101678","924078241344536607","520331216415621143","818809151257575464","821059798270214176","812324460429836318","813482380887064597","817886647915642930","835156231861698562"]
 					}
 				]
-                let value = interaction.options.get("inviterole", true).value as string;
+                const value = interaction.options.get("inviterole", true).value as string;
                 if(/\d/.test(value)){
-                    let role = value;
+                    const role = value;
                     voiceChannel.permissionOverwrites.edit(role, {ViewChannel:true,Speak:true,Connect:true});
                     interaction.editReply(`Du har bjudit in alla med rollen ${interaction.guild?.roles.cache.get(role)?.name} till kanalen!`);
                 }else{
-                    let role = MultipleRoles.find(role => role.value == value);
+                    const role = MultipleRoles.find(role => role.value == value);
                     role?.roles.forEach(role => {
                         voiceChannel.permissionOverwrites.edit(role, {ViewChannel:true,Speak:true,Connect:true});
                     })
                     interaction.editReply(`Du har bjudit in alla med rollen ${value} till kanalen!`);
                 }
                 break;
+            }
         }
 
     }
     async getVoiceMembers(voiceChannel: VoiceChannel){
-        let members: string[] = [];
+        const members: string[] = [];
         voiceChannel.permissionOverwrites.cache.forEach(overwrite => {
             if(overwrite.type !== 1) return;
             if(overwrite.allow.has(PermissionFlagsBits.ViewChannel)){
                 members.push(overwrite.id);
             }
         })
-        let message = members.map(member => `<@!${member}>`).join("\n");
+        const message = members.map(member => `<@!${member}>`).join("\n");
         return message;
     }
 

@@ -21,11 +21,11 @@ export default class ready implements Event{
         await GamerBotAPIInstance.getAPIStatus();
 
         // Get config data from the API
-        let config_data : ConfigData = await GamerBotAPIInstance.models.get_config_data(Number.parseInt(process.env.CONFIG_ID as string));
+        const config_data = await GamerBotAPIInstance.models.get_config_data(Number.parseInt(process.env.CONFIG_ID as string));
 
         // Register commands and load user reminders
         this.regiser_commands(client as GamerbotClient,config_data);
-        this.load_reminders(client as GamerbotClient,config_data);
+        this.load_reminders(client as GamerbotClient);
     }
 
 
@@ -34,31 +34,27 @@ export default class ready implements Event{
      * @param {Client} client 
      * @param {*} configData 
     */
-    private regiser_commands(client:GamerbotClient, config_data:ConfigData){
+    private async regiser_commands(client:GamerbotClient, config_data:ConfigData){
         // Register commands here
-        new Promise(async (resolve,reject) => {
-            const rest = new REST({version:'9'}).setToken(process.env.TOKEN as string);
-            try{
-                if(config_data.debugGuildID != undefined){
-                    await rest.put(
-                        Routes.applicationGuildCommands(
-                            client.user?.id as string,
-                            config_data.debugGuildID as string),
-                            {body:client.command_array}
-                    );
-                }
-                else{
-                    await rest.put(
-                        Routes.applicationCommands(client.user?.id as string),
+        const rest = new REST({version:'9'}).setToken(process.env.TOKEN as string);
+        try{
+            if(config_data.debugGuildID != undefined){
+                await rest.put(
+                    Routes.applicationGuildCommands(
+                        client.user?.id as string,
+                        config_data.debugGuildID as string),
                         {body:client.command_array}
-                    );
-                }
-                resolve(0);
-            }catch(error){
-                console.error(error);
-                reject(1);
+                );
             }
-        })
+            else{
+                await rest.put(
+                    Routes.applicationCommands(client.user?.id as string),
+                    {body:client.command_array}
+                );
+            }
+        }catch(error){
+            console.error(error);
+        }
     }
 
     
@@ -67,12 +63,12 @@ export default class ready implements Event{
      * @param client Client
      * @param config_data ConfigData
      */
-    private async load_reminders(client:GamerbotClient, config_data:ConfigData){
-        let profiles = await GamerBotAPIInstance.models.get_all_profile_data(50000,{ reminders: { $exists: true, $not: { $size: 0 } } })
-
+    private async load_reminders(client:GamerbotClient){
+        const profiles = await GamerBotAPIInstance.models.get_all_profile_data(50000,{ reminders: { $exists: true, $not: { $size: 0 } } })
         profiles.forEach((profile:PorfileData) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             profile.reminders.forEach((reminder:any) => {
-                let reminder_temp = {
+                const reminder_temp = {
                     user_id: profile.userID,
                     message: reminder.message,
                     remindTimestamp: reminder.remindTimestamp

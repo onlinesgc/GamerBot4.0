@@ -6,5 +6,6 @@ export interface Event{
      * @param client 
      * @returns 
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     run_event: (client:Client, ...args:any) => void;
 }
