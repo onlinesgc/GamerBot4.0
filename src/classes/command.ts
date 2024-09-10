@@ -1,4 +1,8 @@
-import { CommandInteraction, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder } from "discord.js";
+import {
+    CommandInteraction,
+    SlashCommandBuilder,
+    SlashCommandOptionsOnlyBuilder,
+} from "discord.js";
 import { PorfileData } from "gamerbot-module";
 
 export interface Command {
@@ -11,7 +15,10 @@ export interface Command {
      * Run the command
      * @param interaction Discord interaction
      * @param profileData Data for the user that sent the command
-     * @returns 
+     * @returns
      */
-    execute: (interaction: CommandInteraction, profileData:PorfileData) => void;
+    execute: (
+        interaction: CommandInteraction,
+        profileData: PorfileData,
+    ) => void;
 }

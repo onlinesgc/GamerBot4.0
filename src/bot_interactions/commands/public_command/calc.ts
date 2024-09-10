@@ -1,4 +1,8 @@
-import { CommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import {
+    CommandInteraction,
+    EmbedBuilder,
+    SlashCommandBuilder,
+} from "discord.js";
 import { Command } from "../../../classes/command";
 
 /**
@@ -12,22 +16,34 @@ export default class CalcCommand implements Command {
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description)
-        .addStringOption((option) => option.setName("expression").setDescription("Det matematiska uttrycket").setRequired(true));
-    async execute(interaction: CommandInteraction){
-        const expression = interaction.options.get("expression", false)?.value as string;
-        
+        .addStringOption((option) =>
+            option
+                .setName("expression")
+                .setDescription("Det matematiska uttrycket")
+                .setRequired(true),
+        );
+    async execute(interaction: CommandInteraction) {
+        const expression = interaction.options.get("expression", false)
+            ?.value as string;
+
         const math_embed = new EmbedBuilder()
             .setColor("#2DD21C")
             .setTitle(`${interaction.member?.user.username} | Matte tal`)
             .setDescription(`Calculating ${"`"}${expression.trim()}${"`"}`)
-            .setFooter({text:this.name,iconURL:interaction.client.user.avatarURL()?.toString()})
-            .setTimestamp();
-        await interaction.editReply({embeds:[math_embed]});
-
-        fetch(`http://api.mathjs.org/v4/?expr=${encodeURIComponent(expression)}`)
-            .then(async data => {
-                math_embed.setDescription(`Calculated ${"`"}${expression.trim()}${"`"}\nAnswer ${"`"}${await data.text()}${"`"}`);
-                interaction.editReply({embeds:[math_embed]});
+            .setFooter({
+                text: this.name,
+                iconURL: interaction.client.user.avatarURL()?.toString(),
             })
+            .setTimestamp();
+        await interaction.editReply({ embeds: [math_embed] });
+
+        fetch(
+            `http://api.mathjs.org/v4/?expr=${encodeURIComponent(expression)}`,
+        ).then(async (data) => {
+            math_embed.setDescription(
+                `Calculated ${"`"}${expression.trim()}${"`"}\nAnswer ${"`"}${await data.text()}${"`"}`,
+            );
+            interaction.editReply({ embeds: [math_embed] });
+        });
     }
 }

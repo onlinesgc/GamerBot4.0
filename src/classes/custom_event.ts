@@ -1,10 +1,10 @@
 import { Client } from "discord.js";
 
-export interface CustomEvent{
+export interface CustomEvent {
     /**
      * custom emitor
-     * @param client 
-     * @returns 
+     * @param client
+     * @returns
      */
-    emitor : (client:Client) => void;
+    emitor: (client: Client) => void;
 }

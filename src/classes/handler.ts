@@ -4,7 +4,7 @@ export interface Handler {
     /**
      * Handler interface
      * @param client Discord client
-     * @returns 
+     * @returns
      */
-    run: (client:GamerbotClient) => void;
+    run: (client: GamerbotClient) => void;
 }
