@@ -1,14 +1,14 @@
 import {
     CommandInteraction,
-    EmbedBuilder,
     GuildMember,
     SlashCommandBuilder,
 } from "discord.js";
 import { Command } from "../../../classes/command";
 import { GamerBotAPIInstance } from "../../..";
-import { MogLog } from "../../../classes/modlog";
+import { ModLog } from "../../../classes/modlog";
 import { modLogToObject } from "../../../functions/moglog_functions";
 import ms from "ms";
+import { CreateModLogEmbed } from "../../../functions/CreateEmbed";
 
 export default class BanCommand implements Command {
     name = "ban";
@@ -58,19 +58,13 @@ export default class BanCommand implements Command {
             interaction.user.id,
             messages,
         );
-        const ban_embed = new EmbedBuilder()
-        .setTitle("ban")
-        .setDescription(
-            `${member.user.username} har blivit bannad `+(time == "0") ? "" : `i ${time}` +` för **${reason}**` + (has_sent_message ? "" : "\n(Personen har stängt av DMs)")
-        )
-        .setFooter({
-            text: this.name,
-            iconURL: interaction.client.user
-                .avatarURL()
-                ?.toString(),
-        })
-        .setTimestamp()
-        .setColor("Green");
+        const ban_embed = CreateModLogEmbed(
+            "ban",
+            `${member.user.username} har blivit bannad för **${reason}**` +
+                (has_sent_message ? "" : "\n(Personen har stängt av DMs)"),
+            this.name,
+            interaction,
+        );
 
         interaction.editReply({
             embeds: [ban_embed],
@@ -87,7 +81,7 @@ export default class BanCommand implements Command {
         const profile_data = await GamerBotAPIInstance.models.get_profile_data(
             member.id,
         );
-        const modLog = new MogLog(
+        const modLog = new ModLog(
             "ban",
             member.id,
             member.user.username,

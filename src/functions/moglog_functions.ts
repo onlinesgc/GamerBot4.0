@@ -1,6 +1,6 @@
-import { MogLog } from "../classes/modlog";
+import { ModLog } from "../classes/modlog";
 
-export function modLogToObject(modlog: MogLog) {
+export function modLogToObject(modlog: ModLog) {
     return {
         type: modlog.type,
         userId: modlog.userId,

@@ -1,9 +1,9 @@
-export class MogLog {
+export class ModLog {
     type: string;
     userId: string;
     userName: string;
     Reason: string;
-    length: string;
+    length: string | null;
     date: number;
     authorId: string;
     constructor(
@@ -11,7 +11,7 @@ export class MogLog {
         userId: string,
         userName: string,
         Reason: string,
-        length: string,
+        length: string | null,
         date: number,
         authorId: string,
     ) {

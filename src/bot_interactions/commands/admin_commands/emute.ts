@@ -1,6 +1,11 @@
-import { CommandInteraction, EmbedBuilder, GuildMember, SlashCommandBuilder } from "discord.js";
+import {
+    CommandInteraction,
+    GuildMember,
+    SlashCommandBuilder,
+} from "discord.js";
 import { Command } from "../../../classes/command";
 import MuteCommand from "./mute";
+import { CreateModLogEmbed } from "../../../functions/CreateEmbed";
 
 export default class EmuteCommand implements Command {
     name = "emute";
@@ -39,21 +44,21 @@ export default class EmuteCommand implements Command {
         const reason = interaction.options.get("reason", true).value as string;
         const time =
             (interaction.options.get("time", true).value as string) || "0";
-        const has_sent_message = await MuteCommand.mute(member, reason, time, interaction.user.id,`Du har blivit tystad i SGC.\n**Du är jättevälkommen tillbaka igen efter ${time}. Kom ihåg respektera alla på servern och lyssna på staffsens regelpåminnelser.**`);
+        const has_sent_message = await MuteCommand.mute(
+            member,
+            reason,
+            time,
+            interaction.user.id,
+            `Du har blivit tystad i SGC.\n**Du är jättevälkommen tillbaka igen efter ${time}. Kom ihåg respektera alla på servern och lyssna på staffsens regelpåminnelser.**`,
+        );
 
-        const mute_embed = new EmbedBuilder()
-            .setTitle("Mute")
-            .setDescription(
-                `${member.user.username} har blivit mutead i ${time} för **${reason}**` + (has_sent_message ? "" : "\n(Personen har stängt av DMs)")
-            )
-            .setFooter({
-                text: this.name,
-                iconURL: interaction.client.user
-                    .avatarURL()
-                    ?.toString(),
-            })
-            .setTimestamp()
-            .setColor("Green");
+        const mute_embed = CreateModLogEmbed(
+            "mute",
+            `${member.user.username} har blivit tystad i ${time} för **${reason}**` +
+                (has_sent_message ? "" : "\n(Personen har stängt av DMs)"),
+            this.name,
+            interaction,
+        );
         await interaction.reply({ embeds: [mute_embed] });
     }
 }
