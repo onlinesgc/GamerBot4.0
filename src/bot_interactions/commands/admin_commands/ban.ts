@@ -1,6 +1,7 @@
 import {
     CommandInteraction,
     GuildMember,
+    PermissionFlagsBits,
     SlashCommandBuilder,
 } from "discord.js";
 import { Command } from "../../../classes/command";
@@ -8,7 +9,7 @@ import { GamerBotAPIInstance } from "../../..";
 import { ModLog } from "../../../classes/modlog";
 import { modLogToObject } from "../../../functions/moglog_functions";
 import ms from "ms";
-import { CreateModLogEmbed } from "../../../functions/CreateEmbed";
+import { CreateModLogEmbed } from "../../../functions/createEmbed";
 
 export default class BanCommand implements Command {
     name = "ban";
@@ -18,6 +19,7 @@ export default class BanCommand implements Command {
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description)
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .addUserOption((option) =>
             option
                 .setName("user")

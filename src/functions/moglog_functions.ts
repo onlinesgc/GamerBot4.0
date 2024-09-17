@@ -11,8 +11,15 @@ export function modLogToObject(modlog: ModLog) {
         authorId: modlog.authorId,
     };
 }
-/*
+
+//eslint-disable-next-line
 export function objectToModLog(obj: any){
-    return new MogLog(obj.type,obj.userId,obj.userName,obj.Reason,obj.length,obj.date,obj.authorId);
+    return new ModLog(
+        obj.type,
+        obj.userId,
+        obj.userName,
+        obj.Reason,
+        obj.length,
+        (Number.isNaN(parseInt(obj.date))) ? obj.date : new Date(parseInt(obj.date)).toLocaleDateString(),
+        obj.authorId);
 }
-*/

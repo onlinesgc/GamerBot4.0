@@ -1,11 +1,12 @@
 import {
     CommandInteraction,
     GuildMember,
+    PermissionFlagsBits,
     SlashCommandBuilder,
 } from "discord.js";
 import { Command } from "../../../classes/command";
 import MuteCommand from "./mute";
-import { CreateModLogEmbed } from "../../../functions/CreateEmbed";
+import { CreateModLogEmbed } from "../../../functions/createEmbed";
 
 export default class EmuteCommand implements Command {
     name = "emute";
@@ -15,6 +16,7 @@ export default class EmuteCommand implements Command {
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description)
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .addUserOption((option) =>
             option
                 .setName("user")
