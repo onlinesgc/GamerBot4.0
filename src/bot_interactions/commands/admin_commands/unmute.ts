@@ -7,6 +7,7 @@ import { CreateModLogEmbed } from "../../../functions/createEmbed";
 export default class UnMuteCommand implements Command {
     name = "unmute";
     ephemeral = false;
+    defer = true;
     description = "Unmutar en användare";
     aliases = [];
     data = new SlashCommandBuilder()

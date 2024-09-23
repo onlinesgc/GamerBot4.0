@@ -14,6 +14,7 @@ import { CreateModLogEmbed } from "../../../functions/createEmbed";
 export default class BanCommand implements Command {
     name = "ban";
     ephemeral = false;
+    defer = true;
     description = "Banna en person från sereven!";
     aliases = [];
     data = new SlashCommandBuilder()

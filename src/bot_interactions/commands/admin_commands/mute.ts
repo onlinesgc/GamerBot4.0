@@ -14,6 +14,7 @@ import { CreateModLogEmbed } from "../../../functions/createEmbed";
 export default class MuteCommand implements Command {
     name = "mute";
     ephemeral = false;
+    defer = true;
     description = "Timar ut personen en viss tid.";
     aliases = [];
     data = new SlashCommandBuilder()

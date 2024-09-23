@@ -31,7 +31,7 @@ export default class interactionCreate implements Event {
             interaction.member?.user.id as string,
         );
         try {
-            await interaction.deferReply({ ephemeral: command.ephemeral });
+            if(command.defer) await interaction.deferReply({ ephemeral: command.ephemeral });
             await command.execute(interaction, profile_data);
         } catch (error) {
             console.error(error);

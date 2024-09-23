@@ -9,6 +9,7 @@ import { GamerBotAPIInstance } from "../../..";
 export default class LinkWhitelistCommand implements Command {
     name = "linkwhitelist";
     ephemeral = false;
+    defer = true;
     description = "Lägg till en länk till whitelisten";
     aliases = [];
     data = new SlashCommandBuilder()

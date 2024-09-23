@@ -12,6 +12,7 @@ import { CreateModLogEmbed } from "../../../functions/createEmbed";
 export default class KickCommand implements Command {
     name = "kick";
     ephemeral = false;
+    defer = true;
     description = "Kicka en person från servern!";
     aliases = [];
     data = new SlashCommandBuilder()

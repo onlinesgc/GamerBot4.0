@@ -12,6 +12,7 @@ import { CreateModLogEmbed } from "../../../functions/createEmbed";
 export default class NoteCommand implements Command {
     name = "note";
     ephemeral = false;
+    defer = true;
     description = "Lägg till en notering på en användare";
     aliases = [];
     data = new SlashCommandBuilder()

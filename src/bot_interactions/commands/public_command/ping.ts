@@ -12,6 +12,7 @@ export default class PingCommand implements Command {
     constructor() {}
     name = "ping";
     ephemeral = false;
+    defer = true;
     description = "Replies with pong!";
     aliases = [];
     data = new SlashCommandBuilder()

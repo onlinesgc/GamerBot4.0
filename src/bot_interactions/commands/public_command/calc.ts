@@ -11,6 +11,7 @@ import { Command } from "../../../classes/command";
 export default class CalcCommand implements Command {
     name = "calc";
     ephemeral = false;
+    defer = true;
     description = "Räkna ut en matematisk uttryck";
     aliases = [];
     data = new SlashCommandBuilder()

@@ -14,6 +14,7 @@ import { GamerBotAPIInstance } from "../../..";
 export default class VoiceCommand implements Command {
     name = "voice";
     ephemeral = false;
+    defer = true;
     description = "Ändra på din voice kanal!";
     aliases = [];
     data = new SlashCommandBuilder()

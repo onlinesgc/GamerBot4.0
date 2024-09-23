@@ -7,6 +7,7 @@ import { CreateModLogEmbed } from "../../../functions/createEmbed";
 export default class UnbanCommand implements Command {
     name = "unban";
     ephemeral = false;
+    defer = true;
     description = "Unbannar en användare";
     aliases = [];
     data = new SlashCommandBuilder()

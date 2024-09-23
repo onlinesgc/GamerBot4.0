@@ -7,6 +7,7 @@ import { GamerbotClient } from "../../..";
 export default class RemindCommand implements Command {
     name = "remind";
     ephemeral = false;
+    defer = true;
     description = "Påminn dig själv om något!";
     aliases = [];
     data = new SlashCommandBuilder()

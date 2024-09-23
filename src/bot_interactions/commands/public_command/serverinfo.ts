@@ -13,6 +13,7 @@ import { Command } from "../../../classes/command";
 export default class ServerInfoCommand implements Command {
     name = "serverinfo";
     ephemeral = false;
+    defer = true;
     description = "Visar information om servern";
     aliases = [];
     data = new SlashCommandBuilder()

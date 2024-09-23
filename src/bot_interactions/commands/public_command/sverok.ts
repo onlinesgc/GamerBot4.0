@@ -20,6 +20,7 @@ export default class SverokCommand implements Command {
     description =
         "Koppla ditt sverok konto till discord och få en cool sverok roll";
     aliases = [];
+    defer = false;
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description);

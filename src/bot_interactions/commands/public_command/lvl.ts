@@ -14,6 +14,7 @@ import { PorfileData } from "gamerbot-module";
 export default class LvlCommand implements Command {
     name = "lvl";
     ephemeral = false;
+    defer = true;
     description = "Titta vilken nivå du är på discorden!";
     aliases = ["me"];
     data = new SlashCommandBuilder()

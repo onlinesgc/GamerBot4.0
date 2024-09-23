@@ -11,6 +11,7 @@ import { getRndInteger } from "../../../functions/getRndInt";
 export default class TopicCommand implements Command {
     name = "topic";
     ephemeral = false;
+    defer = true;
     description = "Få ett ämne man kan diskutera i chatten";
     aliases = [];
     data = new SlashCommandBuilder()

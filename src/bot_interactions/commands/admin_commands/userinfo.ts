@@ -5,6 +5,7 @@ import { EmbedBuilder } from "@discordjs/builders";
 export default class UserInfoCommand implements Command {
     name = "userinfo";
     ephemeral = false;
+    defer = true;
     description = "Hämta information om en användare";
     aliases = [];
     data = new SlashCommandBuilder()

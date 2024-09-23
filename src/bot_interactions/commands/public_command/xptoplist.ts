@@ -16,6 +16,7 @@ import { PorfileData } from "gamerbot-module/dist/classes/ProfileData";
 export default class XptoplistCommand implements Command {
     name = "xptoplist";
     ephemeral = false;
+    defer = true;
     description = "Vissar topplistan för xp";
     aliases = [];
     data = new SlashCommandBuilder()

@@ -6,6 +6,7 @@ import { objectToModLog } from "../../../functions/moglog_functions";
 export default class ModLogCommand implements Command {
     name = "modlog";
     ephemeral = false;
+    defer = true;
     description = "Visar loggar för en användare";
     aliases = [];
     data = new SlashCommandBuilder()

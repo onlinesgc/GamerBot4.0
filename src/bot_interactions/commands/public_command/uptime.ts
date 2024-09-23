@@ -13,6 +13,7 @@ export default class UptimeCommand implements Command {
     constructor() {}
     name = "uptime";
     ephemeral = false;
+    defer = true;
     description = "Titta på hur länge boten har varit igång!";
     aliases = [];
     data = new SlashCommandBuilder()

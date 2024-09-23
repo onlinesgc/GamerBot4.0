@@ -10,6 +10,7 @@ export interface Command {
     ephemeral: boolean;
     description: string;
     aliases: string[];
+    defer: boolean;
     data: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
     /**
      * Run the command

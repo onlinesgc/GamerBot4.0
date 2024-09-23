@@ -11,6 +11,7 @@ import { CreateModLogEmbed } from "../../../functions/createEmbed";
 export default class EmuteCommand implements Command {
     name = "emute";
     ephemeral = false;
+    defer = true;
     description = "Timar ut personen en viss tid.";
     aliases = [];
     data = new SlashCommandBuilder()

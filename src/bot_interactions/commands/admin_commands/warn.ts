@@ -7,6 +7,7 @@ import { CreateModLogEmbed } from "../../../functions/createEmbed";
 export default class WarnCommand implements Command {
     name = "warn";
     ephemeral = false;
+    defer = true;
     description = "Varna en person!";
     aliases = [];
     data = new SlashCommandBuilder()
