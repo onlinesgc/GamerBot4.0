@@ -71,7 +71,7 @@ export default class ModLogCommand implements Command {
     //eslint-disable-next-line
     async getUserModLogs(mod_logs: any, interaction:CommandInteraction,start: number, log_count: number){
         const fields = [];
-        let log_counter = start + 1;
+        let log_counter = start;
         for(const log of mod_logs.slice(start, start + log_count)){
             const mod_log = objectToModLog(log);
             fields.push(mod_log.getEmbedField(log_counter));

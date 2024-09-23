@@ -3,12 +3,12 @@ import { ModLog } from "../classes/modlog";
 export function modLogToObject(modlog: ModLog) {
     return {
         type: modlog.type,
-        userId: modlog.userId,
+        userID: modlog.userID,
         userName: modlog.userName,
         Reason: modlog.Reason,
         length: modlog.length,
         date: modlog.date,
-        authorId: modlog.authorId,
+        authorID: modlog.authorID,
     };
 }
 
@@ -16,10 +16,10 @@ export function modLogToObject(modlog: ModLog) {
 export function objectToModLog(obj: any){
     return new ModLog(
         obj.type,
-        obj.userId,
+        obj.userID,
         obj.userName,
         obj.Reason,
         obj.length,
         (Number.isNaN(parseInt(obj.date))) ? obj.date : new Date(parseInt(obj.date)).toLocaleDateString(),
-        obj.authorId);
+        obj.authorID);
 }

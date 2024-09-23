@@ -38,34 +38,35 @@ export default class BanCommand implements Command {
                 .setDescription("Tid du banar en person")
                 .setRequired(false),
         )
-        .addIntegerOption((option) =>
+        .addStringOption((option) =>
             option
                 .setName("messages")
-                .setDescription("Antal dagar av medelanden")
+                .setDescription("Alla meddelanden innom tiden kommer att raderas (1d tex)")
                 .setRequired(false),
         );
     async execute(interaction: CommandInteraction) {
         const member = interaction.options.get("user", true)
             .member as GuildMember;
-        const reason = interaction.options.get("reason", true).value;
+        const reason = interaction.options.get("reason", true).value as string;
         const time =
             (interaction.options.get("time", false)?.value as string) || "0";
         const messages =
-            (interaction.options.get("messages", false)?.value as number) || 0;
+            (interaction.options.get("messages", false)?.value as string) || "0s";
 
         const has_sent_message = await this.banUser(
             member,
-            reason as string,
+            reason,
             time,
             interaction.user.id,
             messages,
         );
         const ban_embed = CreateModLogEmbed(
-            "ban",
-            `${member.user.username} har blivit bannad för **${reason}**` +
-                (has_sent_message ? "" : "\n(Personen har stängt av DMs)"),
+            "Ban",
+            `${member.user.username} har blivit bannad`,
+            reason,
             this.name,
             interaction,
+            has_sent_message
         );
 
         interaction.editReply({
@@ -78,7 +79,7 @@ export default class BanCommand implements Command {
         reason: string,
         time: string,
         authorId: string,
-        messages: number,
+        messages: string,
     ) {
         const profile_data = await GamerBotAPIInstance.models.get_profile_data(
             member.id,
@@ -115,7 +116,7 @@ export default class BanCommand implements Command {
         }
         await member.guild.bans.create(member.id, {
             reason: reason,
-            deleteMessageSeconds: messages,
+            deleteMessageSeconds: ms(messages) / 1000,
         });
         return hasSentMessage;
     }

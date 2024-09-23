@@ -54,10 +54,11 @@ export default class MuteCommand implements Command {
 
         const mute_embed = CreateModLogEmbed(
             "mute",
-            `${member.user.username} har blivit mutead i ${time} för **${reason}**` +
-                (has_sent_message ? "" : "\n(Personen har stängt av DMs)"),
+            `${member.user.username} har blivit mutead i ${time}`,
+            reason,
             this.name,
             interaction,
+            has_sent_message
         );
 
         interaction.editReply({ embeds: [mute_embed] });

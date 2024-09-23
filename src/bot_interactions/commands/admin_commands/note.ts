@@ -39,11 +39,13 @@ export default class NoteCommand implements Command {
         const note_embed = CreateModLogEmbed(
             "note",
             "Du har nu laggt en notering på " + member.user.username,
+            reason,
             this.name,
             interaction,
+            true
         );
 
-        await interaction.reply({ embeds: [note_embed] });
+        await interaction.editReply({ embeds: [note_embed] });
     }
     async noteUser(member: GuildMember, reason: string, author_id: string) {
         const profile_data = await GamerBotAPIInstance.models.get_profile_data(

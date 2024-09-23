@@ -42,10 +42,11 @@ export default class KickCommand implements Command {
 
         const kick_embed = CreateModLogEmbed(
             "kick",
-            `${member.user.username} har blivit kickad för **${reason}**` +
-                (has_sent_message ? "" : "\n(Personen har stängt av DMs)"),
+            `${member.user.username} har blivit kickad`,
+            reason,
             this.name,
             interaction,
+            has_sent_message
         );
 
         await interaction.editReply({ embeds: [kick_embed] });
