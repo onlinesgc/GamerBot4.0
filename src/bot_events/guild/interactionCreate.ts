@@ -1,5 +1,6 @@
 import {
     AutocompleteInteraction,
+    ButtonInteraction,
     Client,
     CommandInteraction,
     Interaction,
@@ -7,6 +8,13 @@ import {
 import { Event } from '../../classes/event'
 import { Command } from '../../classes/command'
 import { GamerBotAPIInstance, GamerbotClient } from '../..'
+import { Button } from '../../classes/button'
+
+/**
+ * InteractionCreate is called when a user interacts with the bot.
+ * @param client - Discord client
+ * @param interaction - Discord interaction
+ */
 export default class interactionCreate implements Event {
     constructor() {}
     run_event(client: Client, interaction: Interaction) {
@@ -22,6 +30,38 @@ export default class interactionCreate implements Event {
                 client as GamerbotClient,
             )
         }
+        if (interaction.isButton()) {
+            this.onButtonInteraction(
+                interaction as ButtonInteraction,
+                client as GamerbotClient,
+            )
+        }
+    }
+
+    private async onButtonInteraction(buttonInteraction: ButtonInteraction, client: GamerbotClient) {
+        const button = client.buttons.get(
+            buttonInteraction.customId.split(';')[0]
+        ) as Button
+
+        if (!button) return
+
+        try {
+            if (button.defer)
+                await buttonInteraction.deferUpdate();
+            const args = buttonInteraction.customId.split(';')
+            args.shift()
+            if(args.length === 0)
+                button.execute(buttonInteraction, [])
+            else
+                button.execute(buttonInteraction, args)
+        } catch (error) {
+            console.error(error)
+            buttonInteraction.reply({
+                content: 'There was an error while executing the button.',
+                ephemeral: true,
+            })
+        }
+
     }
 
     private async onAutocomplete(

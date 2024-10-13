@@ -3,6 +3,7 @@ import dot_env from 'dotenv'
 import { GamerBotAPI } from 'gamerbot-module'
 import { Command } from './classes/command'
 import fs from 'fs'
+import { Button } from './classes/button'
 
 dot_env.config()
 
@@ -18,6 +19,7 @@ export const GamerBotAPIInstance = new GamerBotAPI(
 //Extends the client to add new properties
 export interface GamerbotClient extends Client {
     commands: Collection<string, Command>
+    buttons: Collection<string, Button>
     command_array: Array<object>
     reminder_list: Array<object>
     frameChoices: Array<object>
@@ -41,6 +43,7 @@ const client = new Client({
 
 //Create collections
 client.commands = new Collection()
+client.buttons = new Collection();
 client.command_array = []
 client.reminder_list = []
 client.frameChoices = []
