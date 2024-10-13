@@ -1,4 +1,4 @@
-import { Client } from "discord.js";
+import { Client } from 'discord.js'
 
 export interface Event {
     /**
@@ -7,5 +7,5 @@ export interface Event {
      * @returns
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    run_event: (client: Client, ...args: any) => void;
+    run_event: (client: Client, ...args: any) => void
 }

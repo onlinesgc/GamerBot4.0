@@ -1,4 +1,4 @@
-import { CommandInteraction, EmbedBuilder } from "discord.js";
+import { CommandInteraction, EmbedBuilder } from 'discord.js'
 
 export function CreateModLogEmbed(
     title: string,
@@ -6,20 +6,30 @@ export function CreateModLogEmbed(
     reason: string,
     command_name: string,
     interaction: CommandInteraction,
-    got_message: boolean
+    got_message: boolean,
 ) {
     return new EmbedBuilder()
-        .setTitle(title +" | " +description + ((got_message) ? "" : "\n(Personen har stängt av DMs)"))
+        .setTitle(
+            title +
+                ' | ' +
+                description +
+                (got_message ? '' : '\n(Personen har stängt av DMs)'),
+        )
         .setDescription(`Anledning: ${reason}`)
         .setFooter({
             text: command_name,
             iconURL: interaction.client.user.avatarURL()?.toString(),
         })
         .setTimestamp()
-        .setColor("Green");
+        .setColor('Green')
 }
 
-export function createCommandEmbed(title: string,  interaction: CommandInteraction, discription = null, fields = []) {
+export function createCommandEmbed(
+    title: string,
+    interaction: CommandInteraction,
+    discription = null,
+    fields = [],
+) {
     return new EmbedBuilder()
         .setTitle(title)
         .setDescription(discription)
@@ -29,6 +39,5 @@ export function createCommandEmbed(title: string,  interaction: CommandInteracti
             iconURL: interaction.client.user.avatarURL()?.toString(),
         })
         .setTimestamp()
-        .setColor("Green");
-
+        .setColor('Green')
 }

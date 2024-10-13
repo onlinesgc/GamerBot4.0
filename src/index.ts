@@ -1,26 +1,26 @@
-import { Client, GatewayIntentBits, Collection, Partials } from "discord.js";
-import dot_env from "dotenv";
-import { GamerBotAPI } from "gamerbot-module";
-import { Command } from "./classes/command";
-import fs from "fs";
+import { Client, GatewayIntentBits, Collection, Partials } from 'discord.js'
+import dot_env from 'dotenv'
+import { GamerBotAPI } from 'gamerbot-module'
+import { Command } from './classes/command'
+import fs from 'fs'
 
-dot_env.config();
+dot_env.config()
 
-const TOKEN = process.env.TOKEN;
-const GAMERBOT_API_TOKEN = process.env.GAMERBOT_API_TOKEN as string;
-const API_DEBUG_LOCAL = true;
+const TOKEN = process.env.TOKEN
+const GAMERBOT_API_TOKEN = process.env.GAMERBOT_API_TOKEN as string
+const API_DEBUG_LOCAL = true
 
 export const GamerBotAPIInstance = new GamerBotAPI(
     GAMERBOT_API_TOKEN,
     API_DEBUG_LOCAL,
-);
+)
 
 //Extends the client to add new properties
 export interface GamerbotClient extends Client {
-    commands: Collection<string, Command>;
-    command_array: Array<object>;
-    reminder_list: Array<object>;
-    frameChoices: Array<object>;
+    commands: Collection<string, Command>
+    command_array: Array<object>
+    reminder_list: Array<object>
+    frameChoices: Array<object>
 }
 
 //Creates the client that is going to do all actions!
@@ -37,21 +37,21 @@ const client = new Client({
         GatewayIntentBits.GuildVoiceStates,
         GatewayIntentBits.MessageContent,
     ],
-}) as GamerbotClient;
+}) as GamerbotClient
 
 //Create collections
-client.commands = new Collection();
-client.command_array = [];
-client.reminder_list = [];
-client.frameChoices = [];
+client.commands = new Collection()
+client.command_array = []
+client.reminder_list = []
+client.frameChoices = []
 
 //load and run all handlers
-const files = fs.readdirSync("./src/handlers");
+const files = fs.readdirSync('./src/handlers')
 files.forEach(async (file) => {
     await import(`./handlers/${file}`).then((handler_file) => {
-        const handler = new handler_file.default();
-        handler.run(client);
-    });
-});
+        const handler = new handler_file.default()
+        handler.run(client)
+    })
+})
 
-client.login(TOKEN);
+client.login(TOKEN)
