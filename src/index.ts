@@ -20,6 +20,7 @@ export interface GamerbotClient extends Client {
     commands: Collection<string, Command>;
     command_array: Array<object>;
     reminder_list: Array<object>;
+    frameChoices: Array<object>;
 }
 
 //Creates the client that is going to do all actions!
@@ -42,6 +43,7 @@ const client = new Client({
 client.commands = new Collection();
 client.command_array = [];
 client.reminder_list = [];
+client.frameChoices = [];
 
 //load and run all handlers
 const files = fs.readdirSync("./src/handlers");

@@ -1,4 +1,5 @@
 import {
+    AutocompleteInteraction,
     CommandInteraction,
     SlashCommandBuilder,
     SlashCommandOptionsOnlyBuilder,
@@ -22,4 +23,6 @@ export interface Command {
         interaction: CommandInteraction,
         profileData: PorfileData,
     ) => void;
+
+    autoComplete?: (interaction: AutocompleteInteraction) => void;
 }

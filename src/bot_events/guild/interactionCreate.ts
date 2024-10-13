@@ -1,4 +1,4 @@
-import { Client, CommandInteraction, Interaction } from "discord.js";
+import { AutocompleteInteraction, Client, CommandInteraction, Interaction } from "discord.js";
 import { Event } from "../../classes/event";
 import { Command } from "../../classes/command";
 import { GamerBotAPIInstance, GamerbotClient } from "../..";
@@ -11,7 +11,30 @@ export default class interactionCreate implements Event {
                 client as GamerbotClient,
             );
         }
+        if(interaction.isAutocomplete()) {
+            this.onAutocomplete(
+                interaction as AutocompleteInteraction,
+                client as GamerbotClient,
+            );
+        }
     }
+
+    private async onAutocomplete(interaction:AutocompleteInteraction, client : GamerbotClient){
+        let command: Command = client.commands.get(
+            interaction.commandName,
+        ) as Command;
+        if (!command) {
+            client.commands.forEach((cmd) => {
+                if (cmd.aliases.includes(interaction.commandName)) {
+                    command = cmd;
+                }
+            });
+        }
+        if (!command) return;
+        if(command.autoComplete)
+            command.autoComplete(interaction);
+    }
+
     private async onCommand(
         interaction: CommandInteraction,
         client: GamerbotClient,

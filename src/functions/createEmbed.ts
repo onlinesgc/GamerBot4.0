@@ -18,3 +18,17 @@ export function CreateModLogEmbed(
         .setTimestamp()
         .setColor("Green");
 }
+
+export function createCommandEmbed(title: string,  interaction: CommandInteraction, discription = null, fields = []) {
+    return new EmbedBuilder()
+        .setTitle(title)
+        .setDescription(discription)
+        .setFields(fields)
+        .setFooter({
+            text: interaction.commandName,
+            iconURL: interaction.client.user.avatarURL()?.toString(),
+        })
+        .setTimestamp()
+        .setColor("Green");
+
+}
