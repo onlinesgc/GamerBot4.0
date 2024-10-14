@@ -52,6 +52,8 @@ export default class messageCreate implements Event{
             this.sendLvlText(profile_data, message);
             updateLevelRoles(message.member as GuildMember, profile_data);
         }
+
+        profile_data.save();
     }
     private async sendLvlText(profile_data:PorfileData, message:Message){
         
