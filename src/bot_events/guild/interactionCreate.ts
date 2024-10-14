@@ -18,6 +18,7 @@ import { Button } from '../../classes/button'
 export default class interactionCreate implements Event {
     constructor() {}
     run_event(client: Client, interaction: Interaction) {
+        if(!interaction.inGuild()) return;
         if (interaction.isCommand()) {
             this.onCommand(
                 interaction as CommandInteraction,

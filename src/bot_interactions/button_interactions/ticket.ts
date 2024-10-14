@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ChannelType, GuildChannel, GuildMember, ModalBuilder, ModalSubmitInteraction, TextInputBuilder, TextInputStyle } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ChannelType, CommandInteraction, GuildChannel, GuildMember, ModalBuilder, ModalSubmitInteraction, TextInputBuilder, TextInputStyle, User } from "discord.js";
 import { Button } from "../../classes/button";
 import { GamerBotAPIInstance } from "../..";
 import NoteCommand from "../commands/admin_commands/note";
@@ -7,13 +7,13 @@ export default class Ticket implements Button{
     name = 'ticket'
     defer = false
     execute(interaction: ButtonInteraction, args: string[]) {
-        if(args[0] == 'open') this.open_ticket(interaction, `Tack för att du öppnade en ticket! <@` + interaction.user.id + `> ! <@&1071466487069556746> kommer svara inom kort!`)
+        if(args[0] == 'open') this.open_ticket(interaction, interaction.user,`Tack för att du öppnade en ticket! <@` + interaction.user.id + `> ! <@&1071466487069556746> kommer svara inom kort!`)
         else if(args[0] == 'close') this.close_ticket(interaction, args[1], args[2], JSON.parse(args[3]))
         else if(args[0] == "note") this.note_ticket(interaction,args[2]);
         else if(args[0] == "archive") this.archive_ticket(interaction,args[2]);
     }
 
-    async open_ticket(interaction: ButtonInteraction, open_ticket_text:string){
+    async open_ticket(interaction: ButtonInteraction | CommandInteraction,ticketUser:User, open_ticket_text:string){
         const guild_category = (await GamerBotAPIInstance.models.get_guild_data(interaction.guildId as string)).ticketParent;
 
         if(guild_category == null || guild_category == ""){
@@ -59,7 +59,7 @@ export default class Ticket implements Button{
                         allow: ['AttachFiles']
                     },
                     {
-                        id: interaction.user.id,
+                        id: ticketUser.id,
                         allow: ['ViewChannel', "SendMessages", "AttachFiles"],
                     }
                 ]
@@ -67,7 +67,8 @@ export default class Ticket implements Button{
             const message = await ticket_channel?.send({content:`${open_ticket_text}\nBeskrivningen för problemet är:\n\`${description}\``, components:[leave_ticket_row]})
             leave_ticket_row.components[0].setCustomId(`ticket;close;${message?.id};${interaction.user.id};false`)
             await message?.edit({components:[leave_ticket_row]})
-            if(this.defer) interaction.deferUpdate()
+            if(interaction.isButton()) interaction.deferUpdate();
+            modal_submit.deferUpdate();
             return {channel : ticket_channel, interaction: interaction}
         }).catch(async () => {});
     }
@@ -102,17 +103,16 @@ export default class Ticket implements Button{
                     .setCustomId(`ticket;close;${message_id};${user_id};true`)
         )
         message?.reply({ content: `Nu har <@${user_id}> lämnat ticketen. Vill ni spara, anteckna eller slänga ticketen?`, components: [close_row] })
-        interaction.deferUpdate()
+        interaction.deferUpdate();
     }
     async note_ticket(interaction: ButtonInteraction, user_id:string){
         await interaction.showModal(await this.get_modal())
         interaction.awaitModalSubmit({time: 1000 * 60 * 10}).then(async (modal_submit) => {
             const note = modal_submit.fields.getTextInputValue("noteid")
             const member = interaction.guild?.members.cache.get(user_id) as GuildMember;
-            await new NoteCommand().noteUser(member, note, interaction.user.id)
+            await new NoteCommand().noteUser(member, "[ticket note]"+note, interaction.user.id)
             await modal_submit.reply(`Tar bort kanalen om 5 sekunder...`)
             setTimeout(()=>interaction.channel?.delete(), 5000)
-            interaction.deferUpdate()
         })
     }
     async archive_ticket(interaction: ButtonInteraction, user_id:string){
@@ -122,7 +122,7 @@ export default class Ticket implements Button{
             const note = modal_submit.fields.getTextInputValue("noteid")
             const member = interaction.guild?.members.cache.get(user_id) as GuildMember;
 
-            await new NoteCommand().noteUser(member, note, interaction.user.id)
+            await new NoteCommand().noteUser(member, "[ticket note]"+note, interaction.user.id)
             
 
             const guildConfig = await GamerBotAPIInstance.models.get_guild_data(interaction.guildId as string)

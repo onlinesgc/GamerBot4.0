@@ -11,7 +11,7 @@
         "dev": "nodemon src/index.ts"
     },
     "author": "",
-    "license": "ISC",
+    "license": "ARR",
     "devDependencies": {
         "@eslint/js": "^9.10.0",
         "@types/ms": "^0.7.34",
@@ -29,6 +29,7 @@
     "dependencies": {
         "discord.js": "^14.15.3",
         "dotenv": "^16.4.5",
+        "gamerbot-module": "^1.0.3",
         "ms": "^2.1.3"
     }
 }
