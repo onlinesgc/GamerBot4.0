@@ -35,10 +35,10 @@ export default class ModLogCommand implements Command {
             await GamerBotAPIInstance.models.get_profile_data(user.id)
         ).modLogs
 
-        //eslint-disable-next-line
         if (
             !modlogs &&
             !Array.isArray(modlogs) &&
+            //eslint-disable-next-line
             (modlogs as Array<any>).length < 1
         )
             return interaction.editReply('Användaren har inga loggar')
@@ -118,8 +118,8 @@ export default class ModLogCommand implements Command {
             })
         })
     }
-    //eslint-disable-next-line
     async getUserModLogs(
+        //eslint-disable-next-line
         mod_logs: any,
         interaction: CommandInteraction,
         start: number,
