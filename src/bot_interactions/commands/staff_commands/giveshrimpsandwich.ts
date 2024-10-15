@@ -1,4 +1,4 @@
-import { CommandInteraction, SlashCommandBuilder, User } from "discord.js";
+import { CommandInteraction, SlashCommandBuilder } from "discord.js";
 import { Command } from "../../../classes/command";
 
 export default class giveshrimpsandwich implements Command{

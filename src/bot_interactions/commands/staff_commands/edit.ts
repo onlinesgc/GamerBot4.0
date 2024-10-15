@@ -19,7 +19,6 @@ export default class EditMessageCommand implements Command {
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description)
-        //.addBooleanOption((option) => option.setName("formated").setDescription("Get formated message").setRequired(true))
         .addStringOption((option) =>
             option
                 .setName('message_id')
@@ -37,14 +36,8 @@ export default class EditMessageCommand implements Command {
             .value as string
         const channel = interaction.options.get('channel', true)
             .channel as BaseGuildTextChannel
-        //const formated = interaction.options.get("formated", true).value as boolean;
 
         const message = await channel.messages.fetch(message_id)
-        /*
-        if(formated){
-            return interaction.editReply("```"+message.content+"```")
-        }
-        */
 
         const modal = new ModalBuilder()
             .setTitle('Edit message')

@@ -24,8 +24,8 @@ export default class remindTimer implements CustomEvent {
                     reminder.user_id,
                 )
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const index = user_profile.reminders.findIndex(
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 (rem: any) =>
                     rem.message == reminder.message &&
                     rem.remindTimestamp == reminder.remindTimestamp,

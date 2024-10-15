@@ -7,6 +7,7 @@ import { updateLevelRoles } from "../../functions/updateLevelRoles";
 export default class messageCreate implements Event{
     constructor() {}
     run_event (client: Client, message:Message) {
+        if(message.author.bot) return;
         if(!message.inGuild()) return;
         this.xpCalculation(message);
     }
@@ -25,23 +26,23 @@ export default class messageCreate implements Event{
 
         //returns until time is calculated
         if(profile_data.xpTimeoutUntil > message.createdTimestamp) return;
-
+        
         const time_out = 10 * 60 * 1000; // ten mins
 
         //adds timeout
         profile_data.xpTimeoutUntil = message.createdTimestamp + time_out;
 
         //Gives xp, if similar word only give 1 xp.
-        if(profile_data.old_old_messages.length >= 3)
-            profile_data.old_old_messages.shift();
+        if(profile_data.old_messages.length >= 3)
+            profile_data.old_messages.shift();
         
-        if(profile_data.old_old_messages.includes(message.content.toLowerCase())){
+        if(profile_data.old_messages.includes(message.content.toLowerCase())){
             profile_data.xp += 1;
         }else{
             profile_data.xp += 3;
         }
 
-        profile_data.old_old_messages.push(message.content.toLowerCase());
+        profile_data.old_messages.push(message.content.toLowerCase());
 
         const lvl_cap = 31;
 

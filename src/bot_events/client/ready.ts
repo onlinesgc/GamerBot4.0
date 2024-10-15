@@ -22,7 +22,7 @@ export default class ready implements Event {
 
         // Get config data from the API
         const config_data = await GamerBotAPIInstance.models.get_config_data(
-            Number.parseInt(process.env.CONFIG_ID as string),
+            parseInt(process.env.CONFIG_ID as string),
         )
 
         // Register commands and load user reminders

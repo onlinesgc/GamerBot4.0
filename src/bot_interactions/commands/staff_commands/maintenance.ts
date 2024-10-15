@@ -1,4 +1,4 @@
-import { CommandInteraction, EmbedBuilder, GuildChannel, PermissionFlagsBits, SlashCommandBuilder, TextChannel } from "discord.js";
+import { CommandInteraction, EmbedBuilder, PermissionFlagsBits, SlashCommandBuilder, TextChannel } from "discord.js";
 import { Command } from "../../../classes/command";
 
 export default class maintenance implements Command {
