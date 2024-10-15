@@ -36,8 +36,8 @@ export default class LvlCommand implements Command {
         const file = new AttachmentBuilder(
             (await GamerBotAPIInstance.models.get_user_frame(
                 user.id as string,
-                interaction.member?.user.username as string,
-                interaction.user.avatarURL({ extension: 'png' }) as string,
+                user.username as string,
+                user.avatarURL({ extension: 'png' }) as string,
             )) as BufferResolvable,
         )
         file.setDescription(
