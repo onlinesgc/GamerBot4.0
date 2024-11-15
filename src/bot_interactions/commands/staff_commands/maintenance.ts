@@ -1,7 +1,7 @@
 import { CommandInteraction, EmbedBuilder, PermissionFlagsBits, SlashCommandBuilder, TextChannel } from "discord.js";
 import { Command } from "../../../classes/command";
 
-export default class maintenance implements Command {
+export default class Maintenance implements Command {
     name = 'maintenance'
     ephemeral = false
     defer = true

@@ -4,6 +4,7 @@ import { GamerBotAPI } from 'gamerbot-module'
 import { Command } from './classes/command'
 import fs from 'fs'
 import { Button } from './classes/button'
+import { MessageInteraction } from './classes/messageInteraction'
 
 dot_env.config()
 
@@ -20,6 +21,7 @@ export const GamerBotAPIInstance = new GamerBotAPI(
 export interface GamerbotClient extends Client {
     commands: Collection<string, Command>
     buttons: Collection<string, Button>
+    messageInteractions: Collection<string, MessageInteraction>
     command_array: Array<object>
     reminder_list: Array<object>
     frameChoices: Array<object>
@@ -44,6 +46,7 @@ const client = new Client({
 //Create collections
 client.commands = new Collection()
 client.buttons = new Collection();
+client.messageInteractions = new Collection()
 client.command_array = []
 client.reminder_list = []
 client.frameChoices = []

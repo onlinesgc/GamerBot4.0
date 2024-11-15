@@ -1,6 +1,6 @@
 import { Client, GuildMember, Message } from "discord.js";
 import { Event } from "../../classes/event";
-import { GamerBotAPIInstance } from "../..";
+import { GamerBotAPIInstance, GamerbotClient } from "../..";
 import { PorfileData } from "gamerbot-module";
 import { updateLevelRoles } from "../../functions/updateLevelRoles";
 
@@ -10,6 +10,7 @@ export default class messageCreate implements Event{
         if(message.author.bot) return;
         if(!message.inGuild()) return;
         this.xpCalculation(message);
+        this.messageInteraction(message);
     }
 
     private async xpCalculation(message:Message){
@@ -70,5 +71,11 @@ export default class messageCreate implements Event{
         })
         message.member?.send(level_text).catch();
     }
-    
+
+    private messageInteraction(message:Message) {
+        const message_interaction = (message.client as GamerbotClient).messageInteractions.find((message_interaction) => message.content && message_interaction.name == message.content.toLowerCase().replace(/\s/g,""));
+        if(message_interaction){
+            message_interaction.execute(message);
+        }
+    }
 }
