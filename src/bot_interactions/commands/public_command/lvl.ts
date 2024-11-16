@@ -38,6 +38,7 @@ export default class LvlCommand implements Command {
                 user.id as string,
                 user.username as string,
                 user.avatarURL({ extension: 'png' }) as string,
+                true
             )) as BufferResolvable,
         )
         file.setDescription(

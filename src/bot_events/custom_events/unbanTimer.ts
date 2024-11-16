@@ -1,9 +1,8 @@
-import { CustomEvent } from '../../classes/custom_event'
 import { GamerBotAPIInstance } from '../..';
 import { ModLog } from '../../classes/modlog';
 import { Client, Guild } from 'discord.js';
 
-export default class UnBanTimer implements CustomEvent {
+export default class UnBanTimer {
     async run_unban_event(client: Client, guild:Guild) {
         const time_now = Date.now();
         const guild_config_data = await GamerBotAPIInstance.models.get_guild_data(guild.id);
@@ -13,7 +12,8 @@ export default class UnBanTimer implements CustomEvent {
                 //eslint-disable-next-line
                 const userId = (ban as any).userID;
 
-                const user = client.users.cache.get(userId.id);
+                const user = await guild.bans.fetch(userId).catch(() => {});
+
 
                 if(user == undefined) return;
 
@@ -23,7 +23,7 @@ export default class UnBanTimer implements CustomEvent {
                 const modlog = new ModLog(
                     'unban',
                     userId,
-                    user?.username as string,
+                    user.user.username as string,
                     "Tiden har runnit ut",
                     null,
                     Date.now(),
@@ -34,22 +34,24 @@ export default class UnBanTimer implements CustomEvent {
                 profile_data.save()
         
         
-                await user
+                await user.user
                     .send(
                         `Du har blivit unbannad i SGC.\nhttps://discord.sgc.se to join`,
                     )
                     .catch(() => {});
         
-                await guild.members.unban(user.id)
+                await guild.members.unban(user.user.id)
                 guild_config_data.bansTimes.splice(index, 1);
                 await guild_config_data.save();
             }
         });
     }
 
-    emitor(client: Client) {
-        client.guilds.cache.forEach(guild => {
-            setInterval(() => this.run_unban_event(client, guild), 1000*30);
-        })
+    async emitor(client: Client) {
+        const guild = client.guilds.cache.get("516605157795037185");
+        if(guild == undefined) return;
+        setInterval(() => {
+            this.run_unban_event(client, guild);
+        }, 1000 * 5);
     }
 }

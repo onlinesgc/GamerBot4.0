@@ -2,6 +2,7 @@ import { Client, REST, Routes } from 'discord.js'
 import { Event } from '../../classes/event'
 import { GamerBotAPIInstance, GamerbotClient } from '../..'
 import { ConfigData, PorfileData } from 'gamerbot-module'
+import UnBanTimer from '../custom_events/unbanTimer'
 /**
  * Ready is called when the bot is turned on.
  * @param client - Discord client
@@ -28,6 +29,10 @@ export default class ready implements Event {
         // Register commands and load user reminders
         this.regiser_commands(client as GamerbotClient, config_data)
         this.load_reminders(client as GamerbotClient)
+
+        // load unbantimer 
+        const unban_timer = new UnBanTimer();
+        unban_timer.emitor(client);
     }
 
     /**
