@@ -111,7 +111,7 @@ export default class BanCommand implements Command {
             })
         if (time != '0') {
             const guild_config =
-                await GamerBotAPIInstance.models.get_guild_data('guild_id')
+                await GamerBotAPIInstance.models.get_guild_data(member.guild.id)
             guild_config.bansTimes.push({
                 userID: member.id,
                 unbantime: Number(Date.now() + ms(time)),

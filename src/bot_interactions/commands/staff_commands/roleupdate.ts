@@ -8,7 +8,7 @@ export default class RoleUpdate implements Command {
     ephemeral = false;
     description = "Uppdatera levelrollerna för en användare"
     aliases = [];
-    defer = false;
+    defer = true;
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description)

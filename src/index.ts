@@ -10,7 +10,7 @@ dot_env.config()
 
 const TOKEN = process.env.TOKEN
 const GAMERBOT_API_TOKEN = process.env.GAMERBOT_API_TOKEN as string
-const API_DEBUG_LOCAL = true
+const API_DEBUG_LOCAL = false
 
 export const GamerBotAPIInstance = new GamerBotAPI(
     GAMERBOT_API_TOKEN,

@@ -33,13 +33,15 @@ export default class FrameCommand implements Command {
             )
         //eslint-disable-next-line
         let loaded_frames: any[] = frame_config.slice(0, 10)
+        
+        const all_exclusive_frames = frame_config.slice(10, frame_config.length)
 
         if (exclusive_frames.length > 0) {
             loaded_frames = loaded_frames.concat(
                 //eslint-disable-next-line
-                frame_config.filter((frame: any) =>
+                all_exclusive_frames.filter((frame: any) =>
                     exclusive_frames.includes((frame.id - 10).toString()),
-                ),
+                )
             )
         }
 
@@ -137,7 +139,7 @@ export default class FrameCommand implements Command {
                     })
                     interaction.editReply({ embeds: [embed] })
 
-                    profileData.profileFrame = selected_frame.toString()
+                    profileData.profileFrame = loaded_frames[selected_frame].id.toString();
                     await profileData.save()
 
                     embed.setFooter({

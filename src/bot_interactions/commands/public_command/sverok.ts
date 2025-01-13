@@ -11,8 +11,8 @@ import {
     TextInputStyle,
 } from 'discord.js'
 import { Command } from '../../../classes/command'
+import { GamerBotAPIInstance } from '../../..'
 import { PorfileData } from 'gamerbot-module'
-import bcrypt from 'bcrypt'
 
 export default class SverokCommand implements Command {
     name = 'sverok'
@@ -20,12 +20,12 @@ export default class SverokCommand implements Command {
     description =
         'Koppla ditt sverok konto till discord och få en cool sverok roll'
     aliases = []
-    defer = true
+    defer = true;
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description)
     async execute(interaction: CommandInteraction, profileData: PorfileData) {
-        const sverok_role_id = '1016685055357222942'
+        const sverok_role_id = '1013577257870184559'
         const SVEROK_FRAME_ID = '19'
         const email_modal = new ModalBuilder()
             .setTitle('Sverok koppling')
@@ -64,15 +64,18 @@ export default class SverokCommand implements Command {
                 button
                     .awaitModalSubmit({ filter, time: 1000 * 5 * 60 })
                     .then(async (modal) => {
-                        const email = modal.fields.getTextInputValue('email');
+                        const email = modal.fields.getTextInputValue('email')
                         const TOKEN = process.env.SVEROK_API_TOKEN
-                        console.log(profileData.hashed_email)
-                        if (profileData.hashed_email != undefined && await this.compare(email, profileData.hashed_email)) {
-                            interaction.editReply(
-                                {content:'Denna mailadress är redan kopplad till en användare!',components:[]},
+
+                        const guild =
+                            await GamerBotAPIInstance.models.get_guild_data(
+                                interaction.guildId as string,
                             )
-                            return modal.deferUpdate();
-                        }
+
+                        if (guild.sverokMails.includes(email))
+                            return modal.reply(
+                                'Denna mailadress är redan kopplad till en användare!',
+                            )
 
                         fetch(
                             'https://ebas.sverok.se/apis/confirm_membership.json',
@@ -96,25 +99,23 @@ export default class SverokCommand implements Command {
                             .then(async (res) => res.json())
                             .then(async (data) => {
                                 if (data.response.member_found) {
-                                    profileData.hashed_email = await this.hashEmail(email) as string;
-                                    await profileData.save();
+                                    guild.sverokMails.push(email)
+                                    guild.save()
+                                    interaction.guild?.members.cache
+                                        .get(interaction.user.id)
+                                        ?.roles.add(sverok_role_id)
                                     modal.reply(
                                         'Ditt sverok konto är nu kopplat till discord och du har fått en sverok roll!',
                                     )
-                                    if(interaction.guildId != "813844220694757447"){
-                                        interaction.guild?.members.cache
-                                        .get(interaction.user.id)
-                                        ?.roles.add(sverok_role_id)
-                                        if (
-                                            !profileData.exclusiveFrames.includes(
-                                                SVEROK_FRAME_ID,
-                                            )
-                                        ) {
-                                            profileData.exclusiveFrames.push(
-                                                SVEROK_FRAME_ID,
-                                            )
-                                            profileData.save()
-                                        }
+                                    if (
+                                        !profileData.exclusiveFrames.includes(
+                                            SVEROK_FRAME_ID,
+                                        )
+                                    ) {
+                                        profileData.exclusiveFrames.push(
+                                            SVEROK_FRAME_ID,
+                                        )
+                                        profileData.save()
                                     }
                                 } else {
                                     modal.reply(
@@ -125,27 +126,10 @@ export default class SverokCommand implements Command {
                             .catch((err) => {
                                 console.log(err)
                                 interaction.editReply(
-                                    {content:'Något gick fel när vi försökte koppla ditt konto, försök igen senare!',components:[]},
+                                    'Något gick fel när vi försökte koppla ditt konto, försök igen senare!',
                                 )
                             })
                     })
             })
-    }
-    private hashEmail(email:string) {
-        const salt = 10;
-        return new Promise((resolve) => {
-            bcrypt.hash(email,salt, (err, hashedString) => {
-                if(err) console.log(err);
-                else resolve(hashedString);
-            })
-        })
-    }
-    private async compare(email:string,hashedMail:string){
-        return new Promise((resolve) => {
-            bcrypt.compare(email,hashedMail,(err, result) => {
-                if(err) console.log(err);
-                else resolve(result);
-            })
-        })
     }
 }

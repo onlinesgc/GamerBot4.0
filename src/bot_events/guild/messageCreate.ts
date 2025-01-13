@@ -27,7 +27,7 @@ export default class messageCreate implements Event{
 
         //returns until time is calculated
         if(profile_data.xpTimeoutUntil > message.createdTimestamp) return;
-        
+
         const time_out = 10 * 60 * 1000; // ten mins
 
         //adds timeout
@@ -42,7 +42,6 @@ export default class messageCreate implements Event{
         }else{
             profile_data.xp += 3;
         }
-
         profile_data.old_messages.push(message.content.toLowerCase());
 
         const lvl_cap = 31;
