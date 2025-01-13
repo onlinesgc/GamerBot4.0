@@ -49,7 +49,7 @@ export default class SverokCommand implements Command {
             )
         const message = await interaction.editReply({
             content:
-                'Hej innan du skriver in din mail så måste vi göra det tydligt att vi sparar din mailadress du skriver in på en intern hemlig lista. Vi sparar INTE vilket konto som skickat in vilken mailadress. Anledningen till att vi sparar är för att ingen mailadress ska kunna användas två gånger. Uppgifterna hanteras enligt GDPR. Mer information finns i https://docs.google.com/document/d/1PlTUOCm61SVMGd0nxxGWKIUSNuc-zK7lXdqecGZGJMs/edit?usp=sharing',
+                'Hej innan du skriver in din mail så måste vi göra det tydligt att vi sparar din mailadress igenom att kryptera den. Det betyder att vi inte kan se vilka mails vi har, men systemet kan fortfarande jämföra om du försker använda den igen. Anledningen till att vi sparar är för att ingen mailadress ska kunna användas två gånger. Uppgifterna hanteras enligt GDPR. Mer information finns i https://docs.google.com/document/d/1PlTUOCm61SVMGd0nxxGWKIUSNuc-zK7lXdqecGZGJMs/edit?usp=sharing',
             components: [confermationButton],
         })
         message
