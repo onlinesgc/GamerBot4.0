@@ -1,4 +1,4 @@
-import { CommandInteraction, SlashCommandBuilder } from "discord.js";
+import { CommandInteraction, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Command } from "../../../classes/command.js";
 
 export default class giveshrimpsandwich implements Command{
@@ -10,6 +10,7 @@ export default class giveshrimpsandwich implements Command{
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description)
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .addUserOption((option) =>
             option
                 .setName('user')

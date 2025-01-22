@@ -12,7 +12,7 @@ dot_env.config()
 
 const TOKEN = process.env.TOKEN
 const GAMERBOT_API_TOKEN = process.env.GAMERBOT_API_TOKEN as string
-const API_DEBUG_LOCAL = true
+const API_DEBUG_LOCAL = process.env.DEBUG as unknown as boolean;
 
 export const _dirname = path.join(dirname(fileURLToPath(import.meta.url)));
 

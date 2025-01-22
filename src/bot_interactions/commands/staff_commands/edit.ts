@@ -4,6 +4,7 @@ import {
     CommandInteraction,
     ModalBuilder,
     ModalSubmitInteraction,
+    PermissionFlagsBits,
     SlashCommandBuilder,
     TextInputBuilder,
     TextInputStyle,
@@ -19,6 +20,7 @@ export default class EditMessageCommand implements Command {
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description)
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .addStringOption((option) =>
             option
                 .setName('message_id')

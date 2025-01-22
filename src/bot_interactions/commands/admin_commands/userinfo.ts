@@ -1,6 +1,7 @@
 import {
     CommandInteraction,
     GuildMember,
+    PermissionFlagsBits,
     PresenceStatus,
     SlashCommandBuilder,
 } from 'discord.js'
@@ -16,6 +17,7 @@ export default class UserInfoCommand implements Command {
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description)
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .addUserOption((option) =>
             option
                 .setName('user')
