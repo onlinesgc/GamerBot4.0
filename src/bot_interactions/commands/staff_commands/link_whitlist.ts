@@ -3,8 +3,8 @@ import {
     PermissionFlagsBits,
     SlashCommandBuilder,
 } from 'discord.js'
-import { Command } from '../../../classes/command'
-import { GamerBotAPIInstance } from '../../..'
+import { Command } from '../../../classes/command.js'
+import { GamerBotAPIInstance } from '../../../index.js'
 
 export default class LinkWhitelistCommand implements Command {
     name = 'linkwhitelist'

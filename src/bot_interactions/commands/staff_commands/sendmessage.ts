@@ -11,7 +11,7 @@ import {
     TextInputBuilder,
     TextInputStyle,
 } from 'discord.js'
-import { Command } from '../../../classes/command'
+import { Command } from '../../../classes/command.js'
 
 export default class SendMessageCommand implements Command {
     name = 'sendmessage'

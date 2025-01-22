@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { MessageInteraction } from "../../classes/messageInteraction";
+import { MessageInteraction } from "../../classes/messageInteraction.js";
 
 export default class ClockInteraction implements MessageInteraction {
     name = "vad är klockan";

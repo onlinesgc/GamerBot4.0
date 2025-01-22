@@ -1,16 +1,20 @@
 import { Client, GatewayIntentBits, Collection, Partials } from 'discord.js'
 import dot_env from 'dotenv'
 import { GamerBotAPI } from 'gamerbot-module'
-import { Command } from './classes/command'
+import { Command } from './classes/command.js'
 import fs from 'fs'
-import { Button } from './classes/button'
-import { MessageInteraction } from './classes/messageInteraction'
+import { Button } from './classes/button.js'
+import { MessageInteraction } from './classes/messageInteraction.js'
+import path, { dirname } from 'path'
+import { fileURLToPath } from 'url'
 
 dot_env.config()
 
 const TOKEN = process.env.TOKEN
 const GAMERBOT_API_TOKEN = process.env.GAMERBOT_API_TOKEN as string
-const API_DEBUG_LOCAL = false
+const API_DEBUG_LOCAL = true
+
+export const _dirname = path.join(dirname(fileURLToPath(import.meta.url)));
 
 export const GamerBotAPIInstance = new GamerBotAPI(
     GAMERBOT_API_TOKEN,
@@ -52,7 +56,7 @@ client.reminder_list = []
 client.frameChoices = []
 
 //load and run all handlers
-const files = fs.readdirSync('./src/handlers')
+const files = fs.readdirSync(path.join(_dirname, './handlers'))
 files.forEach(async (file) => {
     await import(`./handlers/${file}`).then((handler_file) => {
         const handler = new handler_file.default()

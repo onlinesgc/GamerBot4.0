@@ -1,8 +1,8 @@
 import { Client, GuildMember, Message } from "discord.js";
-import { Event } from "../../classes/event";
-import { GamerBotAPIInstance, GamerbotClient } from "../..";
+import { Event } from "../../classes/event.js";
+import { GamerBotAPIInstance, GamerbotClient } from "../../index.js";
 import { PorfileData } from "gamerbot-module";
-import { updateLevelRoles } from "../../functions/updateLevelRoles";
+import { updateLevelRoles } from "../../functions/updateLevelRoles.js";
 
 export default class messageCreate implements Event{
     constructor() {}

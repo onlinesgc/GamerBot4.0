@@ -4,9 +4,9 @@ import {
     PermissionFlagsBits,
     GuildMember,
 } from 'discord.js'
-import { Command } from '../../../classes/command'
-import { GamerBotAPIInstance } from '../../..'
-import { getRndInteger } from '../../../functions/getRndInt'
+import { Command } from '../../../classes/command.js'
+import { GamerBotAPIInstance } from '../../../index.js'
+import { getRndInteger } from '../../../functions/getRndInt.js'
 
 export default class TopicCommand implements Command {
     name = 'topic'

@@ -1,6 +1,6 @@
 import { ButtonInteraction } from "discord.js";
-import { Button } from "../../classes/button";
-import { GamerBotAPIInstance } from "../..";
+import { Button } from "../../classes/button.js";
+import { GamerBotAPIInstance } from "../../index.js";
 
 export default class AddFrame implements Button{
     name = "addframe";

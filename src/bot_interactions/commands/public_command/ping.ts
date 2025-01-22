@@ -3,7 +3,7 @@ import {
     EmbedBuilder,
     SlashCommandBuilder,
 } from 'discord.js'
-import { Command } from '../../../classes/command'
+import { Command } from '../../../classes/command.js'
 
 /**
  * Ping command that replies with pong! and the time it took to respond.

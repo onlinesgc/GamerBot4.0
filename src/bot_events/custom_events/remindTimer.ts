@@ -1,6 +1,6 @@
 import { Client } from 'discord.js'
-import { CustomEvent } from '../../classes/custom_event'
-import { GamerBotAPIInstance, GamerbotClient } from '../..'
+import { CustomEvent } from '../../classes/custom_event.js'
+import { GamerBotAPIInstance, GamerbotClient } from '../../index.js'
 
 /**
  * Custom event to remind users, user add reminder with the command remind

@@ -1,5 +1,5 @@
-import { GamerBotAPIInstance } from '../..';
-import { ModLog } from '../../classes/modlog';
+import { GamerBotAPIInstance } from '../../index.js';
+import { ModLog } from '../../classes/modlog.js';
 import { Client, Guild } from 'discord.js';
 
 export default class UnBanTimer {

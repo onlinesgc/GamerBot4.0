@@ -7,9 +7,9 @@ import {
     ButtonStyle,
     EmbedBuilder,
 } from 'discord.js'
-import { Command } from '../../../classes/command'
-import { GamerBotAPIInstance } from '../../..'
-import { objectToModLog } from '../../../functions/moglog_functions'
+import { Command } from '../../../classes/command.js'
+import { GamerBotAPIInstance } from '../../../index.js'
+import { objectToModLog } from '../../../functions/moglog_functions.js'
 
 export default class ModLogCommand implements Command {
     name = 'modlog'

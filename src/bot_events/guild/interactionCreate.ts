@@ -5,10 +5,10 @@ import {
     CommandInteraction,
     Interaction,
 } from 'discord.js'
-import { Event } from '../../classes/event'
-import { Command } from '../../classes/command'
-import { GamerBotAPIInstance, GamerbotClient } from '../..'
-import { Button } from '../../classes/button'
+import { Event } from '../../classes/event.js'
+import { Command } from '../../classes/command.js'
+import { GamerBotAPIInstance, GamerbotClient } from '../../index.js'
+import { Button } from '../../classes/button.js'
 
 /**
  * InteractionCreate is called when a user interacts with the bot.

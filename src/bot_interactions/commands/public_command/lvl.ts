@@ -4,8 +4,8 @@ import {
     CommandInteraction,
     SlashCommandBuilder,
 } from 'discord.js'
-import { Command } from '../../../classes/command'
-import { GamerBotAPIInstance } from '../../..'
+import { Command } from '../../../classes/command.js'
+import { GamerBotAPIInstance } from '../../../index.js'
 import { PorfileData } from 'gamerbot-module'
 
 /**

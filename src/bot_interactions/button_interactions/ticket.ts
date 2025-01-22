@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ChannelType, CommandInteraction, GuildChannel, GuildMember, ModalBuilder, ModalSubmitInteraction, TextInputBuilder, TextInputStyle, User } from "discord.js";
-import { Button } from "../../classes/button";
-import { GamerBotAPIInstance } from "../..";
-import NoteCommand from "../commands/admin_commands/note";
+import { Button } from "../../classes/button.js";
+import { GamerBotAPIInstance } from "../../index.js";
+import NoteCommand from "../commands/admin_commands/note.js";
 
 export default class Ticket implements Button{
     name = 'ticket'

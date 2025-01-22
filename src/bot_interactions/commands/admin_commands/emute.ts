@@ -4,9 +4,9 @@ import {
     PermissionFlagsBits,
     SlashCommandBuilder,
 } from 'discord.js'
-import { Command } from '../../../classes/command'
-import MuteCommand from './mute'
-import { CreateModLogEmbed } from '../../../functions/createEmbed'
+import { Command } from '../../../classes/command.js'
+import MuteCommand from './mute.js'
+import { CreateModLogEmbed } from '../../../functions/createEmbed.js'
 
 export default class EmuteCommand implements Command {
     name = 'emute'

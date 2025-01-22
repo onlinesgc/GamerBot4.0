@@ -1,8 +1,8 @@
 import { Client, REST, Routes } from 'discord.js'
-import { Event } from '../../classes/event'
-import { GamerBotAPIInstance, GamerbotClient } from '../..'
+import { Event } from '../../classes/event.js'
+import { GamerBotAPIInstance, GamerbotClient } from '../../index.js'
 import { ConfigData, PorfileData } from 'gamerbot-module'
-import UnBanTimer from '../custom_events/unbanTimer'
+import UnBanTimer from '../custom_events/unbanTimer.js'
 /**
  * Ready is called when the bot is turned on.
  * @param client - Discord client

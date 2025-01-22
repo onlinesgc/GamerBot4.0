@@ -7,9 +7,9 @@ import {
     TextChannel,
     VoiceChannel,
 } from 'discord.js'
-import { Command } from '../../../classes/command'
+import { Command } from '../../../classes/command.js'
 import { PorfileData } from 'gamerbot-module'
-import { GamerBotAPIInstance } from '../../..'
+import { GamerBotAPIInstance } from '../../../index.js'
 
 export default class VoiceCommand implements Command {
     name = 'voice'

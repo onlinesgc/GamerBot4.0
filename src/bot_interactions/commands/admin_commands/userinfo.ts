@@ -4,7 +4,7 @@ import {
     PresenceStatus,
     SlashCommandBuilder,
 } from 'discord.js'
-import { Command } from '../../../classes/command'
+import { Command } from '../../../classes/command.js'
 import { EmbedBuilder } from '@discordjs/builders'
 
 export default class UserInfoCommand implements Command {

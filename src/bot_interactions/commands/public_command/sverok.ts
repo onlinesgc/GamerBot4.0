@@ -10,7 +10,7 @@ import {
     TextInputBuilder,
     TextInputStyle,
 } from 'discord.js'
-import { Command } from '../../../classes/command'
+import { Command } from '../../../classes/command.js'
 import { PorfileData } from 'gamerbot-module'
 import bcrypt from 'bcrypt'
 

@@ -6,9 +6,9 @@ import {
     ButtonBuilder,
     ButtonStyle,
 } from 'discord.js'
-import { Command } from '../../../classes/command'
-import { GamerBotAPIInstance } from '../../..'
-import { PorfileData } from 'gamerbot-module/dist/classes/ProfileData'
+import { Command } from '../../../classes/command.js'
+import { GamerBotAPIInstance } from '../../../index.js'
+import { PorfileData } from "gamerbot-module"
 
 /**
  * Xptoplist command that shows the top list of xp

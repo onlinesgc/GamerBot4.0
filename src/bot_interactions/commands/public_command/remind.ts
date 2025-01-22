@@ -1,8 +1,8 @@
 import { CommandInteraction, SlashCommandBuilder } from 'discord.js'
-import { Command } from '../../../classes/command'
+import { Command } from '../../../classes/command.js'
 import ms from 'ms'
 import { PorfileData } from 'gamerbot-module'
-import { GamerbotClient } from '../../..'
+import { GamerbotClient } from '../../../index.js'
 
 export default class RemindCommand implements Command {
     name = 'remind'

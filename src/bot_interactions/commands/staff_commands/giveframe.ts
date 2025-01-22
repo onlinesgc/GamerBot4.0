@@ -4,9 +4,9 @@ import {
     PermissionFlagsBits,
     SlashCommandBuilder,
 } from 'discord.js'
-import { Command } from '../../../classes/command'
-import { GamerBotAPIInstance, GamerbotClient } from '../../..'
-import { getAllFrames } from '../../../functions/getAllFrames'
+import { Command } from '../../../classes/command.js'
+import { GamerBotAPIInstance, GamerbotClient } from '../../../index.js'
+import { getAllFrames } from '../../../functions/getAllFrames.js'
 
 export default class GiveFrameCommand implements Command {
     name = 'giveframe'

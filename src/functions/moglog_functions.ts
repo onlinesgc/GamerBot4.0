@@ -1,4 +1,4 @@
-import { ModLog } from '../classes/modlog'
+import { ModLog } from '../classes/modlog.js'
 
 export function modLogToObject(modlog: ModLog) {
     return {

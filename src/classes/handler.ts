@@ -1,4 +1,4 @@
-import { GamerbotClient } from '..'
+import { GamerbotClient } from '../index.js'
 
 export interface Handler {
     /**

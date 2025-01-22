@@ -5,7 +5,7 @@ import {
     PresenceUpdateStatus,
     SlashCommandBuilder,
 } from 'discord.js'
-import { Command } from '../../../classes/command'
+import { Command } from '../../../classes/command.js'
 
 /**
  * Serverinfo command that shows information about the server

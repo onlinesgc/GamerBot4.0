@@ -1,5 +1,5 @@
 import { GuildMember } from "discord.js";
-import { GamerBotAPIInstance } from "..";
+import { GamerBotAPIInstance } from "../index.js";
 import { PorfileData } from "gamerbot-module";
 
 export async function updateLevelRoles(member:GuildMember, profile_data:PorfileData){

@@ -3,7 +3,7 @@ import {
     EmbedBuilder,
     SlashCommandBuilder,
 } from 'discord.js'
-import { Command } from '../../../classes/command'
+import { Command } from '../../../classes/command.js'
 
 /**
  * Calc command that calculates a math expression.

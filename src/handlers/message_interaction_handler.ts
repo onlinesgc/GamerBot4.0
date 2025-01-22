@@ -1,6 +1,7 @@
-import { Handler } from '../classes/handler'
+import { Handler } from '../classes/handler.js'
 import fs from 'fs'
-import { GamerbotClient } from '..'
+import { _dirname, GamerbotClient } from '../index.js'
+import path from 'path'
 
 /**
  * Loops over all message interaction files and imports them
@@ -9,7 +10,7 @@ export default class MessageInteractionHandler implements Handler {
     constructor() {}
     async run(client: GamerbotClient) {
         const message_interactions_files_and_dirs = fs.readdirSync(
-            './src/bot_interactions/message_interactions',
+            path.join(_dirname, '/bot_interactions/message_interactions'),
             { withFileTypes: true },
         )
         //Get all directories
@@ -18,14 +19,14 @@ export default class MessageInteractionHandler implements Handler {
         )
         //Get all files from top level
         const message_files = message_interactions_files_and_dirs
-            .filter((file) => file.name.endsWith('.ts') && !file.isDirectory())
+            .filter((file) => (file.name.endsWith('.ts') || file.name.endsWith(".js")) && !file.isDirectory())
             .map((file) => '../bot_interactions/message_interactions/' + file.name)
         //Get all files from sub directories
         for (const dir of message_interaction_dirs) {
             message_files.push(
                 ...fs
-                    .readdirSync('./src/bot_interactions/message_interactions/' + dir.name)
-                    .filter((file) => file.endsWith('.ts'))
+                    .readdirSync(path.join(_dirname, '/bot_interactions/message_interactions/' + dir.name))
+                    .filter((file) => file.endsWith('.ts') || file.endsWith(".js"))
                     .map(
                         (file) =>
                             '../bot_interactions/message_interactions/' +

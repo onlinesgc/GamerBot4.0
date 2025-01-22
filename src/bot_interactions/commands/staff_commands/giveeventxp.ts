@@ -1,6 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CommandInteraction, PermissionFlagsBits, SlashCommandBuilder, User, UserSelectMenuBuilder, UserSelectMenuInteraction } from "discord.js";
-import { Command } from "../../../classes/command";
-import { GamerBotAPIInstance } from "../../..";
+import { Command } from "../../../classes/command.js";
+import { GamerBotAPIInstance } from "../../../index.js";
 
 export default class GiveEventXp implements Command {
     name = 'giveeventxp'

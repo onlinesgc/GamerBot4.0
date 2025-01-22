@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, CommandInteraction, PermissionFlagsBits, GuildMember } from "discord.js";
-import { Command } from "../../../classes/command";
-import { GamerBotAPIInstance } from "../../..";
-import { updateLevelRoles } from "../../../functions/updateLevelRoles";
+import { Command } from "../../../classes/command.js";
+import { GamerBotAPIInstance } from "../../../index.js";
+import { updateLevelRoles } from "../../../functions/updateLevelRoles.js";
 
 export default class RoleUpdate implements Command {
     name = "roleupdate";

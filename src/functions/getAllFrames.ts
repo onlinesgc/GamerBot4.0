@@ -1,4 +1,4 @@
-import { GamerBotAPIInstance, GamerbotClient } from '..'
+import { GamerBotAPIInstance, GamerbotClient } from '../index.js'
 
 /**
  * Get all frames available in the guild

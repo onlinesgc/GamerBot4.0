@@ -13,8 +13,8 @@ import {
     TextInputStyle,
 } from 'discord.js'
 import { PorfileData } from 'gamerbot-module'
-import { Command } from '../../../classes/command'
-import { GamerBotAPIInstance } from '../../..'
+import { Command } from '../../../classes/command.js'
+import { GamerBotAPIInstance } from '../../../index.js'
 
 export default class FrameCommand implements Command {
     name = 'frame'

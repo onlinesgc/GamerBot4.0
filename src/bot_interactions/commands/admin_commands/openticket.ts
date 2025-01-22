@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, PermissionFlagsBits, CommandInteraction } from "discord.js"
-import { Command } from "../../../classes/command"
-import Ticket from "../../button_interactions/ticket"
+import { Command } from "../../../classes/command.js"
+import Ticket from "../../button_interactions/ticket.js"
 
 export default class OpenTicketCommand implements Command {
     name = 'openticket'

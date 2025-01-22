@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { MessageInteraction } from "../../classes/messageInteraction";
+import { MessageInteraction } from "../../classes/messageInteraction.js";
 
 export default class Poll implements MessageInteraction {
     name = "(poll)";

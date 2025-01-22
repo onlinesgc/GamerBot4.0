@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
-import { MessageInteraction } from "../../classes/messageInteraction";
-import { getRndInteger } from "../../functions/getRndInt";
+import { MessageInteraction } from "../../classes/messageInteraction.js";
+import { getRndInteger } from "../../functions/getRndInt.js";
 
 export default class GamerBotMessageInteraction implements MessageInteraction {
     name = "gamerbot";

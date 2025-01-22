@@ -4,10 +4,10 @@ import {
     PermissionFlagsBits,
     SlashCommandBuilder,
 } from 'discord.js'
-import { Command } from '../../../classes/command'
-import { GamerBotAPIInstance } from '../../..'
-import { ModLog } from '../../../classes/modlog'
-import { CreateModLogEmbed } from '../../../functions/createEmbed'
+import { Command } from '../../../classes/command.js'
+import { GamerBotAPIInstance } from '../../../index.js'
+import { ModLog } from '../../../classes/modlog.js'
+import { CreateModLogEmbed } from '../../../functions/createEmbed.js'
 
 export default class UnMuteCommand implements Command {
     name = 'unmute'
