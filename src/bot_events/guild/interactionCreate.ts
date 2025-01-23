@@ -57,9 +57,8 @@ export default class interactionCreate implements Event {
                 button.execute(buttonInteraction, args)
         } catch (error) {
             console.error(error)
-            buttonInteraction.reply({
-                content: 'There was an error while executing the button.',
-                ephemeral: true,
+            buttonInteraction.channel?.send({
+                content: 'There was an error while executing the button.'
             })
         }
 
@@ -107,9 +106,8 @@ export default class interactionCreate implements Event {
             await command.execute(interaction, profile_data)
         } catch (error) {
             console.error(error)
-            interaction.reply({
-                content: 'There was an error while executing this command.',
-                ephemeral: true,
+            interaction.channel?.send({
+                content: 'There was an error while executing this command.'
             })
         }
     }
