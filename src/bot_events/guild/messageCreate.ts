@@ -68,7 +68,7 @@ export default class messageCreate implements Event{
                 level_text += level.message;
             }
         })
-        message.member?.send(level_text).catch();
+        message.member?.send(level_text).catch(() => {});
     }
 
     private messageInteraction(message:Message) {
