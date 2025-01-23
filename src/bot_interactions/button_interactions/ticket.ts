@@ -67,7 +67,6 @@ export default class Ticket implements Button{
             const message = await ticket_channel?.send({content:`${open_ticket_text}\nBeskrivningen för problemet är:\n\`${description}\``, components:[leave_ticket_row]})
             leave_ticket_row.components[0].setCustomId(`ticket;close;${message?.id};${interaction.user.id};false`)
             await message?.edit({components:[leave_ticket_row]})
-            if(interaction.isButton() && !interaction.deferred) interaction.deferUpdate();
             modal_submit.deferUpdate();
             return {channel : ticket_channel, interaction: interaction}
         }).catch(async () => {});
