@@ -128,8 +128,8 @@ export default class SverokCommand implements Command {
                                     {content:'Något gick fel när vi försökte koppla ditt konto, försök igen senare!',components:[]},
                                 )
                             })
-                    })
-            })
+                    }).catch(() => {})
+            }).catch(() => {})
     }
     private hashEmail(email:string) {
         const salt = 10;
