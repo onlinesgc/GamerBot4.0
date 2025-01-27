@@ -51,7 +51,7 @@ export default class ColorCommand implements Command {
         .addStringOption(option => option
             .setName("färg")
             .setDescription("Välj vilken färg du vill ha, lämna denna blank ifall du vill ta bort din roll")
-            .setRequired(true)
+            .setRequired(false)
             .addChoices(formattedRoles));
     async execute(interaction: CommandInteraction, profileData: PorfileData) {
         //eslint-disable-next-line
