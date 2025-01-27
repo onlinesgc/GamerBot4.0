@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, SlashCommandOptionsOnlyBuilder, CommandInteraction, AutocompleteInteraction, GuildMemberRoleManager } from "discord.js";
+import { SlashCommandBuilder, CommandInteraction, GuildMemberRoleManager } from "discord.js";
 import { PorfileData } from "gamerbot-module";
 import { Command } from "../../../classes/command.js";
 
@@ -54,6 +54,9 @@ export default class ColorCommand implements Command {
             .setRequired(true)
             .addChoices(formattedRoles));
     async execute(interaction: CommandInteraction, profileData: PorfileData) {
+        //eslint-disable-next-line
+        const roleOption = interaction.options.get("färg", false) as unknown as any;
+        
         if(interaction.member == null) return;
 
         if(!(interaction.member.roles as GuildMemberRoleManager).cache.hasAny(...ROLES_PERMISSION)){
@@ -61,7 +64,6 @@ export default class ColorCommand implements Command {
             return;
         }
 
-        const roleOption = interaction.options.get("färg", false) as unknown as string;
 
         const rolesArray = []
 		for (const roleId of Object.values(ROLES)) {
@@ -77,7 +79,7 @@ export default class ColorCommand implements Command {
             return;
         }
 
-        await (interaction.member.roles as GuildMemberRoleManager).add(roleOption);
+        await (interaction.member.roles as GuildMemberRoleManager).add(roleOption.value);
 
 
         interaction.editReply({content: `Gav dig rollen <@&${roleOption}>!`,})
