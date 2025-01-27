@@ -82,7 +82,7 @@ export default class ColorCommand implements Command {
         await (interaction.member.roles as GuildMemberRoleManager).add(roleOption.value);
 
 
-        interaction.editReply({content: `Gav dig rollen <@&${roleOption}>!`,})
+        interaction.editReply({content: `Gav dig rollen <@&${roleOption.value}>!`,})
 
     }
 
