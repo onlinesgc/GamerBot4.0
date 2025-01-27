@@ -15,10 +15,8 @@ export async function updateLevelRoles(member:GuildMember, profile_data:PorfileD
     const roles = await findRoles(xp_config.levels, profile_data.level);
 
     for (const level of xp_config.levels) {
-        if(member.roles.cache.has(level.id)){
-            if(!roles.includes(level.id))
-                await member.roles.remove(level.id);
-        }
+        if((level.id as any[]).some((id:number) => roles.includes(id))) continue;
+        await member.roles.remove(level.id);
     }
 
     const blockRoleUpdateRoleId = "1082393287731708015"
