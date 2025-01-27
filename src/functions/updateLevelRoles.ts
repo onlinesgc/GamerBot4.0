@@ -7,7 +7,7 @@ export async function updateLevelRoles(member:GuildMember, profile_data:PorfileD
     //eslint-disable-next-line
     const xp_config = bot_config.xp as any;
 
-    if(xp_config.levels.length){
+    if(!xp_config.levels.length){
         console.log("User leveled up but there are no level-roles configured");
         return;
     }
