@@ -4,7 +4,7 @@ import { MessageInteraction } from "../../classes/messageInteraction.js";
 export default class ClockInteraction implements MessageInteraction {
     name = "vad är klockan";
     execute(interaction: Message) {
-
+		if(!interaction.channel.isSendable()) return;
         if(!interaction.mentions.has(interaction.client.user)) return;
 
         if (Math.floor(Math.random() * 100) > 91) {

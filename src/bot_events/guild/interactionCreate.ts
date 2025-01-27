@@ -4,6 +4,7 @@ import {
     Client,
     CommandInteraction,
     Interaction,
+    TextChannel,
 } from 'discord.js'
 import { Event } from '../../classes/event.js'
 import { Command } from '../../classes/command.js'
@@ -56,8 +57,8 @@ export default class interactionCreate implements Event {
             else
                 button.execute(buttonInteraction, args)
         } catch (error) {
-            console.error(error)
-            buttonInteraction.channel?.send({
+            console.error(error);
+            (buttonInteraction.channel as TextChannel).send({
                 content: 'There was an error while executing the button.'
             })
         }
@@ -105,8 +106,8 @@ export default class interactionCreate implements Event {
                 await interaction.deferReply({ ephemeral: command.ephemeral })
             await command.execute(interaction, profile_data)
         } catch (error) {
-            console.error(error)
-            interaction.channel?.send({
+            console.error(error);
+            (interaction.channel as TextChannel).send({
                 content: 'There was an error while executing this command.'
             })
         }
