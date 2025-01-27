@@ -1,10 +1,12 @@
 # Gamerbot 4.0
 
+# Information
+This bot is used by [SGC discord](https://discord.sgc.se). It has a level system, user management, voice chat features, and more!
+
 # Setup
 
-1. First you need to clone [Gamerbot rest API](https://github.com/stamdiscord/Gamerbot-REST-API) (There is instruction to set this up in that projects README). If you want to use the real API (not currently available) just make sure to set `const API_DEBUG_LOCAL = true` to `false` in `index.ts`
-2. After that you need the Gamerbot module. Its not published yet so you need to clone that. [Module](https://github.com/stamdiscord/Gamerbot-module). Make sure to run `npm install` and than `npm run link`. This will make the project available on your computer.
-3. After that you can clone this project.
-4. First run `npm run init` and than `npm link gamerbot-module`
-5. You will now have a .env that you need to fill.
-6. To run the project `npm run dev`
+1. You need an instance of the [Gamerbot API](https://github.com/onlinesgc/Gamerbot-REST-API) running. It has instructions on how you set it up!
+2. After that you need to clone this project with `git clone https://github.com/onlinesgc/GamerBot4.0.git`
+3. You now need to set up the `.env` file. There is a `.env.example` file rep, you just need to fill out the information and remove the .example!
+4. Run `npm install`
+5. Run `npm run dev` to run in dev mode, to test production run `npm run build` and then `npm run start`
