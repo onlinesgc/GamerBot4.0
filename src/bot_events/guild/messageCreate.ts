@@ -1,21 +1,23 @@
 import { Client, GuildMember, Message } from "discord.js";
 import { Event } from "../../classes/event.js";
 import { GamerBotAPIInstance, GamerbotClient } from "../../index.js";
-import { PorfileData } from "gamerbot-module";
+import { GuildData, PorfileData } from "gamerbot-module";
 import { updateLevelRoles } from "../../functions/updateLevelRoles.js";
 
 export default class messageCreate implements Event{
     constructor() {}
-    run_event (client: Client, message:Message) {
+    async run_event (client: Client, message:Message) {
         if(message.author.bot) return;
         if(!message.inGuild()) return;
-        this.xpCalculation(message);
-        this.messageInteraction(message);
-    }
 
-    private async xpCalculation(message:Message){
         const guild_data = await GamerBotAPIInstance.models.get_guild_data(message.guild?.id as string);
 
+        this.xpCalculation(message, guild_data);
+        this.messageInteraction(message);
+        this.removeLink(message, guild_data);
+    }
+
+    private async xpCalculation(message:Message, guild_data:GuildData){
         if(guild_data.noXpChannels.includes(message.channel.id)) return;
 
         // Check if the message is in a thead from general chat and random shit
@@ -76,5 +78,37 @@ export default class messageCreate implements Event{
         if(message_interaction){
             message_interaction.execute(message);
         }
+    }
+
+    async removeLink(message:Message, guild_data:GuildData) {
+        const link_roles = guild_data.trustedLinkRoles;
+        const whitelistedLinks = guild_data.whitelistedLinks;
+        const whitelistedChannels = guild_data.allowedLinksChannels;
+
+        const notAllowed = (msg:Message) => {
+            if(!msg.channel.isSendable()) return;
+            msg.channel.send({content:"Du har inte tillåtelse att skicka länkar här", }).then((sentMessage) => {
+                setTimeout(() => {
+                    sentMessage.delete().catch(() => {});
+                }, 5000);
+            });
+            msg.delete().catch(() => {});
+        }
+
+        const urlRegex = /((https?:\/\/)|(www\.)|(discord\.((com\/invite\/)|(gg\/)))[^\s]+)/;
+
+        const linkFound = message.content.match(urlRegex) != null;
+
+        if(!linkFound) return;
+
+        if(message.member?.roles.cache.hasAny(...link_roles)) return;
+
+        if((await GamerBotAPIInstance.models.get_profile_data(message.member?.id as string)).level < 2) return notAllowed(message);
+
+        if(
+            whitelistedChannels.includes(message.channel.id)
+        ) return;
+
+        notAllowed(message);
     }
 }
