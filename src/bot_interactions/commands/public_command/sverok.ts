@@ -65,8 +65,7 @@ export default class SverokCommand implements Command {
                     .awaitModalSubmit({ filter, time: 1000 * 5 * 60 })
                     .then(async (modal) => {
                         const email = modal.fields.getTextInputValue('email');
-                        const TOKEN = process.env.SVEROK_API_TOKEN
-                        console.log(profileData.hashed_email)
+                        const TOKEN = process.env.SVEROK_API_TOKEN;
                         if (profileData.hashed_email != undefined && await this.compare(email, profileData.hashed_email)) {
                             interaction.editReply(
                                 {content:'Denna mailadress är redan kopplad till en användare!',components:[]},
