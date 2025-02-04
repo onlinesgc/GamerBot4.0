@@ -1,6 +1,7 @@
 # Gamerbot 4.0
 
 # Information
+
 This bot is used by [SGC discord](https://discord.sgc.se). It has a level system, user management, voice chat features, and more!
 
 # Setup

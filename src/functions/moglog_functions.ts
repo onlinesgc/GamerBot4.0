@@ -1,4 +1,4 @@
-import { ModLog } from '../classes/modlog.js'
+import { ModLog } from "../classes/modlog.js";
 
 export function modLogToObject(modlog: ModLog) {
     return {
@@ -9,7 +9,7 @@ export function modLogToObject(modlog: ModLog) {
         length: modlog.length,
         date: modlog.date,
         authorID: modlog.authorID,
-    }
+    };
 }
 
 //eslint-disable-next-line
@@ -24,5 +24,5 @@ export function objectToModLog(obj: any) {
             ? obj.date
             : new Date(parseInt(obj.date)).toLocaleDateString(),
         obj.authorID,
-    )
+    );
 }

@@ -1,4 +1,4 @@
-import { GamerbotClient } from '../index.js'
+import { GamerbotClient } from "../index.js";
 
 export interface Handler {
     /**
@@ -6,5 +6,5 @@ export interface Handler {
      * @param client Discord client
      * @returns
      */
-    run: (client: GamerbotClient) => void
+    run: (client: GamerbotClient) => void;
 }
