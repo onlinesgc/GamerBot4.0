@@ -5,8 +5,10 @@ import { Client, Guild } from "discord.js";
 export default class UnBanTimer {
     async run_unban_event(client: Client, guild: Guild) {
         const time_now = Date.now();
+
         const guild_config_data =
             await GamerBotAPIInstance.models.get_guild_data(guild.id);
+        
         guild_config_data.bansTimes.forEach(async (ban, index) => {
             //eslint-disable-next-line
             if ((ban as any).unbantime <= time_now) {

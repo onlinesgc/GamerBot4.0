@@ -19,6 +19,7 @@ export default class remindTimer implements CustomEvent {
                 client.reminder_list.indexOf(reminder),
                 1,
             );
+            
             const user_profile =
                 await GamerBotAPIInstance.models.get_profile_data(
                     reminder.user_id,

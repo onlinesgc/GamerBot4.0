@@ -1,21 +1,18 @@
 import {
-    ActionRowBuilder,
-    ButtonBuilder,
     ButtonInteraction,
     ButtonStyle,
     ChannelType,
     CommandInteraction,
     GuildChannel,
     GuildMember,
-    ModalBuilder,
     ModalSubmitInteraction,
-    TextInputBuilder,
     TextInputStyle,
     User,
 } from "discord.js";
 import { Button } from "../../classes/button.js";
 import { GamerBotAPIInstance } from "../../index.js";
 import NoteCommand from "../commands/admin_commands/note.js";
+import { createButtonRow, createModal } from "../../functions/builder_functions.js";
 
 export default class Ticket implements Button {
     name = "ticket";
@@ -57,74 +54,74 @@ export default class Ticket implements Button {
             return;
         }
 
-        const leave_ticket_row =
-            new ActionRowBuilder<ButtonBuilder>().addComponents(
-                new ButtonBuilder()
-                    .setStyle(ButtonStyle.Danger)
-                    .setLabel("Lämna ticket")
-                    .setCustomId(`ticket;close;${interaction.user.id};false`),
-            );
-        const ticket_modal = new ModalBuilder()
-            .setTitle("Ticket")
-            .setCustomId(`ticket_help:${interaction.id}`)
-            .addComponents(
-                new ActionRowBuilder<TextInputBuilder>().addComponents(
-                    new TextInputBuilder()
-                        .setLabel(
-                            "Skriv en beskrivning vad du behöver hjälp med",
-                        )
-                        .setPlaceholder("Skriv här...")
-                        .setStyle(TextInputStyle.Paragraph)
-                        .setCustomId(
-                            `ticket_help_description:${interaction.id}`,
-                        ),
-                ),
-            );
+        const leave_ticket_row = createButtonRow(
+            {
+                style:ButtonStyle.Danger,
+                label:"Lämna ticket",
+                id:`ticket;close;${interaction.user.id};false`
+            }
+        );
+
+        const ticket_modal = createModal(
+            "Ticket",
+            `ticket_help:${interaction.id}`,
+            {
+                label:"Skriv en beskrivning vad du behöver hjälp med",
+                placeholder:"Skriv här...",
+                style:TextInputStyle.Paragraph,
+                text_id:`ticket_help_description:${interaction.id}`,
+                requierd:true
+            }
+        );
 
         await interaction.showModal(ticket_modal);
 
         const filter = (i: ModalSubmitInteraction) =>
             i.customId.split(":")[1] === interaction.id;
-        interaction
-            .awaitModalSubmit({ filter, time: 1000 * 60 * 10 })
-            .then(async (modal_submit) => {
-                const description = modal_submit.fields.getTextInputValue(
-                    `ticket_help_description:${interaction.id}`,
-                );
-                const ticket_channel = await interaction.guild?.channels.create(
+
+        const modal_submit = await interaction.awaitModalSubmit({ filter, time: 1000 * 60 * 10 }).catch(() => {})
+        if (!modal_submit) return;
+
+        const description = modal_submit.fields.getTextInputValue(
+            `ticket_help_description:${interaction.id}`,
+        );
+
+        const ticket_channel = await interaction.guild?.channels.create(
+            {
+                name: `ticket-${interaction.user.username}`,
+                type: ChannelType.GuildText,
+                parent: guild_category,
+                permissionOverwrites: [
                     {
-                        name: `ticket-${interaction.user.username}`,
-                        type: ChannelType.GuildText,
-                        parent: guild_category,
-                        permissionOverwrites: [
-                            {
-                                id: interaction.guild?.roles.everyone.id,
-                                deny: ["ViewChannel", "SendMessages"],
-                                allow: ["AttachFiles"],
-                            },
-                            {
-                                id: ticketUser.id,
-                                allow: [
-                                    "ViewChannel",
-                                    "SendMessages",
-                                    "AttachFiles",
-                                ],
-                            },
+                        id: interaction.guild?.roles.everyone.id,
+                        deny: ["ViewChannel", "SendMessages"],
+                        allow: ["AttachFiles"],
+                    },
+                    {
+                        id: ticketUser.id,
+                        allow: [
+                            "ViewChannel",
+                            "SendMessages",
+                            "AttachFiles",
                         ],
                     },
-                );
-                const message = await ticket_channel?.send({
-                    content: `${open_ticket_text}\nBeskrivningen för problemet är:\n\`${description}\``,
-                    components: [leave_ticket_row],
-                });
-                leave_ticket_row.components[0].setCustomId(
-                    `ticket;close;${message?.id};${interaction.user.id};false`,
-                );
-                await message?.edit({ components: [leave_ticket_row] });
-                modal_submit.deferUpdate();
-                return { channel: ticket_channel, interaction: interaction };
-            })
-            .catch(async () => {});
+                ],
+            },
+        );
+        const message = await ticket_channel?.send({
+            content: `${open_ticket_text}\nBeskrivningen för problemet är:\n\`${description}\``,
+            components: [leave_ticket_row],
+        });
+
+        leave_ticket_row.components[0].setCustomId(
+            `ticket;close;${message?.id};${interaction.user.id};false`,
+        );
+
+        await message?.edit({ components: [leave_ticket_row] });
+        modal_submit.deferUpdate();
+
+        return { channel: ticket_channel, interaction: interaction };
+        
     }
 
     async close_ticket(
@@ -147,23 +144,13 @@ export default class Ticket implements Button {
             SendMessages: false,
             AttachFiles: false,
         });
-        const close_row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-            new ButtonBuilder()
-                .setEmoji("📝")
-                .setStyle(ButtonStyle.Secondary)
-                .setLabel("Notera och radera")
-                .setCustomId(`ticket;note;${message_id};${user_id}`),
-            new ButtonBuilder()
-                .setEmoji("💾")
-                .setStyle(ButtonStyle.Secondary)
-                .setLabel("Notera och arkivera")
-                .setCustomId(`ticket;archive;${message_id};${user_id}`),
-            new ButtonBuilder()
-                .setStyle(ButtonStyle.Danger)
-                .setEmoji("🗑️")
-                .setLabel("Radera")
-                .setCustomId(`ticket;close;${message_id};${user_id};true`),
+
+        const close_row = createButtonRow(
+            {emoji:"📝", style:ButtonStyle.Secondary, label:"Notera och radera", id:`ticket;note;${message_id};${user_id}`},
+            {emoji:"💾", style:ButtonStyle.Secondary, label:"Notera och arkivera", id:`ticket;archive;${message_id};${user_id}`},
+            {style:ButtonStyle.Danger, label:"Radera", id:`ticket;close;${message_id};${user_id};true`},
         );
+
         message?.reply({
             content: `Nu har <@${user_id}> lämnat ticketen. Vill ni spara, anteckna eller slänga ticketen?`,
             components: [close_row],
@@ -172,72 +159,62 @@ export default class Ticket implements Button {
     }
     async note_ticket(interaction: ButtonInteraction, user_id: string) {
         await interaction.showModal(await this.get_modal());
-        interaction
-            .awaitModalSubmit({ time: 1000 * 60 * 10 })
-            .then(async (modal_submit) => {
-                const note = modal_submit.fields.getTextInputValue("noteid");
-                const member = interaction.guild?.members.cache.get(
-                    user_id,
-                ) as GuildMember;
-                await new NoteCommand().noteUser(
-                    member,
-                    "[ticket note]" + note,
-                    interaction.user.id,
-                );
-                await modal_submit.reply(`Tar bort kanalen om 5 sekunder...`);
-                setTimeout(() => interaction.channel?.delete(), 5000);
-            });
+        const modal_submit = await interaction.awaitModalSubmit({ time: 1000 * 60 * 10 }).catch(() => {});
+
+        if (!modal_submit) return;
+
+        const note = modal_submit.fields.getTextInputValue("noteid");
+        const member = interaction.guild?.members.cache.get(
+            user_id,
+        ) as GuildMember;
+
+        await new NoteCommand().noteUser(
+            member,
+            "[ticket note]" + note,
+            interaction.user.id,
+        );
+
+        await modal_submit.reply(`Tar bort kanalen om 5 sekunder...`);
+
+        setTimeout(() => interaction.channel?.delete(), 5000);
     }
     async archive_ticket(interaction: ButtonInteraction, user_id: string) {
         await interaction.showModal(await this.get_modal());
-        interaction
-            .awaitModalSubmit({ time: 60 * 1000 * 10 })
-            .then(async (modal_submit) => {
-                const note = modal_submit.fields.getTextInputValue("noteid");
-                const member = interaction.guild?.members.cache.get(
-                    user_id,
-                ) as GuildMember;
+        const modal_submit = await interaction.awaitModalSubmit({ time: 60 * 1000 * 10 }).catch(() => {});
 
-                await new NoteCommand().noteUser(
-                    member,
-                    "[ticket note]" + note,
-                    interaction.user.id,
-                );
+        if (!modal_submit) return;
 
-                const guildConfig =
-                    await GamerBotAPIInstance.models.get_guild_data(
-                        interaction.guildId as string,
-                    );
-                if (!guildConfig.archivedTicketParent) {
-                    modal_submit.reply(
-                        "Det gick inte att arkivera ticketen eftersom att guild config värdet `archivedTicketParent` inte är definierat! Medlemmen noterades dock ändå.",
-                    );
-                    return;
-                }
+        const note = modal_submit.fields.getTextInputValue("noteid");
+        const member = interaction.guild?.members.cache.get(
+            user_id,
+        ) as GuildMember;
 
-                await modal_submit.reply(`Arkiverar kanalen om 5 sekunder...`);
-                setTimeout(async () => {
-                    await (interaction.channel as GuildChannel).setParent(
-                        guildConfig.archivedTicketParent,
-                    );
-                }, 5000);
-            })
-            .catch(() => {});
+        await new NoteCommand().noteUser(
+            member,
+            "[ticket note]" + note,
+            interaction.user.id,
+        );
+
+        const guildConfig =
+            await GamerBotAPIInstance.models.get_guild_data(
+                interaction.guildId as string,
+            );
+        if (!guildConfig.archivedTicketParent) {
+            modal_submit.reply(
+                "Det gick inte att arkivera ticketen eftersom att guild config värdet `archivedTicketParent` inte är definierat! Medlemmen noterades dock ändå.",
+            );
+            return;
+        }
+
+        await modal_submit.reply(`Arkiverar kanalen om 5 sekunder...`);
+        setTimeout(async () => {
+            await (interaction.channel as GuildChannel).setParent(
+                guildConfig.archivedTicketParent,
+            );
+        }, 5000);
     }
 
     async get_modal() {
-        return new ModalBuilder()
-            .setCustomId("noteadd")
-            .setTitle("Add note")
-            .addComponents(
-                new ActionRowBuilder<TextInputBuilder>().addComponents(
-                    new TextInputBuilder()
-                        .setLabel("Add note")
-                        .setPlaceholder("note...")
-                        .setCustomId("noteid")
-                        .setRequired(true)
-                        .setStyle(TextInputStyle.Paragraph),
-                ),
-            );
+        return createModal("Add note", "noteadd", {label:"Add note",placeholder:"note...",style:TextInputStyle.Paragraph,text_id:"noteid", requierd:true});
     }
 }

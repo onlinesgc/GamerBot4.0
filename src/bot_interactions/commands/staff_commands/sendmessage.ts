@@ -12,6 +12,7 @@ import {
     TextInputStyle,
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
+import { createModal } from "../../../functions/builder_functions.js";
 
 export default class SendMessageCommand implements Command {
     name = "sendmessage";
@@ -41,43 +42,44 @@ export default class SendMessageCommand implements Command {
         const options = interaction.options.get("options", false)
             ?.value as string;
 
-        const message_modal = new ModalBuilder()
-            .setTitle("Skicka meddelande")
-            .setCustomId(`send_message:${interaction.id}`)
-            .addComponents(
-                new ActionRowBuilder<TextInputBuilder>().addComponents(
-                    new TextInputBuilder()
-                        .setLabel("Meddelande:")
-                        .setStyle(TextInputStyle.Paragraph)
-                        .setPlaceholder("Skriv här...")
-                        .setCustomId("send_message_message"),
-                ),
-            );
+
+        const message_modal = createModal(
+            "Skicka meddelande",
+            `send_message:${interaction.id}`,
+            {
+                label: "Meddelande:",
+                placeholder: "Skriv här...",
+                style: TextInputStyle.Paragraph,
+                text_id: "send_message_message",
+                requierd: true,
+            }
+        );
 
         await interaction.showModal(message_modal);
         const filter = (i: ModalSubmitInteraction) =>
             i.customId.split(":")[1] === interaction.id;
-        interaction
-            .awaitModalSubmit({ filter, time: 1000 * 60 * 10 })
-            .then(async (modal_submit) => {
-                const message = modal_submit.fields.getTextInputValue(
-                    "send_message_message",
-                );
-                if (options) {
-                    const button_row =
-                        new ActionRowBuilder<ButtonBuilder>().addComponents(
-                            new ButtonBuilder()
-                                .setStyle(ButtonStyle.Success)
-                                .setCustomId(options.split("-")[1])
-                                .setLabel(options.split("-")[0]),
-                        );
-                    await channel.send({
-                        content: message,
-                        components: [button_row],
-                    });
-                } else await channel.send(message);
+        const modal_submit = await interaction.awaitModalSubmit({ filter, time: 1000 * 60 * 10 }).catch(() => {});
 
-                modal_submit.deferUpdate();
+        if (!modal_submit) return;
+
+        const message = modal_submit.fields.getTextInputValue(
+            "send_message_message",
+        );
+        
+        if (options) {
+            const button_row =
+                new ActionRowBuilder<ButtonBuilder>().addComponents(
+                    new ButtonBuilder()
+                        .setStyle(ButtonStyle.Success)
+                        .setCustomId(options.split("-")[1])
+                        .setLabel(options.split("-")[0]),
+                );
+            await channel.send({
+                content: message,
+                components: [button_row],
             });
+        } else await channel.send(message);
+
+        modal_submit.deferUpdate();
     }
 }
