@@ -19,13 +19,13 @@ export default class AddFrame implements Button {
         if (has_frame == undefined) {
             profile_data.exclusiveFrames.push(args[0]);
             await profile_data.save();
-            interaction.reply(`Du har nu lagt till ramen ${args[0]}!`);
+            interaction.user.send("Du har fått en ny ram!").catch(() => {});
             return;
         } else {
             //eslint-disable-next-line
-            interaction.reply(
+            interaction.user.send(
                 `Du har redan fått ${(guild_data.frameConfig[parseInt(args[0])] as any).name}!`,
-            );
+            ).catch(() => {});
             return;
         }
     }
