@@ -17,7 +17,7 @@ export default class AddFrame implements Button {
             (frame) => frame == args[0],
         );
         if (has_frame == undefined) {
-            profile_data.exclusiveFrames.push(args[0]);
+            profile_data.exclusiveFrames.push((parseInt(args[0])-10).toString());
             await profile_data.save();
             interaction.user.send("Du har fått en ny ram!").catch(() => {});
             return;
