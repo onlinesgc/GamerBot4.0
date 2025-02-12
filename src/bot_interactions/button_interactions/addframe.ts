@@ -14,7 +14,7 @@ export default class AddFrame implements Button {
                 "516605157795037185",
             );
         const has_frame = profile_data.exclusiveFrames.find(
-            (frame) => frame == args[0],
+            (frame) => frame == (parseInt(args[0])-10).toString(),
         );
         if (has_frame == undefined) {
             profile_data.exclusiveFrames.push((parseInt(args[0])-10).toString());
