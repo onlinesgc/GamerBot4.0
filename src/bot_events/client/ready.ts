@@ -19,7 +19,16 @@ export default class ready implements Event {
         );
 
         // Get API status and config data and logs it
-        await GamerBotAPIInstance.getAPIStatus();
+        const status = await GamerBotAPIInstance.getAPIStatus();
+        if(status == false) {
+            await new Promise<boolean>(() =>{
+                const t = setInterval(()=>{
+                    if(GamerBotAPIInstance.apiStatus){
+                        clearInterval(t);
+                    }
+                }, 5000);
+            });
+        }
 
         // Get config data from the API
         const config_data = await GamerBotAPIInstance.models.get_config_data(
