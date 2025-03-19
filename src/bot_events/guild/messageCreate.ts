@@ -91,13 +91,14 @@ export default class messageCreate implements Event {
     }
 
     private messageInteraction(message: Message) {
+
+        const message_content = message.content.toLowerCase().replace(/\s/g, "");
+
         const message_interaction = (
             message.client as GamerbotClient
         ).messageInteractions.find(
             (message_interaction) =>
-                message.content &&
-                message_interaction.name ==
-                    message.content.toLowerCase().replace(/\s/g, ""),
+                message.content.toLowerCase().includes(message_interaction.name),
         );
         if (message_interaction) {
             message_interaction.execute(message);
