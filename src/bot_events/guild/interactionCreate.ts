@@ -99,8 +99,12 @@ export default class interactionCreate implements Event {
         }
         if (!command) return;
         try {
-            if (command.defer)
-                await interaction.deferReply({ flags: MessageFlags.Ephemeral});
+            if (command.defer){
+                if(command.ephemeral)
+                    await interaction.deferReply({ ephemeral: true });
+                else
+                    await interaction.deferReply();
+            }
 
             const profile_data = await GamerBotAPIInstance.models.get_profile_data(
                 interaction.member?.user.id as string,
