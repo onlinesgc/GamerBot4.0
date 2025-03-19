@@ -4,6 +4,7 @@ import {
     Client,
     CommandInteraction,
     Interaction,
+    MessageFlags,
     TextChannel,
 } from "discord.js";
 import { Event } from "../../classes/event.js";
@@ -97,12 +98,14 @@ export default class interactionCreate implements Event {
             });
         }
         if (!command) return;
-        const profile_data = await GamerBotAPIInstance.models.get_profile_data(
-            interaction.member?.user.id as string,
-        );
         try {
             if (command.defer)
-                await interaction.deferReply({ ephemeral: command.ephemeral });
+                await interaction.deferReply({ flags: MessageFlags.Ephemeral});
+
+            const profile_data = await GamerBotAPIInstance.models.get_profile_data(
+                interaction.member?.user.id as string,
+            );
+            
             await command.execute(interaction, profile_data);
         } catch (error) {
             console.error(error);
