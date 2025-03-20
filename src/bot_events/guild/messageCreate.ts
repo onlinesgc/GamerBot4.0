@@ -150,8 +150,8 @@ export default class messageCreate implements Event {
     async addReaction(message: Message) {
         if(message.channel.id == "1352009789378662492"){
             await message.react("❤");
-            await message.react("�");
-            await message.react("�");
+            await message.react("💬");
+            await message.react("🔁");
         }
     }
 }
