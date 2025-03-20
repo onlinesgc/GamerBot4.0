@@ -14,6 +14,7 @@ export default class messageCreate implements Event {
             message.guild?.id as string,
         );
 
+        this.addReaction(message);
         this.xpCalculation(message, guild_data);
         this.messageInteraction(message);
         this.removeLink(message, guild_data);
@@ -143,5 +144,14 @@ export default class messageCreate implements Event {
         if (whitelistedChannels.includes(message.channel.id)) return;
 
         notAllowed(message);
+    }
+    
+    //Move function to a more dynamic place TODO
+    async addReaction(message: Message) {
+        if(message.channel.id == "1352009789378662492"){
+            await message.react("❤");
+            await message.react("�");
+            await message.react("�");
+        }
     }
 }
