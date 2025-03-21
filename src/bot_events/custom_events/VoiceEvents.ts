@@ -129,6 +129,9 @@ export default class VoiceEvents implements CustomEvent {
         const voice_channel: VoiceChannel = member.guild.channels.cache.get(
             channelId,
         ) as VoiceChannel;
+
+        if (voice_channel == undefined) return;
+
         const threed_channel = (
             member.guild.channels.cache.get(
                 guild_data.infoVoiceChannel,
