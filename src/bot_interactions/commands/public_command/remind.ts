@@ -8,7 +8,7 @@ export default class RemindCommand implements Command {
     name = "remind";
     ephemeral = false;
     defer = true;
-    description = "Påminn dig själv om något!";
+    description = "🤔 ⏲️";
     aliases = [];
     data = new SlashCommandBuilder()
         .setName(this.name)
@@ -16,13 +16,13 @@ export default class RemindCommand implements Command {
         .addStringOption((option) =>
             option
                 .setName("reminder")
-                .setDescription("Det du vill bli påmind om")
+                .setDescription("🤔 💬")
                 .setRequired(true),
         )
         .addStringOption((option) =>
             option
                 .setName("time")
-                .setDescription("Ge tiden som du vill ska ta, Som 7d, 5m, 10h")
+                .setDescription("⏲️ 💬")
                 .setRequired(true),
         );
     async execute(interaction: CommandInteraction, profileData: PorfileData) {

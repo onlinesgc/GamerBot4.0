@@ -12,7 +12,7 @@ export default class CalcCommand implements Command {
     name = "calc";
     ephemeral = false;
     defer = true;
-    description = "Räkna ut en matematisk uttryck";
+    description = "🤓 🧮 🖩";
     aliases = [];
     data = new SlashCommandBuilder()
         .setName(this.name)
@@ -29,8 +29,8 @@ export default class CalcCommand implements Command {
 
         const math_embed = new EmbedBuilder()
             .setColor("#2DD21C")
-            .setTitle(`${interaction.member?.user.username} | Matte tal`)
-            .setDescription(`Calculating ${"`"}${expression.trim()}${"`"}`)
+            .setTitle(`🤓 | 🧮`)
+            .setDescription(`🤔 ${"`"}${expression.trim()}${"`"}`)
             .setFooter({
                 text: this.name,
                 iconURL: interaction.client.user.avatarURL()?.toString(),
@@ -42,7 +42,7 @@ export default class CalcCommand implements Command {
             `http://api.mathjs.org/v4/?expr=${encodeURIComponent(expression)}`,
         ).then(async (data) => {
             math_embed.setDescription(
-                `Calculated ${"`"}${expression.trim()}${"`"}\nAnswer ${"`"}${await data.text()}${"`"}`,
+                `🤓 ${"`"}${expression.trim()}${"`"}\n🧮 ${"`"}${await data.text()}${"`"}`,
             );
             interaction.editReply({ embeds: [math_embed] });
         });
