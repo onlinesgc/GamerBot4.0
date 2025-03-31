@@ -15,7 +15,7 @@ export default class LvlCommand implements Command {
     name = "lvl";
     ephemeral = false;
     defer = true;
-    description = "Titta vilken nivå du är på discorden!";
+    description = "🎚️ 👈 👀";
     aliases = ["me"];
     data = new SlashCommandBuilder()
         .setName(this.name)
@@ -23,7 +23,7 @@ export default class LvlCommand implements Command {
         .addUserOption((option) =>
             option
                 .setName("user")
-                .setDescription("Titta på en annan medlems lvl")
+                .setDescription("🤳 🎚️ 👈 👀")
                 .setRequired(false),
         );
     async execute(interaction: CommandInteraction, profileData: PorfileData) {

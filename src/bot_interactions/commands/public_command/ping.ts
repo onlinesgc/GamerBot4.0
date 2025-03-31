@@ -4,6 +4,7 @@ import {
     SlashCommandBuilder,
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
+import { get_emojis } from "../../../functions/emoji_counter_builder.js";
 
 /**
  * Ping command that replies with pong! and the time it took to respond.
@@ -13,7 +14,7 @@ export default class PingCommand implements Command {
     name = "ping";
     ephemeral = false;
     defer = true;
-    description = "Replies with pong!";
+    description = "🏓";
     aliases = [];
     data = new SlashCommandBuilder()
         .setName(this.name)
@@ -21,8 +22,8 @@ export default class PingCommand implements Command {
     async execute(interaction: CommandInteraction) {
         const pining_embed = new EmbedBuilder()
             .setColor("#2DD21C")
-            .setTitle(":ping_pong:  Ping")
-            .setDescription(`Pingar...`)
+            .setTitle(":ping_pong:")
+            .setDescription(`🔄`)
             .setFooter({
                 text: this.name,
                 iconURL: interaction.client.user.avatarURL()?.toString(),
@@ -31,9 +32,9 @@ export default class PingCommand implements Command {
         const message = await interaction.editReply({ embeds: [pining_embed] });
 
         pining_embed.setDescription(
-            `Tog ${message.createdTimestamp - interaction.createdTimestamp} millisekunder!`,
+            `${get_emojis(message.createdTimestamp - interaction.createdTimestamp)}`,
         );
-        pining_embed.setTitle(":ping_pong:  Pong");
+        pining_embed.setTitle(":ping_pong:");
         interaction.editReply({ embeds: [pining_embed] });
     }
 }

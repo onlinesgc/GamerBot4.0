@@ -31,7 +31,11 @@
         "bcrypt": "^5.1.1",
         "discord.js": "^14.15.3",
         "dotenv": "^16.4.5",
+<<<<<<< HEAD
         "gamerbot-module": "^1.2.3",
+=======
+        "gamerbot-module": "^1.2.1",
+>>>>>>> 3b5e667 (start på emoji)
         "ms": "^2.1.3"
     }
 }

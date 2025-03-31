@@ -15,11 +15,12 @@ import {
 import { PorfileData } from "gamerbot-module";
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
+import { get_emojis } from "../../../functions/emoji_counter_builder.js";
 
 export default class FrameCommand implements Command {
     name = "frame";
     ephemeral = false;
-    description = "Ändra på din ram och bakgrundsfärg";
+    description = "🖼️ & 🌈";
     aliases = [];
     defer = true;
     data = new SlashCommandBuilder()
@@ -60,18 +61,18 @@ export default class FrameCommand implements Command {
         });
         let current_side = 0;
         const embed = new EmbedBuilder()
-            .setTitle("Du kan välja ram igenom menyn nedan")
+            .setTitle("🖼️ 👇")
             .setColor("#2DD21C")
             .setImage(link)
             .setFooter({
-                text: `${selected_frame + 1}/${loaded_frames.length} - Nuvarande ram`,
+                text: `${get_emojis(selected_frame + 1)}/${get_emojis(loaded_frames.length)} - 👈`,
             })
             .setTimestamp();
         const action_row =
             new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
                 new StringSelectMenuBuilder()
                     .setCustomId("frame_select")
-                    .setPlaceholder("Välj ram")
+                    .setPlaceholder("🖼️ 👉")
                     .addOptions(
                         await this.autoSliceSelect(
                             loaded_options,
@@ -83,7 +84,7 @@ export default class FrameCommand implements Command {
             new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder()
                     .setCustomId("color_select")
-                    .setLabel("Välj färg")
+                    .setLabel("🌈 👈")
                     .setStyle(ButtonStyle.Success),
             );
 
@@ -139,7 +140,7 @@ export default class FrameCommand implements Command {
 
                     embed.setImage(link);
                     embed.setFooter({
-                        text: `${selected_frame + 1}/${loaded_frames.length} - Sparar...`,
+                        text: `${selected_frame + 1}/${loaded_frames.length} - 🔄`,
                     });
                     interaction.editReply({ embeds: [embed] });
 
@@ -148,7 +149,7 @@ export default class FrameCommand implements Command {
                     await profileData.save();
 
                     embed.setFooter({
-                        text: `${selected_frame + 1}/${loaded_frames.length} - Sparat`,
+                        text: `${selected_frame + 1}/${loaded_frames.length} - ✅`,
                     });
                     interaction.editReply({ embeds: [embed] });
 
@@ -157,13 +158,13 @@ export default class FrameCommand implements Command {
                     messageComponentInteraction.customId === "color_select"
                 ) {
                     const color_modal = new ModalBuilder()
-                        .setTitle("Välj färg")
+                        .setTitle("🌈 👈")
                         .setCustomId(`color:${messageComponentInteraction.id}`)
                         .addComponents(
                             new ActionRowBuilder<TextInputBuilder>().addComponents(
                                 new TextInputBuilder()
                                     .setCustomId("hex")
-                                    .setLabel("Skriv din hex kod här")
+                                    .setLabel("# 👈")
                                     .setStyle(TextInputStyle.Short),
                             ),
                         );
@@ -175,12 +176,12 @@ export default class FrameCommand implements Command {
                         .then(async (modal) => {
                             const hex = modal.fields.getTextInputValue("hex");
                             if (!hex.match(/^#[0-9A-F]{6}$/i)) {
-                                await modal.reply("Fel format på hex koden");
+                                await modal.reply("# 👈 ❌");
                                 return;
                             }
                             profileData.colorHexCode = hex;
                             await profileData.save();
-                            await modal.reply("Färg sparad");
+                            await modal.reply("# 👈 ✅");
                         })
                         .catch(async () => {});
                 }
@@ -195,7 +196,7 @@ export default class FrameCommand implements Command {
 
         collector.on("end", async () => {
             embed.setFooter({
-                text: `${selected_frame + 1}/${loaded_frames.length} - Timeout`,
+                text: `${selected_frame + 1}/${loaded_frames.length} - ⌛ ❌`,
             });
             interaction.editReply({ embeds: [embed], components: [] });
         });
@@ -210,9 +211,9 @@ export default class FrameCommand implements Command {
         );
         if (sliced_frames.length >= 24) {
             sliced_frames = sliced_frames.slice(0, 24);
-            sliced_frames.push({ label: "Nästa sida", value: "next" });
+            sliced_frames.push({ label: "👉", value: "next" });
         } else if (sliced_frames.length < 24 && sliced_side > 0) {
-            sliced_frames.push({ label: "Första sidan", value: "prev" });
+            sliced_frames.push({ label: "👈", value: "prev" });
         }
         return sliced_frames;
     }

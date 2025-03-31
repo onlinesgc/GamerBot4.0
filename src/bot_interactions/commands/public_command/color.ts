@@ -54,7 +54,7 @@ export default class ColorCommand implements Command {
             option
                 .setName("färg")
                 .setDescription(
-                    "Välj vilken färg du vill ha, lämna denna blank ifall du vill ta bort din roll",
+                    "💁🌈",
                 )
                 .setRequired(false)
                 .addChoices(formattedRoles),
@@ -75,7 +75,7 @@ export default class ColorCommand implements Command {
         ) {
             interaction.editReply({
                 content:
-                    "Du har inte tillräckligt hög level för att ändra din färg!",
+                    "❌ | 🔞",
             });
             return;
         }
@@ -96,7 +96,7 @@ export default class ColorCommand implements Command {
         );
 
         if (!roleOption) {
-            interaction.editReply({ content: "Din färg har tagits bort!" });
+            interaction.editReply({ content: "✅ ❌ 🌈" });
             return;
         }
 
@@ -105,7 +105,7 @@ export default class ColorCommand implements Command {
         );
 
         interaction.editReply({
-            content: `Gav dig rollen <@&${roleOption.value}>!`,
+            content: `🤖 💁 <@&${roleOption.value}>!`,
         });
     }
 }
