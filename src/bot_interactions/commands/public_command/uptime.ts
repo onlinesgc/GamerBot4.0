@@ -14,7 +14,7 @@ export default class UptimeCommand implements Command {
     name = "uptime";
     ephemeral = false;
     defer = true;
-    description = "Titta på hur länge boten har varit igång!";
+    description = "⏳";
     aliases = [];
     data = new SlashCommandBuilder()
         .setName(this.name)
@@ -26,11 +26,11 @@ export default class UptimeCommand implements Command {
         const embed = new EmbedBuilder()
             .setColor("#2DD21C")
             .setTitle("Uptime")
-            .setDescription("Här kommer upptiden för botten!")
+            .setDescription("⏳ <:Gamerbot:895995193579417601>")
             .setThumbnail(interaction.client.user.avatarURL())
             .addFields(
                 {
-                    name: "Tid:",
+                    name: "⏳",
                     value: await msToString(interaction.client.uptime),
                 },
                 {

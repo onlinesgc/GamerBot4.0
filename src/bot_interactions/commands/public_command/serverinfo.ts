@@ -6,6 +6,7 @@ import {
     SlashCommandBuilder,
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
+import { get_emojis } from "../../../functions/emoji_counter_builder.js";
 
 /**
  * Serverinfo command that shows information about the server
@@ -14,7 +15,7 @@ export default class ServerInfoCommand implements Command {
     name = "serverinfo";
     ephemeral = false;
     defer = true;
-    description = "Visar information om servern";
+    description = "ℹ️";
     aliases = [];
     data = new SlashCommandBuilder()
         .setName(this.name)
@@ -31,29 +32,29 @@ export default class ServerInfoCommand implements Command {
                 iconURL: interaction.client.user.avatarURL() as string,
             })
             .addFields(
-                { name: "Medlemmar", value: `\`${guild.memberCount}\`` },
+                { name: "😀 🧮", value: `\`${get_emojis( guild.memberCount )}\`` },
                 {
                     name: "Status",
                     value: `
-                    🟢 \`${guild.members.cache.filter((m) => m.presence && m.presence.status === PresenceUpdateStatus.Online).size}\` medlemmar är online!
-                    🟡 \`${guild.members.cache.filter((m) => m.presence && m.presence.status === PresenceUpdateStatus.Idle).size}\` personer är idle.
-                    🔴 \`${guild.members.cache.filter((m) => m.presence && m.presence.status === PresenceUpdateStatus.DoNotDisturb).size}\` personer är stör ej.
-                    ⚫ \`${guild.members.cache.filter((m) => m.presence == null || m.presence.status === PresenceUpdateStatus.Offline || m.presence.status == PresenceUpdateStatus.Invisible).size}\` personer är offline.
+                    🟢 \`${guild.members.cache.filter((m) => m.presence && m.presence.status === PresenceUpdateStatus.Online).size}\` 🟢!
+                    🟡 \`${guild.members.cache.filter((m) => m.presence && m.presence.status === PresenceUpdateStatus.Idle).size}\` 🟡.
+                    🔴 \`${guild.members.cache.filter((m) => m.presence && m.presence.status === PresenceUpdateStatus.DoNotDisturb).size}\` 🔴.
+                    ⚫ \`${guild.members.cache.filter((m) => m.presence == null || m.presence.status === PresenceUpdateStatus.Offline || m.presence.status == PresenceUpdateStatus.Invisible).size}\` ⚫.
 
-                    🟣 \`${guild.members.cache.filter((m) => m.premiumSince).size}\` Personer som bostar servern
+                    🟣 \`${guild.members.cache.filter((m) => m.premiumSince).size}\`
                     
-                    🕓 \`${guild.members.cache.filter((m) => m.presence && m.presence.status === PresenceUpdateStatus.Online && m.permissions.has("Administrator") && !m.user.bot).size}\` admins är tillgängliga!`,
+                    🕓 \`${guild.members.cache.filter((m) => m.presence && m.presence.status === PresenceUpdateStatus.Online && m.permissions.has("Administrator") && !m.user.bot).size}\` 🤖`,
                 },
                 {
-                    name: "Minecraft servers",
+                    name: "<:icon_Trusted:951861057410965584>",
                     value: `
-                    **Trusted:** ${server_data[0].online ? `\`${server_data[0].players.online}\` / \`${server_data[0].players.max}\`` : "Servern är offline"}
-                    **Creative:** ${server_data[1].online ? `\`${server_data[1].players.online}\` / \`${server_data[1].players.max}\`` : "Servern är offline"}
-                    **Parkour servern:** ${server_data[2].online ? `\`${server_data[2].players.online}\` / \`${server_data[2].players.max}\`` : "Servern är offline"}
+                    **<:icon_Trusted:951861057410965584> :** ${server_data[0].online ? `\`${get_emojis(server_data[0].players.online)}\` / \`${get_emojis(server_data[0].players.max)}\`` : "🔴"}
+                    **🔴 <:icon_Trusted:951861057410965584> :** ${server_data[1].online ? `\`${get_emojis(server_data[1].players.online)}\` / \`${get_emojis(server_data[1].players.max)}\`` : "🔴"}
+                    **<:icon_Parkourservern:952188934316757042>:** ${server_data[2].online ? `\`${get_emojis(server_data[2].players.online)}\` / \`${get_emojis(server_data[2].players.max)}\`` : "🔴"}
                     `,
                 },
                 {
-                    name: "Boost nivå",
+                    name: "<a:vibecat:813405042887491594>",
                     value: `\`${guild.premiumTier}\``,
                 },
             );

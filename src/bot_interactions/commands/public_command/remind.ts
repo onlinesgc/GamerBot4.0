@@ -3,6 +3,7 @@ import { Command } from "../../../classes/command.js";
 import ms from "ms";
 import { PorfileData } from "gamerbot-module";
 import { GamerbotClient } from "../../../index.js";
+import { get_emojis } from "../../../functions/emoji_counter_builder.js";
 
 export default class RemindCommand implements Command {
     name = "remind";
@@ -32,7 +33,7 @@ export default class RemindCommand implements Command {
 
         const time_ms = ms(time);
         if (time_ms == undefined)
-            return interaction.editReply("Felaktig tid angiven, försök igen!");
+            return interaction.editReply("❌ ⏲️");
 
         const remindTimestamp = Date.now() + time_ms;
         profileData.reminders.push({
@@ -46,7 +47,7 @@ export default class RemindCommand implements Command {
             user_id: interaction.user.id,
         });
         interaction.editReply(
-            `Jag kommer påminna dig om ${reminder} om ${time}!`,
+            `👉 ${reminder} ⏲️ ${time}`,
         );
     }
 }

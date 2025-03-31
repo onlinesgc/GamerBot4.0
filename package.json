@@ -31,15 +31,8 @@
         "bcrypt": "^5.1.1",
         "discord.js": "^14.15.3",
         "dotenv": "^16.4.5",
-<<<<<<< HEAD
-<<<<<<< HEAD
         "gamerbot-module": "^1.2.3",
-=======
-        "gamerbot-module": "^1.2.1",
->>>>>>> 3b5e667 (start på emoji)
-=======
-        "gamerbot-module": "^1.2.1",
->>>>>>> 35c801478bd7fc587444d5fd80210ac51597ff42
-        "ms": "^2.1.3"
+        "ms": "^2.1.3",
+        "node-fetch": "^3.3.2"
     }
 }

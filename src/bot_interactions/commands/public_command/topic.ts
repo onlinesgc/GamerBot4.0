@@ -7,6 +7,10 @@ import {
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { getRndInteger } from "../../../functions/getRndInt.js";
+import fs from "fs";
+
+const emojis = fs.readFileSync("./emojis.json");
+const emojis_json_global = JSON.parse(emojis.toString());
 
 export default class TopicCommand implements Command {
     name = "topic";
@@ -47,11 +51,19 @@ export default class TopicCommand implements Command {
                 return interaction.editReply(
                     "Det finns inga topics i systemet! Lägg till några :)",
                 );
-            await interaction.editReply(
-                guild_config.topicList[
-                    await getRndInteger(0, guild_config.topicList.length)
-                ],
-            );
+            const emoji_amount = getRndInteger(1, 15);
+            let emoji_message = "";
+            const emojis_json = JSON.parse(JSON.stringify(emojis_json_global));
+            interaction.guild?.emojis.cache.forEach(emote => {
+                emojis_json.push({
+                    character: emote.toString(),
+                });
+            });
+            for (let i = 0; i < emoji_amount; i++) {
+                const emoji = emojis_json[getRndInteger(0, emojis_json.length - 1)];
+                emoji_message += `${emoji.character}`;
+            }
+            await interaction.editReply(emoji_message);
         }
     }
 }

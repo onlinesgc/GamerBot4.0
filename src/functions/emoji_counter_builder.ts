@@ -2,7 +2,7 @@ export function get_emojis(num:number){
     const string_num = num.toString();
     let emojis = "";
     for(let i = 0; i < string_num.length; i++){
-        emojis += get_emoji(string_num[i])+ "  ";
+        emojis += get_emoji(string_num[i])+ " ";
     }
     return emojis;
 }

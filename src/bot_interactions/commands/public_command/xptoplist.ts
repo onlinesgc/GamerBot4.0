@@ -9,6 +9,7 @@ import {
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { PorfileData } from "gamerbot-module";
+import { get_emojis } from "../../../functions/emoji_counter_builder.js";
 
 /**
  * Xptoplist command that shows the top list of xp
@@ -17,7 +18,7 @@ export default class XptoplistCommand implements Command {
     name = "xptoplist";
     ephemeral = false;
     defer = true;
-    description = "Vissar topplistan för xp";
+    description = "🎚️ 🔝";
     aliases = [];
     data = new SlashCommandBuilder()
         .setName(this.name)
@@ -31,7 +32,7 @@ export default class XptoplistCommand implements Command {
 
         const xp_toplist_embed = new EmbedBuilder()
             .setColor("#2DD21C")
-            .setTitle(":trophy:  Xp Topplista")
+            .setTitle(":trophy:  🎚️ 🔝")
             .addFields(await this.generate_fields(profiles, pointer, 10))
             .setTimestamp()
             .setFooter({
@@ -110,10 +111,10 @@ export default class XptoplistCommand implements Command {
             starterPointer + userCount,
         )) {
             fields.push({
-                name: (starterPointer + i).toString(),
+                name: get_emojis((starterPointer + i)),
                 value: `
-                Användare: <@!${profile.userID}>
-                Level: \`${profile.level - 1}\`- (\`${Math.round((profile.xp / (profile.level < 31 ? profile.level ** 2 : 31 ** 2)) * 100)}%\`)`,
+                😆: <@!${profile.userID}>
+                🎚️ : \`${get_emojis(profile.level - 1)}\`- (\`${get_emojis(Math.round((profile.xp / (profile.level < 31 ? profile.level ** 2 : 31 ** 2)) * 100))}%\`)`,
             });
             i++;
         }
