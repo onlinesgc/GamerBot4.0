@@ -27,7 +27,7 @@ export interface GamerbotClient extends Client {
     buttons: Collection<string, Button>;
     messageInteractions: Collection<string, MessageInteraction>;
     command_array: Array<object>;
-    reminder_list: Array<object>;
+    reminderList: Array<object>;
     frameChoices: Array<object>;
 }
 
@@ -52,7 +52,7 @@ client.commands = new Collection();
 client.buttons = new Collection();
 client.messageInteractions = new Collection();
 client.command_array = [];
-client.reminder_list = [];
+client.reminderList = [];
 client.frameChoices = [];
 
 //load and run all handlers

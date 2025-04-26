@@ -4,7 +4,6 @@ import {
     Client,
     CommandInteraction,
     Interaction,
-    MessageFlags,
     TextChannel,
 } from "discord.js";
 import { Event } from "../../classes/event.js";
@@ -19,7 +18,7 @@ import { Button } from "../../classes/button.js";
  */
 export default class interactionCreate implements Event {
     constructor() {}
-    run_event(client: Client, interaction: Interaction) {
+    runEvent(client: Client, interaction: Interaction) {
         if (!interaction.inGuild()) return;
         if (interaction.isCommand()) {
             this.onCommand(
@@ -106,11 +105,11 @@ export default class interactionCreate implements Event {
                     await interaction.deferReply();
             }
 
-            const profile_data = await GamerBotAPIInstance.models.get_profile_data(
+            const userData = await GamerBotAPIInstance.models.getUserData(
                 interaction.member?.user.id as string,
             );
             
-            await command.execute(interaction, profile_data);
+            await command.execute(interaction, userData);
         } catch (error) {
             console.error(error);
             (interaction.channel as TextChannel).send({

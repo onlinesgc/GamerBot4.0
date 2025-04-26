@@ -3,15 +3,15 @@ import { ModLog } from "../../classes/modlog.js";
 import { Client, Guild } from "discord.js";
 
 export default class UnBanTimer {
-    async run_unban_event(client: Client, guild: Guild) {
-        const time_now = Date.now();
+    async runUnbanEvent(client: Client, guild: Guild) {
+        const timeNow = Date.now();
 
-        const guild_config_data =
-            await GamerBotAPIInstance.models.get_guild_data(guild.id);
+        const guildConfigData =
+            await GamerBotAPIInstance.models.getGuildData(guild.id);
         
-        guild_config_data.bansTimes.forEach(async (ban, index) => {
+        guildConfigData.autoModeration.bannedUsers.forEach(async (ban, index) => {
             //eslint-disable-next-line
-            if ((ban as any).unbantime <= time_now) {
+            if ((ban as any).unbantime <= timeNow) {
                 //eslint-disable-next-line
                 const userId = (ban as any).userID;
 
@@ -19,8 +19,8 @@ export default class UnBanTimer {
 
                 if (user == undefined) return;
 
-                const profile_data =
-                    await GamerBotAPIInstance.models.get_profile_data(
+                const userData =
+                    await GamerBotAPIInstance.models.getUserData(
                         userId.id,
                     );
                 const modlog = new ModLog(
@@ -33,8 +33,8 @@ export default class UnBanTimer {
                     "[Gamerbot]",
                 );
 
-                profile_data.modLogs.push(modlog);
-                profile_data.save();
+                userData.modLogs.push(modlog);
+                userData.save();
 
                 await user.user
                     .send(
@@ -43,8 +43,8 @@ export default class UnBanTimer {
                     .catch(() => {});
 
                 await guild.members.unban(user.user.id);
-                guild_config_data.bansTimes.splice(index, 1);
-                await guild_config_data.save();
+                guildConfigData.autoModeration.bannedUsers.splice(index, 1);
+                await guildConfigData.save();
             }
         });
     }
@@ -53,7 +53,7 @@ export default class UnBanTimer {
         const guild = client.guilds.cache.get("516605157795037185");
         if (guild == undefined) return;
         setInterval(() => {
-            this.run_unban_event(client, guild);
+            this.runUnbanEvent(client, guild);
         }, 1000 * 5);
     }
 }

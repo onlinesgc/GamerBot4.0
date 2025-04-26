@@ -30,7 +30,7 @@ export default class VoiceEvents implements CustomEvent {
         });
     }
     async onJoin(oldState: VoiceState, newState: VoiceState) {
-        const guild_data = await GamerBotAPIInstance.models.get_guild_data(
+        const guildData = await GamerBotAPIInstance.models.getGuildData(
             newState.guild.id,
         );
         this.removeCustomVoiceChannel(
@@ -39,8 +39,7 @@ export default class VoiceEvents implements CustomEvent {
         );
 
         if (
-            newState.channelId != guild_data.privateVoiceChannel &&
-            newState.channelId != guild_data.publicVoiceChannel
+            newState.channelId != guildData.voiceChannelData.voiceChannelId
         )
             return;
         this.createCustomVoiceChannel(newState);
@@ -52,12 +51,11 @@ export default class VoiceEvents implements CustomEvent {
         );
     }
     async onSwitch(oldState: VoiceState, newState: VoiceState) {
-        const guild_data = await GamerBotAPIInstance.models.get_guild_data(
+        const guildData = await GamerBotAPIInstance.models.getGuildData(
             newState.guild.id,
         );
         if (
-            oldState.channelId == guild_data.privateVoiceChannel ||
-            oldState.channelId == guild_data.publicVoiceChannel
+            oldState.channelId == guildData.voiceChannelData.voiceChannelId
         )
             return;
         this.removeCustomVoiceChannel(
@@ -67,22 +65,22 @@ export default class VoiceEvents implements CustomEvent {
     }
 
     async createCustomVoiceChannel(member: VoiceState) {
-        const custom_voice_channel = await member.guild.channels.create({
+        const customVoiceChannel = await member.guild.channels.create({
             name: `${member.member?.user.username}'s röstkanal`,
             type: ChannelType.GuildVoice,
         });
-        await custom_voice_channel.setParent(
+        await customVoiceChannel.setParent(
             member.channel?.parentId as string,
         );
 
-        const guild_data = await GamerBotAPIInstance.models.get_guild_data(
+        const guildData = await GamerBotAPIInstance.models.getGuildData(
             member.guild.id,
         );
-        const info_channel = member.guild.channels.cache.get(
-            guild_data.infoVoiceChannel,
+        const infoChannel = member.guild.channels.cache.get(
+            guildData.voiceChannelData.infoChatId,
         ) as TextChannel;
 
-        await custom_voice_channel.permissionOverwrites.set([
+        await customVoiceChannel.permissionOverwrites.set([
             {
                 id: member.member?.guild.roles.everyone.id as string,
                 deny: [
@@ -100,69 +98,68 @@ export default class VoiceEvents implements CustomEvent {
                 ],
             },
         ]);
-        const threed_channel = await info_channel.threads.create({
+        const threedChannel = await infoChannel.threads.create({
             name: `Threads - ${member.member?.user.username}'s röstkanal`,
             autoArchiveDuration: 1440,
             type: ChannelType.PrivateThread,
             invitable: true,
         });
-        threed_channel.members.add(member.id);
-        threed_channel.send(
+        threedChannel.members.add(member.id);
+        threedChannel.send(
             `Made a new voice chat thread for you! <@!${member.id}>`,
         );
-        const profile_data = await GamerBotAPIInstance.models.get_profile_data(
+        const userData = await GamerBotAPIInstance.models.getUserData(
             member.id,
         );
-        profile_data.privateVoiceID = custom_voice_channel.id;
-        profile_data.privateVoiceThreadID = threed_channel.id;
-        await profile_data.save();
-        await member.setChannel(custom_voice_channel);
+        userData.voiceData.voiceChannelId = customVoiceChannel.id;
+        userData.voiceData.voiceChannelThreadId = threedChannel.id;
+        await userData.save();
+        await member.setChannel(customVoiceChannel);
     }
 
     async removeCustomVoiceChannel(channelId: string, member: GuildMember) {
-        const guild_data = await GamerBotAPIInstance.models.get_guild_data(
+        const guildData = await GamerBotAPIInstance.models.getGuildData(
             member.guild.id,
         );
-        const profile_data = await GamerBotAPIInstance.models.get_profile_data(
+        const userData = await GamerBotAPIInstance.models.getUserData(
             member.id,
         );
-        const voice_channel: VoiceChannel = member.guild.channels.cache.get(
+        const voiceChannel: VoiceChannel = member.guild.channels.cache.get(
             channelId,
         ) as VoiceChannel;
 
-        if (voice_channel == undefined) return;
+        if (voiceChannel == undefined) return;
 
-        const threed_channel = (
+        const threedChannel = (
             member.guild.channels.cache.get(
-                guild_data.infoVoiceChannel,
+                guildData.voiceChannelData.infoChatId,
             ) as TextChannel
-        ).threads.cache.get(profile_data.privateVoiceThreadID);
+        ).threads.cache.get(userData.voiceData.voiceChannelThreadId);
         if (
-            voice_channel.id != profile_data.privateVoiceID &&
-            voice_channel.id != profile_data.privateVoiceThreadID
+            voiceChannel.id != userData.voiceData.voiceChannelId
         )
             return;
-        if (voice_channel == undefined) return;
-        if (voice_channel.members.size <= 0) {
-            await voice_channel.delete();
-            await threed_channel?.delete();
-            profile_data.privateVoiceID = "";
-            profile_data.privateVoiceThreadID = "";
-            await profile_data.save();
+        if (voiceChannel == undefined) return;
+        if (voiceChannel.members.size <= 0) {
+            await voiceChannel.delete();
+            await threedChannel?.delete();
+            userData.voiceData.voiceChannelId = "";
+            userData.voiceData.voiceChannelThreadId = "";
+            await userData.save();
             return;
         } else {
-            const new_owner = voice_channel.members.first() as GuildMember;
-            const new_owner_profile =
-                await GamerBotAPIInstance.models.get_profile_data(new_owner.id);
-            new_owner_profile.privateVoiceID = voice_channel.id;
-            new_owner_profile.privateVoiceThreadID =
-                profile_data.privateVoiceThreadID;
-            await new_owner_profile.save();
-            profile_data.privateVoiceID = "";
-            profile_data.privateVoiceThreadID = "";
-            await profile_data.save();
-            await threed_channel?.members.add(new_owner.id);
-            await threed_channel?.send(
+            const newOwner = voiceChannel.members.first() as GuildMember;
+            const newOwnerData =
+                await GamerBotAPIInstance.models.getUserData(newOwner.id);
+            newOwnerData.voiceData.voiceChannelId = voiceChannel.id;
+            newOwnerData.voiceData.voiceChannelThreadId =
+                userData.voiceData.voiceChannelThreadId;
+            await newOwnerData.save();
+            userData.voiceData.voiceChannelId = "";
+            userData.voiceData.voiceChannelThreadId = "";
+            await userData.save();
+            await threedChannel?.members.add(newOwner.id);
+            await threedChannel?.send(
                 `__**${member.user.username}**__ har lämnat röstkanalen. Röstkanalens nya ägare är nu __**${member.user.username}**__`,
             );
         }

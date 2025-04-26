@@ -40,7 +40,7 @@ export default class RemindCommand implements Command {
             remindTimestamp: remindTimestamp,
         });
         profileData.save();
-        (interaction.client as GamerbotClient).reminder_list.push({
+        (interaction.client as GamerbotClient).reminderList.push({
             message: reminder,
             remindTimestamp: remindTimestamp,
             user_id: interaction.user.id,

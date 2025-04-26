@@ -1,7 +1,7 @@
 import { Client, REST, Routes } from "discord.js";
 import { Event } from "../../classes/event.js";
 import { GamerBotAPIInstance, GamerbotClient } from "../../index.js";
-import { ConfigData, PorfileData } from "gamerbot-module";
+import { ConfigData, UserData } from "gamerbot-module";
 import UnBanTimer from "../custom_events/unbanTimer.js";
 /**
  * Ready is called when the bot is turned on.
@@ -9,7 +9,7 @@ import UnBanTimer from "../custom_events/unbanTimer.js";
  */
 export default class ready implements Event {
     constructor() {}
-    async run_event(client: Client) {
+    async runEvent(client: Client) {
         // Log that the bot is online
         console.log(
             `${client.user?.username} is online! ` +
@@ -31,17 +31,17 @@ export default class ready implements Event {
         }
 
         // Get config data from the API
-        const config_data = await GamerBotAPIInstance.models.get_config_data(
+        const configData = await GamerBotAPIInstance.models.getConfigData(
             parseInt(process.env.CONFIG_ID as string),
         );
 
         // Register commands and load user reminders
-        this.regiser_commands(client as GamerbotClient, config_data);
-        this.load_reminders(client as GamerbotClient);
+        this.regiserCommands(client as GamerbotClient, configData);
+        this.loadReminders(client as GamerbotClient);
 
         // load unbantimer
-        const unban_timer = new UnBanTimer();
-        unban_timer.emitor(client);
+        const unbanTimer = new UnBanTimer();
+        unbanTimer.emitor(client);
     }
 
     /**
@@ -49,9 +49,9 @@ export default class ready implements Event {
      * @param {Client} client
      * @param {*} configData
      */
-    private async regiser_commands(
+    private async regiserCommands(
         client: GamerbotClient,
-        config_data: ConfigData,
+        configData: ConfigData,
     ) {
         // Register commands here
         const rest = new REST({ version: "9" }).setToken(
@@ -59,12 +59,12 @@ export default class ready implements Event {
         );
         let routesFunc;
 
-        if (!config_data.debugGuildID) {
+        if (!configData.debugGuildId) {
             routesFunc = Routes.applicationCommands(client.user?.id as string);
         } else {
             routesFunc = Routes.applicationGuildCommands(
                 client.user?.id as string,
-                config_data.debugGuildID as string,
+                configData.debugGuildId as string,
             );
         }
 
@@ -76,22 +76,22 @@ export default class ready implements Event {
     /**
      * Loads user reminders onces the bot is online
      * @param client Client
-     * @param config_data ConfigData
+     * @param configData ConfigData
      */
-    private async load_reminders(client: GamerbotClient) {
-        const profiles = await GamerBotAPIInstance.models.get_all_profile_data(
+    private async loadReminders(client: GamerbotClient) {
+        const profiles = await GamerBotAPIInstance.models.getAllUserData(
             50000,
             { reminders: { $exists: true, $not: { $size: 0 } } },
         );
-        profiles.forEach((profile: PorfileData) => {
+        profiles.forEach((profile: UserData) => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             profile.reminders.forEach((reminder: any) => {
-                const reminder_temp = {
-                    user_id: profile.userID,
+                const reminderTemp = {
+                    userId: profile.userId,
                     message: reminder.message,
                     remindTimestamp: reminder.remindTimestamp,
                 };
-                client.reminder_list.push(reminder_temp);
+                client.reminderList.push(reminderTemp);
             });
         });
     }

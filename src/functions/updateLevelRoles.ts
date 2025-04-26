@@ -1,28 +1,28 @@
 import { GuildMember } from "discord.js";
 import { GamerBotAPIInstance } from "../index.js";
-import { PorfileData } from "gamerbot-module";
+import { UserData, Level } from "gamerbot-module";
 
 export async function updateLevelRoles(
     member: GuildMember,
-    profile_data: PorfileData,
+    userData: UserData,
 ) {
-    const bot_config = await GamerBotAPIInstance.models.get_config_data(
+    const botConfig = await GamerBotAPIInstance.models.getConfigData(
         process.env.CONFIG_ID as unknown as number,
     );
-    //eslint-disable-next-line
-    const xp_config = bot_config.xp as any;
 
-    if (!xp_config.levels.length) {
+    const xpConfig = botConfig.levelSystem;
+
+    if (!xpConfig.levels.length) {
         console.log("User leveled up but there are no level-roles configured");
         return;
     }
 
-    const roles = await findRoles(xp_config.levels, profile_data.level);
+    const roles = await findRoles(xpConfig.levels, userData.levelSystem.level);
 
-    for (const level of xp_config.levels) {
-        if ((level.id as any[]).some((id: number) => roles.includes(id)))
+    for (const level of xpConfig.levels) {
+        if ((level.ids as string[]).some((id: string) => roles.includes(id)))
             continue;
-        await member.roles.remove(level.id);
+        await member.roles.remove(level.ids);
     }
 
     const blockRoleUpdateRoleId = "1082393287731708015";
@@ -37,14 +37,14 @@ export async function updateLevelRoles(
 
     await member.roles.add(roles);
 }
-//eslint-disable-next-line
-function findRoles(levels: any, lvl: number) {
+
+function findRoles(levels: Level[], lvl: number) {
     if (!levels.length) {
         return [];
     } else if (levels[levels.length - 1].level > lvl - 1) {
         levels.pop();
         return findRoles(levels, lvl);
     } else {
-        return levels[levels.length - 1].id;
+        return levels[levels.length - 1].ids;
     }
 }
