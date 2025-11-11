@@ -37,7 +37,7 @@ export default class NoteCommand implements Command {
         const reason = interaction.options.get("reason", true).value as string;
         this.noteUser(member, reason, interaction.user.id);
 
-        const note_embed = CreateModLogEmbed(
+        const noteEmbed = CreateModLogEmbed(
             "note",
             "Du har nu laggt en notering på " + member.user.username,
             reason,
@@ -46,23 +46,23 @@ export default class NoteCommand implements Command {
             true,
         );
 
-        await interaction.editReply({ embeds: [note_embed] });
+        await interaction.editReply({ embeds: [noteEmbed] });
     }
-    async noteUser(member: GuildMember, reason: string, author_id: string) {
-        const profile_data = await GamerBotAPIInstance.models.get_profile_data(
+    async noteUser(member: GuildMember, reason: string, authorId: string) {
+        const userData = await GamerBotAPIInstance.models.getUserData(
             member.user.id,
         );
-        const mod_log = new ModLog(
+        const modLog = new ModLog(
             "note",
             member.user.id,
             member.user.username,
             reason,
             null,
             Date.now(),
-            author_id,
+            authorId,
         );
 
-        profile_data.modLogs.push(mod_log);
-        profile_data.save();
+        userData.modLogs.push(modLog);
+        userData.save();
     }
 }

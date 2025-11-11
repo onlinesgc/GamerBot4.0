@@ -32,7 +32,7 @@ export default class ModLogCommand implements Command {
         if (!user) return interaction.editReply("Användaren finns inte");
 
         const modlogs = (
-            await GamerBotAPIInstance.models.get_profile_data(user.id)
+            await GamerBotAPIInstance.models.getUserData(user.id)
         ).modLogs;
 
         if (
@@ -43,7 +43,7 @@ export default class ModLogCommand implements Command {
         )
             return interaction.editReply("Användaren har inga loggar");
 
-        const modlog_rows = new ActionRowBuilder<ButtonBuilder>().addComponents(
+        const modlogRows = new ActionRowBuilder<ButtonBuilder>().addComponents(
             [
                 new ButtonBuilder()
                     .setCustomId("modlog_previous")
@@ -56,18 +56,18 @@ export default class ModLogCommand implements Command {
                     .setStyle(ButtonStyle.Secondary),
             ],
         );
-        let start_pointer = 0;
-        const log_count = 5;
+        let startPointer = 0;
+        const logCount = 5;
 
-        let amount_logs_shown = modlogs.length;
+        let amountLogsShown = modlogs.length;
 
-        if (amount_logs_shown === 0)
+        if (amountLogsShown === 0)
             return interaction.editReply("Användaren har inga loggar");
 
-        if (amount_logs_shown <= log_count) {
-            (modlog_rows.components[1] as ButtonBuilder).setDisabled(true);
+        if (amountLogsShown <= logCount) {
+            (modlogRows.components[1] as ButtonBuilder).setDisabled(true);
         } else {
-            amount_logs_shown = log_count;
+            amountLogsShown = logCount;
         }
 
         const message = await interaction.editReply({
@@ -75,62 +75,62 @@ export default class ModLogCommand implements Command {
                 await this.getUserModLogs(
                     modlogs,
                     interaction,
-                    start_pointer,
-                    log_count,
+                    startPointer,
+                    logCount,
                 ),
             ],
-            components: [modlog_rows],
+            components: [modlogRows],
         });
 
         const collector = message.createMessageComponentCollector({
             time: 1000 * 60 * 5,
         });
-        collector.on("collect", async (button_interaction) => {
-            if (button_interaction.customId === "modlog_previous") {
-                start_pointer -= log_count;
-                if (start_pointer <= 0) {
-                    start_pointer = 0;
-                    (modlog_rows.components[0] as ButtonBuilder).setDisabled(
+        collector.on("collect", async (buttonInteraction) => {
+            if (buttonInteraction.customId === "modlog_previous") {
+                startPointer -= logCount;
+                if (startPointer <= 0) {
+                    startPointer = 0;
+                    (modlogRows.components[0] as ButtonBuilder).setDisabled(
                         true,
                     );
                 }
-                (modlog_rows.components[1] as ButtonBuilder).setDisabled(false);
-            } else if (button_interaction.customId === "modlog_next") {
-                start_pointer += log_count;
-                if (start_pointer + log_count >= modlogs.length) {
-                    start_pointer = modlogs.length - log_count;
-                    (modlog_rows.components[1] as ButtonBuilder).setDisabled(
+                (modlogRows.components[1] as ButtonBuilder).setDisabled(false);
+            } else if (buttonInteraction.customId === "modlog_next") {
+                startPointer += logCount;
+                if (startPointer + logCount >= modlogs.length) {
+                    startPointer = modlogs.length - logCount;
+                    (modlogRows.components[1] as ButtonBuilder).setDisabled(
                         true,
                     );
                 }
-                (modlog_rows.components[0] as ButtonBuilder).setDisabled(false);
+                (modlogRows.components[0] as ButtonBuilder).setDisabled(false);
             }
-            await button_interaction.update({
+            await buttonInteraction.update({
                 embeds: [
                     await this.getUserModLogs(
                         modlogs,
                         interaction,
-                        start_pointer,
-                        log_count,
+                        startPointer,
+                        logCount,
                     ),
                 ],
-                components: [modlog_rows],
+                components: [modlogRows],
             });
         });
     }
     async getUserModLogs(
         //eslint-disable-next-line
-        mod_logs: any,
+        modLogs: any,
         interaction: CommandInteraction,
         start: number,
-        log_count: number,
+        logCount: number,
     ) {
         const fields = [];
-        let log_counter = start;
-        for (const log of mod_logs.slice(start, start + log_count)) {
-            const mod_log = objectToModLog(log);
-            fields.push(mod_log.getEmbedField(log_counter));
-            log_counter++;
+        let logCounter = start;
+        for (const log of modLogs.slice(start, start + logCount)) {
+            const modLog = objectToModLog(log);
+            fields.push(modLog.getEmbedField(logCounter));
+            logCounter++;
         }
         return new EmbedBuilder()
             .setTitle("Mod logs")

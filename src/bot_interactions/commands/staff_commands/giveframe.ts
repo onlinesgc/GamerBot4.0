@@ -46,43 +46,35 @@ export default class GiveFrameCommand implements Command {
         const frame = interaction.options.get("frame", true).value as string;
         const action = interaction.options.get("action", true).value as string;
 
-        const frame_config = (
-            await GamerBotAPIInstance.models.get_guild_data(
+        const frames = (
+            await GamerBotAPIInstance.models.getGuildData(
                 "516605157795037185",
             )
-        ).frameConfig;
-        const frame_data = frame_config.find(
-            //eslint-disable-next-line
-            (f: any) => f.id.toString() === frame,
+        ).frames;
+        const frameData = frames.find(
+            f => f.id.toString() === frame,
         );
-        if (frame_data === undefined) {
+        if (!frameData) {
             interaction.editReply("Frame not found");
             return;
         }
-        const profile_data = await GamerBotAPIInstance.models.get_profile_data(
-            user?.id as string,
-        );
-        const exclusive_frame_id = (parseInt(frame) - 10).toString();
+        const userData = await GamerBotAPIInstance.models.getUserData(user?.id as string);
         if (action === "add") {
-            if (profile_data.exclusiveFrames.includes(exclusive_frame_id)) {
+            if (userData.frameData.frames.includes(frameData.id)) {
                 interaction.editReply("User already has the frame");
                 return;
             }
-            profile_data.exclusiveFrames.push(exclusive_frame_id);
+            userData.frameData.frames.push(frameData.id);
         } else {
-            if (!profile_data.exclusiveFrames.includes(exclusive_frame_id)) {
+            if (!userData.frameData.frames.includes(frameData.id)) {
                 interaction.editReply("User does not have the frame");
                 return;
             }
-            profile_data.exclusiveFrames = profile_data.exclusiveFrames.map(
-                //eslint-disable-next-line
-                (f: any) => f.toString(),
-            );
-            profile_data.exclusiveFrames = profile_data.exclusiveFrames.filter(
-                (f) => f !== exclusive_frame_id,
+            userData.frameData.frames = userData.frameData.frames.filter(
+                f => f !== frameData.id,
             );
         }
-        profile_data.save();
+        userData.save();
         interaction.editReply("Frame added/removed");
     }
 

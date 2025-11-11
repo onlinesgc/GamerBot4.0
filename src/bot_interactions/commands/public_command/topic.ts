@@ -24,7 +24,7 @@ export default class TopicCommand implements Command {
                 .setRequired(false),
         );
     async execute(interaction: CommandInteraction) {
-        const guild_config = await GamerBotAPIInstance.models.get_guild_data(
+        const guild_config = await GamerBotAPIInstance.models.getGuildData(
             interaction.guildId as string,
         );
         const topic = interaction.options.get("topic", false)?.value;
@@ -39,17 +39,17 @@ export default class TopicCommand implements Command {
                 );
                 return;
             }
-            guild_config.topicList.push(topic as string);
+            guild_config.topics.push(topic as string);
             guild_config.save();
             interaction.editReply("Ämnet har lagts till!");
         } else {
-            if (guild_config.topicList.length == 0)
+            if (guild_config.topics.length == 0)
                 return interaction.editReply(
                     "Det finns inga topics i systemet! Lägg till några :)",
                 );
             await interaction.editReply(
-                guild_config.topicList[
-                    await getRndInteger(0, guild_config.topicList.length)
+                guild_config.topics[
+                    await getRndInteger(0, guild_config.topics.length)
                 ],
             );
         }

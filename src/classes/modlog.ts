@@ -29,9 +29,9 @@ export class ModLog {
         return `<@${this.userID}>${this.userName || this.userName == null ? "" : `(${this.userName})`}`;
     }
 
-    getEmbedField(mod_log_number: number) {
+    getEmbedField(modLogNumber: number) {
         const obj = {
-            name: `Mod log ${mod_log_number + 1}`,
+            name: `Mod log ${modLogNumber + 1}`,
             value: `Log Typ: ${this.type}\nAnvändare: ${this.getFormattedUserName()}\nAnledning: ${this.Reason}\nTid: ${this.date}\n Moderator: <@${this.authorID}>`,
         };
         if (this.length) obj.value += `\nLängd: ${this.length}`;

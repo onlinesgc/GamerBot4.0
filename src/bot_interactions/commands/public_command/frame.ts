@@ -12,7 +12,7 @@ import {
     TextInputBuilder,
     TextInputStyle,
 } from "discord.js";
-import { PorfileData } from "gamerbot-module";
+import { UserData } from "gamerbot-module";
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 
@@ -25,61 +25,46 @@ export default class FrameCommand implements Command {
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description);
-    async execute(interaction: CommandInteraction, profileData: PorfileData) {
-        const exclusive_frames = profileData.exclusiveFrames;
-        const frame_config =
-            await GamerBotAPIInstance.models.get_frame_config(
-                "516605157795037185",
-            );
-        //eslint-disable-next-line
-        let loaded_frames: any[] = frame_config.slice(0, 10);
+    async execute(interaction: CommandInteraction, userData: UserData) {
+        const frames = userData.frameData.frames;
+        const frameConfig = await GamerBotAPIInstance.models.getFrameConfig();
 
-        const all_exclusive_frames = frame_config.slice(
-            10,
-            frame_config.length,
-        );
+        const loadedFrames = frameConfig.filter((frame) => frames.includes(frame.id.toString()))
 
-        if (exclusive_frames.length > 0) {
-            loaded_frames = loaded_frames.concat(
-                //eslint-disable-next-line
-                all_exclusive_frames.filter((frame: any) =>
-                    exclusive_frames.includes((frame.id - 10).toString()),
-                ),
-            );
-        }
+        let selectedFrame = userData.frameData.selectedFrame;
 
-        let selected_frame = loaded_frames.findIndex(
-            (frame) => frame.id.toString() === profileData.profileFrame,
-        );
-        let link = loaded_frames[selected_frame].frameLink;
+        let link = loadedFrames[selectedFrame].frameLink;
+
         if (link.includes("localhost"))
             link = "https://i.imgur.com/PT8cJrF.png";
 
-        const loaded_options = loaded_frames.map((frame, index) => {
+        const loadedOptions = loadedFrames.map((frame, index) => {
             return { label: frame.name, value: index.toString() };
         });
-        let current_side = 0;
+
+        let currentSide = 0;
+
         const embed = new EmbedBuilder()
             .setTitle("Du kan välja ram igenom menyn nedan")
             .setColor("#2DD21C")
             .setImage(link)
             .setFooter({
-                text: `${selected_frame + 1}/${loaded_frames.length} - Nuvarande ram`,
+                text: `${selectedFrame + 1}/${loadedFrames.length} - Nuvarande ram`,
             })
             .setTimestamp();
-        const action_row =
+        const actionRow =
             new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
                 new StringSelectMenuBuilder()
                     .setCustomId("frame_select")
                     .setPlaceholder("Välj ram")
                     .addOptions(
                         await this.autoSliceSelect(
-                            loaded_options,
-                            current_side,
+                            loadedOptions,
+                            currentSide,
                         ),
                     ),
             );
-        const color_button =
+        const colorButton =
             new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder()
                     .setCustomId("color_select")
@@ -89,10 +74,12 @@ export default class FrameCommand implements Command {
 
         const message = await interaction.editReply({
             embeds: [embed],
-            components: [action_row, color_button],
+            components: [actionRow, colorButton],
         });
+
         const filter = (i: MessageComponentInteraction) =>
             i.customId === "frame_select" || i.customId === "color_select";
+
         const collector = message.createMessageComponentCollector({
             filter,
             time: 1000 * 60 * 5,
@@ -114,41 +101,40 @@ export default class FrameCommand implements Command {
                         messageComponentInteraction as StringSelectMenuInteraction
                     ).values[0];
                     if (value === "next") {
-                        current_side++;
+                        currentSide++;
                     } else if (value === "prev") {
-                        current_side = 0;
+                        currentSide = 0;
                     }
                     if (value === "prev" || value === "next") {
-                        action_row.components[0].setOptions(
+                        actionRow.components[0].setOptions(
                             await this.autoSliceSelect(
-                                loaded_options,
-                                current_side,
+                                loadedOptions,
+                                currentSide,
                             ),
                         );
                         interaction.editReply({
-                            components: [action_row, color_button],
+                            components: [actionRow, colorButton],
                         });
                         messageComponentInteraction.deferUpdate();
                         return;
                     }
 
-                    selected_frame = parseInt(value);
-                    link = loaded_frames[selected_frame].frameLink;
+                    selectedFrame = parseInt(value);
+                    link = loadedFrames[selectedFrame].frameLink;
                     if (link.includes("localhost"))
                         link = "https://i.imgur.com/PT8cJrF.png";
 
                     embed.setImage(link);
                     embed.setFooter({
-                        text: `${selected_frame + 1}/${loaded_frames.length} - Sparar...`,
+                        text: `${selectedFrame + 1}/${loadedFrames.length} - Sparar...`,
                     });
                     interaction.editReply({ embeds: [embed] });
 
-                    profileData.profileFrame =
-                        loaded_frames[selected_frame].id.toString();
-                    await profileData.save();
+                    userData.frameData.selectedFrame = loadedFrames[selectedFrame].id;
+                    await userData.save();
 
                     embed.setFooter({
-                        text: `${selected_frame + 1}/${loaded_frames.length} - Sparat`,
+                        text: `${selectedFrame + 1}/${loadedFrames.length} - Sparat`,
                     });
                     interaction.editReply({ embeds: [embed] });
 
@@ -156,7 +142,7 @@ export default class FrameCommand implements Command {
                 } else if (
                     messageComponentInteraction.customId === "color_select"
                 ) {
-                    const color_modal = new ModalBuilder()
+                    const colorModal = new ModalBuilder()
                         .setTitle("Välj färg")
                         .setCustomId(`color:${messageComponentInteraction.id}`)
                         .addComponents(
@@ -168,7 +154,7 @@ export default class FrameCommand implements Command {
                             ),
                         );
 
-                    await messageComponentInteraction.showModal(color_modal);
+                    await messageComponentInteraction.showModal(colorModal);
 
                     messageComponentInteraction
                         .awaitModalSubmit({ time: 1000 * 60 * 5 })
@@ -178,42 +164,36 @@ export default class FrameCommand implements Command {
                                 await modal.reply("Fel format på hex koden");
                                 return;
                             }
-                            profileData.colorHexCode = hex;
-                            await profileData.save();
+                            userData.frameData.frameColorHexCode = hex;
+                            await userData.save();
                             await modal.reply("Färg sparad");
                         })
                         .catch(async () => {});
                 }
-                GamerBotAPIInstance.models.get_user_frame(
-                    interaction.user.id,
-                    interaction.user.username,
-                    interaction.user.avatarURL({ extension: "png" }) as string,
-                    true,
-                );
             },
         );
 
         collector.on("end", async () => {
             embed.setFooter({
-                text: `${selected_frame + 1}/${loaded_frames.length} - Timeout`,
+                text: `${selectedFrame + 1}/${loadedFrames.length} - Timeout`,
             });
             interaction.editReply({ embeds: [embed], components: [] });
         });
     }
     async autoSliceSelect(
-        loaded_frames: { label: string; value: string }[],
-        sliced_side: number,
+        loadedFrames: { label: string; value: string }[],
+        slicedSide: number,
     ) {
-        let sliced_frames = loaded_frames.slice(
-            sliced_side * 24,
-            loaded_frames.length,
+        let slicedFrames = loadedFrames.slice(
+            slicedSide * 24,
+            loadedFrames.length,
         );
-        if (sliced_frames.length >= 24) {
-            sliced_frames = sliced_frames.slice(0, 24);
-            sliced_frames.push({ label: "Nästa sida", value: "next" });
-        } else if (sliced_frames.length < 24 && sliced_side > 0) {
-            sliced_frames.push({ label: "Första sidan", value: "prev" });
+        if (slicedFrames.length >= 24) {
+            slicedFrames = slicedFrames.slice(0, 24);
+            slicedFrames.push({ label: "Nästa sida", value: "next" });
+        } else if (slicedFrames.length < 24 && slicedSide > 0) {
+            slicedFrames.push({ label: "Första sidan", value: "prev" });
         }
-        return sliced_frames;
+        return slicedFrames;
     }
 }

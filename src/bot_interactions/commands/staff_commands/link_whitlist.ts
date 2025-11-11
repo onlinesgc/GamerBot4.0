@@ -24,12 +24,12 @@ export default class LinkWhitelistCommand implements Command {
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
     async execute(interaction: CommandInteraction) {
         const link = interaction.options.get("link", true).value as string;
-        const guild_config = await GamerBotAPIInstance.models.get_guild_data(
+        const guildConfig = await GamerBotAPIInstance.models.getGuildData(
             interaction.guildId as string,
         );
-        const new_link = { linkPrefix: link };
-        guild_config.whitelistedLinks.push(new_link);
-        guild_config.save();
+        const newLink = { linkPrefix: link };
+        guildConfig.autoModeration.whitelistedLinks.push(newLink.linkPrefix);
+        guildConfig.save();
         interaction.editReply("Länken har lagts till i whitelisten!");
     }
 }

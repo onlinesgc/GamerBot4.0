@@ -19,7 +19,7 @@ export default class Ticket implements Button {
     defer = false;
     execute(interaction: ButtonInteraction, args: string[]) {
         if (args[0] == "open")
-            this.open_ticket(
+            this.openTicket(
                 interaction,
                 interaction.user,
                 `Tack för att du öppnade en ticket! <@` +
@@ -27,34 +27,34 @@ export default class Ticket implements Button {
                     `> ! <@&1071466487069556746> kommer svara inom kort!`,
             );
         else if (args[0] == "close")
-            this.close_ticket(
+            this.closeTicket(
                 interaction,
                 args[1],
                 args[2],
                 JSON.parse(args[3]),
             );
-        else if (args[0] == "note") this.note_ticket(interaction, args[2]);
+        else if (args[0] == "note") this.noteTicket(interaction, args[2]);
         else if (args[0] == "archive")
-            this.archive_ticket(interaction, args[2]);
+            this.archiveTicket(interaction, args[2]);
     }
 
-    async open_ticket(
+    async openTicket(
         interaction: ButtonInteraction | CommandInteraction,
         ticketUser: User,
-        open_ticket_text: string,
+        openTicketText: string,
     ) {
-        const guild_category = (
-            await GamerBotAPIInstance.models.get_guild_data(
+        const guildCategory = (
+            await GamerBotAPIInstance.models.getGuildData(
                 interaction.guildId as string,
             )
-        ).ticketParent;
+        ).ticketData.ticketCategoryId;
 
-        if (guild_category == null || guild_category == "") {
+        if (guildCategory == null || guildCategory == "") {
             interaction.reply("No ticket category set up");
             return;
         }
 
-        const leave_ticket_row = createButtonRow(
+        const leaveTicketRow = createButtonRow(
             {
                 style:ButtonStyle.Danger,
                 label:"Lämna ticket",
@@ -62,35 +62,35 @@ export default class Ticket implements Button {
             }
         );
 
-        const ticket_modal = createModal(
+        const ticketModal = createModal(
             "Ticket",
             `ticket_help:${interaction.id}`,
             {
                 label:"Skriv en beskrivning vad du behöver hjälp med",
                 placeholder:"Skriv här...",
                 style:TextInputStyle.Paragraph,
-                text_id:`ticket_help_description:${interaction.id}`,
+                textId:`ticket_help_description:${interaction.id}`,
                 requierd:true
             }
         );
 
-        await interaction.showModal(ticket_modal);
+        await interaction.showModal(ticketModal).catch(() => {});
 
         const filter = (i: ModalSubmitInteraction) =>
             i.customId.split(":")[1] === interaction.id;
 
-        const modal_submit = await interaction.awaitModalSubmit({ filter, time: 1000 * 60 * 10 }).catch(() => {})
-        if (!modal_submit) return;
+        const modalSubmit = await interaction.awaitModalSubmit({ filter, time: 1000 * 60 * 10 }).catch(() => {})
+        if (!modalSubmit) return;
 
-        const description = modal_submit.fields.getTextInputValue(
+        const description = modalSubmit.fields.getTextInputValue(
             `ticket_help_description:${interaction.id}`,
         );
 
-        const ticket_channel = await interaction.guild?.channels.create(
+        const ticketChannel = await interaction.guild?.channels.create(
             {
                 name: `ticket-${interaction.user.username}`,
                 type: ChannelType.GuildText,
-                parent: guild_category,
+                parent: guildCategory,
                 permissionOverwrites: [
                     {
                         id: interaction.guild?.roles.everyone.id,
@@ -108,35 +108,35 @@ export default class Ticket implements Button {
                 ],
             },
         );
-        const message = await ticket_channel?.send({
-            content: `${open_ticket_text}\nBeskrivningen för problemet är:\n\`${description}\``,
-            components: [leave_ticket_row],
+        const message = await ticketChannel?.send({
+            content: `${openTicketText}\nBeskrivningen för problemet är:\n\`${description}\``,
+            components: [leaveTicketRow],
         });
 
-        leave_ticket_row.components[0].setCustomId(
+        leaveTicketRow.components[0].setCustomId(
             `ticket;close;${message?.id};${interaction.user.id};false`,
         );
 
-        await message?.edit({ components: [leave_ticket_row] });
-        modal_submit.deferUpdate();
+        await message?.edit({ components: [leaveTicketRow] });
+        modalSubmit.deferUpdate();
 
-        return { channel: ticket_channel, interaction: interaction };
+        return { channel: ticketChannel, interaction: interaction };
         
     }
 
-    async close_ticket(
+    async closeTicket(
         interaction: ButtonInteraction,
-        message_id: string,
-        user_id: string,
-        remove_ticket: boolean,
+        messageId: string,
+        userId: string,
+        removeTicket: boolean,
     ) {
-        if (remove_ticket) {
+        if (removeTicket) {
             await interaction.reply("Tar bort kanalen om 5 sekunder...");
             setTimeout(async () => interaction.channel?.delete(), 5000);
             return;
         }
-        const member = interaction.guild?.members.cache.get(user_id);
-        const message = interaction.channel?.messages.cache.get(message_id);
+        const member = interaction.guild?.members.cache.get(userId);
+        const message = interaction.channel?.messages.cache.get(messageId);
         const channel = interaction.channel as GuildChannel;
 
         await channel?.permissionOverwrites.edit(member?.id as string, {
@@ -145,27 +145,27 @@ export default class Ticket implements Button {
             AttachFiles: false,
         });
 
-        const close_row = createButtonRow(
-            {emoji:"📝", style:ButtonStyle.Secondary, label:"Notera och radera", id:`ticket;note;${message_id};${user_id}`},
-            {emoji:"💾", style:ButtonStyle.Secondary, label:"Notera och arkivera", id:`ticket;archive;${message_id};${user_id}`},
-            {style:ButtonStyle.Danger, label:"Radera", id:`ticket;close;${message_id};${user_id};true`},
+        const closeRow = createButtonRow(
+            {emoji:"📝", style:ButtonStyle.Secondary, label:"Notera och radera", id:`ticket;note;${messageId};${userId}`},
+            {emoji:"💾", style:ButtonStyle.Secondary, label:"Notera och arkivera", id:`ticket;archive;${messageId};${userId}`},
+            {style:ButtonStyle.Danger, label:"Radera", id:`ticket;close;${messageId};${userId};true`},
         );
 
         message?.reply({
-            content: `Nu har <@${user_id}> lämnat ticketen. Vill ni spara, anteckna eller slänga ticketen?`,
-            components: [close_row],
+            content: `Nu har <@${userId}> lämnat ticketen. Vill ni spara, anteckna eller slänga ticketen?`,
+            components: [closeRow],
         });
         interaction.deferUpdate();
     }
-    async note_ticket(interaction: ButtonInteraction, user_id: string) {
-        await interaction.showModal(await this.get_modal());
-        const modal_submit = await interaction.awaitModalSubmit({ time: 1000 * 60 * 10 }).catch(() => {});
+    async noteTicket(interaction: ButtonInteraction, userId: string) {
+        await interaction.showModal(await this.getModal());
+        const modalSubmit = await interaction.awaitModalSubmit({ time: 1000 * 60 * 10 }).catch(() => {});
 
-        if (!modal_submit) return;
+        if (!modalSubmit) return;
 
-        const note = modal_submit.fields.getTextInputValue("noteid");
+        const note = modalSubmit.fields.getTextInputValue("noteid");
         const member = interaction.guild?.members.cache.get(
-            user_id,
+            userId,
         ) as GuildMember;
 
         await new NoteCommand().noteUser(
@@ -174,19 +174,19 @@ export default class Ticket implements Button {
             interaction.user.id,
         );
 
-        await modal_submit.reply(`Tar bort kanalen om 5 sekunder...`);
+        await modalSubmit.reply(`Tar bort kanalen om 5 sekunder...`);
 
         setTimeout(() => interaction.channel?.delete(), 5000);
     }
-    async archive_ticket(interaction: ButtonInteraction, user_id: string) {
-        await interaction.showModal(await this.get_modal());
-        const modal_submit = await interaction.awaitModalSubmit({ time: 60 * 1000 * 10 }).catch(() => {});
+    async archiveTicket(interaction: ButtonInteraction, userId: string) {
+        await interaction.showModal(await this.getModal());
+        const modalSubmit = await interaction.awaitModalSubmit({ time: 60 * 1000 * 10 }).catch(() => {});
 
-        if (!modal_submit) return;
+        if (!modalSubmit) return;
 
-        const note = modal_submit.fields.getTextInputValue("noteid");
+        const note = modalSubmit.fields.getTextInputValue("noteid");
         const member = interaction.guild?.members.cache.get(
-            user_id,
+            userId,
         ) as GuildMember;
 
         await new NoteCommand().noteUser(
@@ -196,25 +196,25 @@ export default class Ticket implements Button {
         );
 
         const guildConfig =
-            await GamerBotAPIInstance.models.get_guild_data(
+            await GamerBotAPIInstance.models.getGuildData(
                 interaction.guildId as string,
             );
-        if (!guildConfig.archivedTicketParent) {
-            modal_submit.reply(
+        if (!guildConfig.ticketData.archivedTicketCategoryId) {
+            modalSubmit.reply(
                 "Det gick inte att arkivera ticketen eftersom att guild config värdet `archivedTicketParent` inte är definierat! Medlemmen noterades dock ändå.",
             );
             return;
         }
 
-        await modal_submit.reply(`Arkiverar kanalen om 5 sekunder...`);
+        await modalSubmit.reply(`Arkiverar kanalen om 5 sekunder...`);
         setTimeout(async () => {
             await (interaction.channel as GuildChannel).setParent(
-                guildConfig.archivedTicketParent,
+                guildConfig.ticketData.archivedTicketCategoryId,
             );
         }, 5000);
     }
 
-    async get_modal() {
-        return createModal("Add note", "noteadd", {label:"Add note",placeholder:"note...",style:TextInputStyle.Paragraph,text_id:"noteid", requierd:true});
+    async getModal() {
+        return createModal("Add note", "noteadd", {label:"Add note",placeholder:"note...",style:TextInputStyle.Paragraph,textId:"noteid", requierd:true});
     }
 }

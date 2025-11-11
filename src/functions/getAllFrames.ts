@@ -2,19 +2,19 @@ import { GamerBotAPIInstance, GamerbotClient } from "../index.js";
 
 /**
  * Get all frames available in the guild
- * @param {string} guild_id
+ * @param {string} guildId
  * @returns {Promise<any[]>}
  */
-export async function getAllFrames(guild_id: string, client: GamerbotClient) {
+export async function getAllFrames(guildId: string, client: GamerbotClient) {
     if (client.frameChoices.length > 0) return client.frameChoices;
-    const frame_config = (
-        await GamerBotAPIInstance.models.get_guild_data(guild_id)
-    ).frameConfig;
+    const frameConfig = (
+        await GamerBotAPIInstance.models.getGuildData(guildId)
+    ).frames;
     //eslint-disable-next-line
-    const frame_options: any[] = [];
+    const frameOptions: any[] = [];
     //eslint-disable-next-line
-    frame_config.forEach((frame: any) =>
-        frame_options.push({
+    frameConfig.forEach((frame: any) =>
+        frameOptions.push({
             name:
                 frame.id.toString() +
                 ":" +
@@ -22,6 +22,6 @@ export async function getAllFrames(guild_id: string, client: GamerbotClient) {
             value: frame.id.toString(),
         }),
     );
-    client.frameChoices = frame_options;
-    return frame_options;
+    client.frameChoices = frameOptions;
+    return frameOptions;
 }

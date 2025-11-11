@@ -26,7 +26,7 @@ export interface GamerbotClient extends Client {
     commands: Collection<string, Command>;
     buttons: Collection<string, Button>;
     messageInteractions: Collection<string, MessageInteraction>;
-    command_array: Array<object>;
+    commandArray: Array<object>;
     reminderList: Array<object>;
     frameChoices: Array<object>;
 }
@@ -51,7 +51,7 @@ const client = new Client({
 client.commands = new Collection();
 client.buttons = new Collection();
 client.messageInteractions = new Collection();
-client.command_array = [];
+client.commandArray = [];
 client.reminderList = [];
 client.frameChoices = [];
 

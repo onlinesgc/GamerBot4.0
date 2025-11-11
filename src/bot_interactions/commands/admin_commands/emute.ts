@@ -47,7 +47,7 @@ export default class EmuteCommand implements Command {
         const reason = interaction.options.get("reason", true).value as string;
         const time =
             (interaction.options.get("time", true).value as string) || "0";
-        const has_sent_message = await MuteCommand.mute(
+        const hasSentMessage = await MuteCommand.mute(
             member,
             reason,
             time,
@@ -55,14 +55,14 @@ export default class EmuteCommand implements Command {
             `Du har blivit tystad i SGC.\n**Du är jättevälkommen tillbaka igen efter ${time}. Kom ihåg respektera alla på servern och lyssna på staffsens regelpåminnelser.**`,
         );
 
-        const mute_embed = CreateModLogEmbed(
+        const muteEmbed = CreateModLogEmbed(
             "mute",
             `${member.user.username} har blivit tystad i ${time}`,
             reason,
             this.name,
             interaction,
-            has_sent_message,
+            hasSentMessage,
         );
-        await interaction.editReply({ embeds: [mute_embed] });
+        await interaction.editReply({ embeds: [muteEmbed] });
     }
 }

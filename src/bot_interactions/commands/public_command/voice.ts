@@ -8,7 +8,7 @@ import {
     VoiceChannel,
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
-import { PorfileData } from "gamerbot-module";
+import { UserData } from "gamerbot-module";
 import { GamerBotAPIInstance } from "../../../index.js";
 
 export default class VoiceCommand implements Command {
@@ -80,10 +80,10 @@ export default class VoiceCommand implements Command {
                 .setDescription("Max antal personer i kanalen")
                 .setRequired(false),
         );
-    async execute(interaction: CommandInteraction, profileData: PorfileData) {
+    async execute(interaction: CommandInteraction, userData: UserData) {
         const guildMember = interaction.member as GuildMember;
 
-        if (profileData.privateVoiceID !== guildMember.voice.channelId) {
+        if (userData.voiceData.voiceChannelId !== guildMember.voice.channelId) {
             interaction.editReply(
                 "Du måste vara i din privata kanal som tillhör dig för att använda det här kommandot",
             );
@@ -93,7 +93,7 @@ export default class VoiceCommand implements Command {
         const voiceChannel = guildMember.voice.channel as VoiceChannel;
 
         if (interaction.options.data.length == 0) {
-            const voice_members_embed = new EmbedBuilder()
+            const voiceMembersEmbed = new EmbedBuilder()
                 .setColor("#2DD21C")
                 .setTitle(`${guildMember.displayName}'s röstkanal`)
                 .addFields({
@@ -105,16 +105,16 @@ export default class VoiceCommand implements Command {
                     text: this.name,
                     iconURL: interaction.client.user.avatarURL()?.toString(),
                 });
-            return interaction.editReply({ embeds: [voice_members_embed] });
+            return interaction.editReply({ embeds: [voiceMembersEmbed] });
         }
 
         let member;
 
-        const guild_data = await GamerBotAPIInstance.models.get_guild_data(
+        const guildData = await GamerBotAPIInstance.models.getGuildData(
             interaction.guildId as string,
         );
-        const info_voice_channel = interaction.guild?.channels.cache.get(
-            guild_data.infoVoiceChannel,
+        const infoVoiceChannel = interaction.guild?.channels.cache.get(
+            guildData.voiceChannelData.infoChatId,
         ) as TextChannel;
 
         switch (interaction.options.data[0].name) {
@@ -122,8 +122,8 @@ export default class VoiceCommand implements Command {
                 member = interaction.options.get("invite", true)
                     .member as GuildMember;
 
-                await info_voice_channel.threads.cache
-                    .get(profileData.privateVoiceThreadID)
+                await infoVoiceChannel.threads.cache
+                    .get(userData.voiceData.voiceChannelThreadId)
                     ?.members.add(member.id);
                 await voiceChannel.permissionOverwrites.edit(member.id, {
                     ViewChannel: true,
@@ -138,8 +138,8 @@ export default class VoiceCommand implements Command {
             case "kick": {
                 member = interaction.options.get("kick", true)
                     .member as GuildMember;
-                await info_voice_channel.threads.cache
-                    .get(profileData.privateVoiceThreadID)
+                await infoVoiceChannel.threads.cache
+                    .get(userData.voiceData.voiceChannelThreadId)
                     ?.members.remove(member.id);
                 await voiceChannel.permissionOverwrites.delete(member.id);
                 await member.voice.disconnect();
@@ -155,20 +155,20 @@ export default class VoiceCommand implements Command {
                     return interaction.editReply(
                         "Personen du vill ge ägandeskapet till är inte i kanalen",
                     );
-                profileData.privateVoiceID = "";
-                await profileData.save();
-                const give_member =
-                    await GamerBotAPIInstance.models.get_profile_data(
+                userData.voiceData.voiceChannelId = "";
+                await userData.save();
+                const giveMember =
+                    await GamerBotAPIInstance.models.getUserData(
                         member.id,
                     );
-                give_member.privateVoiceID = voiceChannel.id;
-                give_member.privateVoiceThreadID =
-                    profileData.privateVoiceThreadID;
-                await give_member.save();
-                profileData.privateVoiceThreadID = "";
-                await profileData.save();
-                await info_voice_channel.threads.cache
-                    .get(profileData.privateVoiceThreadID)
+                giveMember.voiceData.voiceChannelId = voiceChannel.id;
+                giveMember.voiceData.voiceChannelThreadId =
+                    userData.voiceData.voiceChannelThreadId;
+                await giveMember.save();
+                userData.voiceData.voiceChannelThreadId = "";
+                await userData.save();
+                await infoVoiceChannel.threads.cache
+                    .get(userData.voiceData.voiceChannelThreadId)
                     ?.members.add(member.id);
                 interaction.editReply(
                     `Du har gett ägandeskapet till ${member.displayName}`,

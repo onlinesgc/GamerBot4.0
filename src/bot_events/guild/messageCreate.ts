@@ -20,8 +20,8 @@ export default class messageCreate implements Event {
         this.removeLink(message, guildData);
     }
 
-    private async xpCalculation(message: Message, guild_data: GuildData) {
-        if (guild_data.noXpChannels.includes(message.channel.id)) return;
+    private async xpCalculation(message: Message, guildData: GuildData) {
+        if (guildData.noXpChannels.includes(message.channel.id)) return;
 
         // Check if the message is in a thead from general chat and random shit
         const GENERAL_CHAT = "516611606822649870";
@@ -40,10 +40,10 @@ export default class messageCreate implements Event {
         //returns until time is calculated
         if (userData.levelSystem.xpTimeoutUntil > message.createdTimestamp) return;
 
-        const time_out = 10 * 60 * 1000; // ten mins
+        const timeOut = 10 * 60 * 1000; // ten mins
 
         //adds timeout
-        userData.levelSystem.xpTimeoutUntil = message.createdTimestamp + time_out;
+        userData.levelSystem.xpTimeoutUntil = message.createdTimestamp + timeOut;
 
         //Gives xp, if similar word only give 1 xp.
         if (userData.levelSystem.oldMessages.length >= 3)
@@ -56,13 +56,13 @@ export default class messageCreate implements Event {
         }
         userData.levelSystem.oldMessages.push(message.content.toLowerCase());
 
-        const lvl_cap = 31;
+        const lvlCap = 31;
 
         //if level up. xp cap is at lvl 30!
         if (
             (userData.levelSystem.level ** 2 < userData.levelSystem.xp &&
                 userData.levelSystem.level <= 31) ||
-            (lvl_cap ** 2 < userData.levelSystem.xp && userData.levelSystem.level > 31)
+            (lvlCap ** 2 < userData.levelSystem.xp && userData.levelSystem.level > 31)
         ) {
             userData.levelSystem.xp = 0;
             userData.levelSystem.level += 1;
@@ -93,20 +93,20 @@ export default class messageCreate implements Event {
 
     private messageInteraction(message: Message) {
 
-        const message_interaction = (
+        const messageInteraction = (
             message.client as GamerbotClient
         ).messageInteractions.find(
-            (message_interaction) =>
-                message.content.toLowerCase().includes(message_interaction.name),
+            (messageInteraction) =>
+                message.content.toLowerCase().includes(messageInteraction.name),
         );
-        if (message_interaction) {
-            message_interaction.execute(message);
+        if (messageInteraction) {
+            messageInteraction.execute(message);
         }
     }
 
-    async removeLink(message: Message, guild_data: GuildData) {
-        const link_roles = guild_data.autoModeration.trustedLinkRoles;
-        const whitelistedChannels = guild_data.autoModeration.linkChannels;
+    async removeLink(message: Message, guildData: GuildData) {
+        const linkRoles = guildData.autoModeration.trustedLinkRoles;
+        const whitelistedChannels = guildData.autoModeration.linkChannels;
 
         const notAllowed = (msg: Message) => {
             if (!msg.channel.isSendable()) return;
@@ -129,7 +129,7 @@ export default class messageCreate implements Event {
 
         if (!linkFound) return;
 
-        if (message.member?.roles.cache.hasAny(...link_roles)) return;
+        if (message.member?.roles.cache.hasAny(...linkRoles)) return;
 
         if (
             (

@@ -29,7 +29,6 @@ export default class ready implements Event {
                 }, 5000);
             });
         }
-
         // Get config data from the API
         const configData = await GamerBotAPIInstance.models.getConfigData(
             parseInt(process.env.CONFIG_ID as string),
@@ -69,7 +68,7 @@ export default class ready implements Event {
         }
 
         await rest
-            .put(routesFunc, { body: client.command_array })
+            .put(routesFunc, { body: client.commandArray })
             .catch((error) => console.error(error));
     }
 

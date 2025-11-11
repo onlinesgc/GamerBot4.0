@@ -8,7 +8,7 @@ import {
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
-import { PorfileData } from "gamerbot-module";
+import { UserData } from "gamerbot-module";
 
 /**
  * Xptoplist command that shows the top list of xp
@@ -23,13 +23,13 @@ export default class XptoplistCommand implements Command {
         .setName(this.name)
         .setDescription(this.description);
     async execute(interaction: CommandInteraction) {
-        const max_users = 300;
-        const users_per_page = 10;
+        const maxUsers = 300;
+        const usersPerPage = 10;
         let pointer = 0;
         const profiles =
-            await GamerBotAPIInstance.models.get_all_profile_data(max_users);
+            await GamerBotAPIInstance.models.getAllUserData(maxUsers);
 
-        const xp_toplist_embed = new EmbedBuilder()
+        const xpToplistEmbed = new EmbedBuilder()
             .setColor("#2DD21C")
             .setTitle(":trophy:  Xp Topplista")
             .addFields(await this.generate_fields(profiles, pointer, 10))
@@ -52,11 +52,11 @@ export default class XptoplistCommand implements Command {
                     .setCustomId("xptoplist_next")
                     .setDisabled(false),
             ]);
-        const xp_toplist_message = await interaction.editReply({
-            embeds: [xp_toplist_embed],
+        const xpToplistMessage = await interaction.editReply({
+            embeds: [xpToplistEmbed],
             components: [directionButtons],
         });
-        const collector = xp_toplist_message.createMessageComponentCollector({
+        const collector = xpToplistMessage.createMessageComponentCollector({
             time: 1000 * 60 * 5,
         });
 
@@ -65,7 +65,7 @@ export default class XptoplistCommand implements Command {
                 case "xptoplist_previous":
                     directionButtons.components[1].setDisabled(false);
                     if (pointer > 0) {
-                        pointer -= users_per_page;
+                        pointer -= usersPerPage;
                     }
                     if (pointer === 0) {
                         directionButtons.components[0].setDisabled(true);
@@ -73,33 +73,33 @@ export default class XptoplistCommand implements Command {
                     break;
                 case "xptoplist_next":
                     directionButtons.components[0].setDisabled(false);
-                    pointer += users_per_page;
-                    if (pointer >= max_users) {
-                        pointer -= users_per_page;
-                    } else if (pointer + users_per_page >= max_users) {
+                    pointer += usersPerPage;
+                    if (pointer >= maxUsers) {
+                        pointer -= usersPerPage;
+                    } else if (pointer + usersPerPage >= maxUsers) {
                         directionButtons.components[1].setDisabled(true);
                     }
                     break;
             }
-            xp_toplist_embed.setFields(
-                await this.generate_fields(profiles, pointer, users_per_page),
+            xpToplistEmbed.setFields(
+                await this.generate_fields(profiles, pointer, usersPerPage),
             );
             buttonInteraction.update({
-                embeds: [xp_toplist_embed],
+                embeds: [xpToplistEmbed],
                 components: [directionButtons],
             });
         });
         collector.on("end", async () => {
             directionButtons.components[0].setDisabled(true);
             directionButtons.components[1].setDisabled(true);
-            xp_toplist_message.edit({
-                embeds: [xp_toplist_embed],
+            xpToplistMessage.edit({
+                embeds: [xpToplistEmbed],
                 components: [directionButtons],
             });
         });
     }
     private async generate_fields(
-        profiles: PorfileData[],
+        profiles: UserData[],
         starterPointer: number,
         userCount: number,
     ) {
@@ -109,11 +109,12 @@ export default class XptoplistCommand implements Command {
             starterPointer,
             starterPointer + userCount,
         )) {
+            const level = profile.levelSystem.level;
             fields.push({
                 name: (starterPointer + i).toString(),
                 value: `
-                Användare: <@!${profile.userID}>
-                Level: \`${profile.level - 1}\`- (\`${Math.round((profile.xp / (profile.level < 31 ? profile.level ** 2 : 31 ** 2)) * 100)}%\`)`,
+                Användare: <@!${profile.userId}>
+                Level: \`${level - 1}\`- (\`${Math.round((profile.levelSystem.xp / (level < 31 ? level ** 2 : 31 ** 2)) * 100)}%\`)`,
             });
             i++;
         }

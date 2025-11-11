@@ -27,10 +27,10 @@ export default class RoleUpdate implements Command {
     async execute(interaction: CommandInteraction) {
         const user = interaction.options.get("user", true)
             .member as GuildMember;
-        const profile_data = await GamerBotAPIInstance.models.get_profile_data(
+        const userData = await GamerBotAPIInstance.models.getUserData(
             user?.id as string,
         );
-        updateLevelRoles(user, profile_data);
+        updateLevelRoles(user, userData);
         interaction.editReply(`levelrollerna för ${user} har uppdaterats!`);
     }
 }

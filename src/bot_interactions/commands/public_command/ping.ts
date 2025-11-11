@@ -19,7 +19,7 @@ export default class PingCommand implements Command {
         .setName(this.name)
         .setDescription(this.description);
     async execute(interaction: CommandInteraction) {
-        const pining_embed = new EmbedBuilder()
+        const piningEmbed = new EmbedBuilder()
             .setColor("#2DD21C")
             .setTitle(":ping_pong:  Ping")
             .setDescription(`Pingar...`)
@@ -28,12 +28,12 @@ export default class PingCommand implements Command {
                 iconURL: interaction.client.user.avatarURL()?.toString(),
             })
             .setTimestamp();
-        const message = await interaction.editReply({ embeds: [pining_embed] });
+        const message = await interaction.editReply({ embeds: [piningEmbed] });
 
-        pining_embed.setDescription(
+        piningEmbed.setDescription(
             `Tog ${message.createdTimestamp - interaction.createdTimestamp} millisekunder!`,
         );
-        pining_embed.setTitle(":ping_pong:  Pong");
-        interaction.editReply({ embeds: [pining_embed] });
+        piningEmbed.setTitle(":ping_pong:  Pong");
+        interaction.editReply({ embeds: [piningEmbed] });
     }
 }

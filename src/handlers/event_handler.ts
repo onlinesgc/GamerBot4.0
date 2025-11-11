@@ -8,34 +8,34 @@ import fs from "fs";
  *
  * @param client - Discord client
  **/
-export default class event_handler implements Handler {
+export default class EventHandler implements Handler {
     constructor() {}
     async run(client: GamerbotClient) {
         console.log("Loading events...");
-        ["client", "guild"].forEach((dir) => this.load_dir(dir, client));
-        ["custom_events"].forEach((dir) => this.load_custom_event(dir, client));
+        ["client", "guild"].forEach((dir) => this.loadDir(dir, client));
+        ["custom_events"].forEach((dir) => this.loadCustomEvent(dir, client));
     }
 
-    private load_dir(dir: string, client: GamerbotClient) {
-        const event_files = fs
+    private loadDir(dir: string, client: GamerbotClient) {
+        const eventFiles = fs
             .readdirSync(path.join(_dirname, "/bot_events/" + dir))
             .filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
-        for (const file of event_files) {
+        for (const file of eventFiles) {
             console.log(`Loading ${dir}/${file}`);
             import(`../bot_events/${dir}/${file}`).then((_event) => {
                 const event = new _event.default();
                 client.on(file.split(".")[0], (...args) =>
-                    event.run_event(client, ...args),
+                    event.runEvent(client, ...args),
                 );
             });
         }
     }
 
-    private load_custom_event(dir: string, client: GamerbotClient) {
-        const custom_event_files = fs
+    private loadCustomEvent(dir: string, client: GamerbotClient) {
+        const customEventFiles = fs
             .readdirSync(path.join(_dirname, "/bot_events/" + dir))
             .filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
-        for (const file of custom_event_files) {
+        for (const file of customEventFiles) {
             console.log(`Loading ${dir}/${file}`);
             import(`../bot_events/${dir}/${file}`).then((_event) => {
                 const event = new _event.default();

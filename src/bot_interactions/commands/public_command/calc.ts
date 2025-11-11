@@ -27,7 +27,7 @@ export default class CalcCommand implements Command {
         const expression = interaction.options.get("expression", false)
             ?.value as string;
 
-        const math_embed = new EmbedBuilder()
+        const mathEmbed = new EmbedBuilder()
             .setColor("#2DD21C")
             .setTitle(`${interaction.member?.user.username} | Matte tal`)
             .setDescription(`Calculating ${"`"}${expression.trim()}${"`"}`)
@@ -36,15 +36,15 @@ export default class CalcCommand implements Command {
                 iconURL: interaction.client.user.avatarURL()?.toString(),
             })
             .setTimestamp();
-        await interaction.editReply({ embeds: [math_embed] });
+        await interaction.editReply({ embeds: [mathEmbed] });
 
         fetch(
             `http://api.mathjs.org/v4/?expr=${encodeURIComponent(expression)}`,
         ).then(async (data) => {
-            math_embed.setDescription(
+            mathEmbed.setDescription(
                 `Calculated ${"`"}${expression.trim()}${"`"}\nAnswer ${"`"}${await data.text()}${"`"}`,
             );
-            interaction.editReply({ embeds: [math_embed] });
+            interaction.editReply({ embeds: [mathEmbed] });
         });
     }
 }

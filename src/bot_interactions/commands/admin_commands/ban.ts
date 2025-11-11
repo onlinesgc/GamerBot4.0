@@ -57,24 +57,24 @@ export default class BanCommand implements Command {
             (interaction.options.get("messages", false)?.value as string) ||
             "0s";
 
-        const has_sent_message = await this.banUser(
+        const hasSentMessage = await this.banUser(
             member,
             reason,
             time,
             interaction.user.id,
             messages,
         );
-        const ban_embed = CreateModLogEmbed(
+        const banEmbed = CreateModLogEmbed(
             "Ban",
             `${member.user.username} har blivit bannad`,
             reason,
             this.name,
             interaction,
-            has_sent_message,
+            hasSentMessage,
         );
 
         interaction.editReply({
-            embeds: [ban_embed],
+            embeds: [banEmbed],
         });
     }
 
@@ -85,7 +85,7 @@ export default class BanCommand implements Command {
         authorId: string,
         messages: string,
     ) {
-        const profile_data = await GamerBotAPIInstance.models.get_profile_data(
+        const userData = await GamerBotAPIInstance.models.getUserData(
             member.id,
         );
         const modLog = new ModLog(
@@ -97,8 +97,8 @@ export default class BanCommand implements Command {
             Date.now(),
             authorId,
         );
-        profile_data.modLogs.push(modLogToObject(modLog));
-        await profile_data.save();
+        userData.modLogs.push(modLogToObject(modLog));
+        await userData.save();
         let hasSentMessage = true;
         await member
             .send(
@@ -110,15 +110,15 @@ export default class BanCommand implements Command {
                 hasSentMessage = false;
             });
         if (time != "0") {
-            const guild_config =
-                await GamerBotAPIInstance.models.get_guild_data(
+            const guildData =
+                await GamerBotAPIInstance.models.getGuildData(
                     member.guild.id,
                 );
-            guild_config.bansTimes.push({
+            guildData.autoModeration.bannedUsers.push({
                 userID: member.id,
                 unbantime: Number(Date.now() + ms(time)),
             });
-            guild_config.save();
+            guildData.save();
         }
         await member.guild.bans.create(member.id, {
             reason: reason,

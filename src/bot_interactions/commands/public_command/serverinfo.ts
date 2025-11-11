@@ -21,8 +21,8 @@ export default class ServerInfoCommand implements Command {
         .setDescription(this.description);
     async execute(interaction: CommandInteraction) {
         const guild = interaction.guild as Guild;
-        const server_data = await this.get_servers_data();
-        const server_info_embed = new EmbedBuilder()
+        const serverData = await this.getServersData();
+        const serverInfoEmbed = new EmbedBuilder()
             .setColor("#2DD21C")
             .setTitle(`Serverinfo`)
             .setThumbnail(guild.iconURL() as string)
@@ -47,9 +47,9 @@ export default class ServerInfoCommand implements Command {
                 {
                     name: "Minecraft servers",
                     value: `
-                    **Trusted:** ${server_data[0].online ? `\`${server_data[0].players.online}\` / \`${server_data[0].players.max}\`` : "Servern är offline"}
-                    **Creative:** ${server_data[1].online ? `\`${server_data[1].players.online}\` / \`${server_data[1].players.max}\`` : "Servern är offline"}
-                    **Parkour servern:** ${server_data[2].online ? `\`${server_data[2].players.online}\` / \`${server_data[2].players.max}\`` : "Servern är offline"}
+                    **Trusted:** ${serverData[0].online ? `\`${serverData[0].players.online}\` / \`${serverData[0].players.max}\`` : "Servern är offline"}
+                    **Creative:** ${serverData[1].online ? `\`${serverData[1].players.online}\` / \`${serverData[1].players.max}\`` : "Servern är offline"}
+                    **Parkour servern:** ${serverData[2].online ? `\`${serverData[2].players.online}\` / \`${serverData[2].players.max}\`` : "Servern är offline"}
                     `,
                 },
                 {
@@ -57,25 +57,25 @@ export default class ServerInfoCommand implements Command {
                     value: `\`${guild.premiumTier}\``,
                 },
             );
-        interaction.editReply({ embeds: [server_info_embed] });
+        interaction.editReply({ embeds: [serverInfoEmbed] });
     }
-    async get_servers_data() {
-        const server_data = [];
-        server_data.push(
+    async getServersData() {
+        const serverData = [];
+        serverData.push(
             await new Promise((resolve) => {
                 fetch("https://api.mcsrvstat.us/3/trusted.sgc.se")
                     .then((data) => data.json())
                     .then((data) => resolve(data));
             }),
         );
-        server_data.push(
+        serverData.push(
             await new Promise((resolve) => {
                 fetch("https://api.mcsrvstat.us/3/creative.sgc.se")
                     .then((data) => data.json())
                     .then((data) => resolve(data));
             }),
         );
-        server_data.push(
+        serverData.push(
             await new Promise((resolve) => {
                 fetch("https://api.mcsrvstat.us/3/parkour.sgc.se")
                     .then((data) => data.json())
@@ -83,6 +83,6 @@ export default class ServerInfoCommand implements Command {
             }),
         );
         // eslint-disable-next-line
-        return server_data as any;
+        return serverData as any;
     }
 }

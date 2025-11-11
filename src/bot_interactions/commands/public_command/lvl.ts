@@ -6,7 +6,7 @@ import {
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
-import { PorfileData } from "gamerbot-module";
+import { UserData } from "gamerbot-module";
 
 /**
  * Lvl command that shows the level of the user in a frame
@@ -26,15 +26,15 @@ export default class LvlCommand implements Command {
                 .setDescription("Titta på en annan medlems lvl")
                 .setRequired(false),
         );
-    async execute(interaction: CommandInteraction, profileData: PorfileData) {
+    async execute(interaction: CommandInteraction, userData: UserData) {
         const user =
             interaction.options.get("user", false)?.user || interaction.user;
-        if (profileData.userID != user.id)
-            profileData = await GamerBotAPIInstance.models.get_profile_data(
+        if (userData.userId != user.id)
+            userData = await GamerBotAPIInstance.models.getUserData(
                 user.id as string,
             );
         const file = new AttachmentBuilder(
-            (await GamerBotAPIInstance.models.get_user_frame(
+            (await GamerBotAPIInstance.models.getUserFrame(
                 user.id as string,
                 user.username as string,
                 user.avatarURL({ extension: "png" }) as string,
@@ -42,7 +42,7 @@ export default class LvlCommand implements Command {
             )) as BufferResolvable,
         );
         file.setDescription(
-            `${interaction.member?.user.username} är i level ${profileData.level - 1} och har ${profileData.xp} xp!`,
+            `${interaction.member?.user.username} är i level ${userData.levelSystem.xp - 1} och har ${userData.levelSystem.xp} xp!`,
         );
         interaction.editReply({ files: [file] });
     }

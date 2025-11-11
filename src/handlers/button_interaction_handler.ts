@@ -6,19 +6,19 @@ import path from "path";
 /**
  * Loops over all button files and imports them
  */
-export default class command_handler implements Handler {
+export default class CommandHandler implements Handler {
     constructor() {}
     async run(client: GamerbotClient) {
-        const button_files_and_dirs = fs.readdirSync(
+        const buttonFilesAndDirs = fs.readdirSync(
             path.join(_dirname, "/bot_interactions/button_interactions"),
             { withFileTypes: true },
         );
         //Get all directories
-        const button_dirs = button_files_and_dirs.filter((file) =>
+        const buttonDirs = buttonFilesAndDirs.filter((file) =>
             file.isDirectory(),
         );
         //Get all files from top level
-        const button_files = button_files_and_dirs
+        const buttonFiles = buttonFilesAndDirs
             .filter(
                 (file) =>
                     (file.name.endsWith(".ts") || file.name.endsWith(".js")) &&
@@ -29,8 +29,8 @@ export default class command_handler implements Handler {
             );
 
         //Get all files from sub directories
-        for (const dir of button_dirs) {
-            button_files.push(
+        for (const dir of buttonDirs) {
+            buttonFiles.push(
                 ...fs
                     .readdirSync(
                         path.join(
@@ -51,7 +51,7 @@ export default class command_handler implements Handler {
             );
         }
         //Import all files
-        button_files.forEach((file) => {
+        buttonFiles.forEach((file) => {
             import(".." + file).then((_button) => {
                 const button = new _button.default();
                 client.buttons.set(button.name, button);

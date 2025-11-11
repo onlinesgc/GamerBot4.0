@@ -43,31 +43,31 @@ export default class SendMessageCommand implements Command {
             ?.value as string;
 
 
-        const message_modal = createModal(
+        const messageModal = createModal(
             "Skicka meddelande",
             `send_message:${interaction.id}`,
             {
                 label: "Meddelande:",
                 placeholder: "Skriv här...",
                 style: TextInputStyle.Paragraph,
-                text_id: "send_message_message",
+                textId: "send_message_message",
                 requierd: true,
             }
         );
 
-        await interaction.showModal(message_modal);
+        await interaction.showModal(messageModal);
         const filter = (i: ModalSubmitInteraction) =>
             i.customId.split(":")[1] === interaction.id;
-        const modal_submit = await interaction.awaitModalSubmit({ filter, time: 1000 * 60 * 10 }).catch(() => {});
+        const modalSubmit = await interaction.awaitModalSubmit({ filter, time: 1000 * 60 * 10 }).catch(() => {});
 
-        if (!modal_submit) return;
+        if (!modalSubmit) return;
 
-        const message = modal_submit.fields.getTextInputValue(
+        const message = modalSubmit.fields.getTextInputValue(
             "send_message_message",
         );
         
         if (options) {
-            const button_row =
+            const buttonRow =
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
                     new ButtonBuilder()
                         .setStyle(ButtonStyle.Success)
@@ -76,10 +76,10 @@ export default class SendMessageCommand implements Command {
                 );
             await channel.send({
                 content: message,
-                components: [button_row],
+                components: [buttonRow],
             });
         } else await channel.send(message);
 
-        modal_submit.deferUpdate();
+        modalSubmit.deferUpdate();
     }
 }

@@ -38,7 +38,7 @@ export default class UnMuteCommand implements Command {
 
         if (!member) return interaction.editReply("Användaren finns inte");
 
-        const has_sent_message = await this.unMute(
+        const hasSentMessage = await this.unMute(
             member,
             reason,
             interaction.user.id,
@@ -50,13 +50,13 @@ export default class UnMuteCommand implements Command {
             reason,
             this.name,
             interaction,
-            has_sent_message,
+            hasSentMessage,
         );
 
         interaction.editReply({ embeds: [embed] });
     }
     async unMute(member: GuildMember, reason: string, authorId: string) {
-        const profile_data = await GamerBotAPIInstance.models.get_profile_data(
+        const userData = await GamerBotAPIInstance.models.getUserData(
             member.id,
         );
         const modlog = new ModLog(
@@ -69,17 +69,17 @@ export default class UnMuteCommand implements Command {
             authorId,
         );
 
-        profile_data.modLogs.push(modlog);
-        profile_data.save();
+        userData.modLogs.push(modlog);
+        userData.save();
 
-        let has_sent_message = true;
+        let hasSentMessage = true;
 
         await member
             .send(`Du har blivit unmutad i SGC.\nAnledningen är **${reason}**`)
-            .catch(() => (has_sent_message = false));
+            .catch(() => (hasSentMessage = false));
 
         member.timeout(null);
 
-        return has_sent_message;
+        return hasSentMessage;
     }
 }

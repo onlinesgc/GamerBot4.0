@@ -45,7 +45,7 @@ export default class MuteCommand implements Command {
         const reason = interaction.options.get("reason", true).value as string;
         const time =
             (interaction.options.get("time", false)?.value as string) || "0";
-        const has_sent_message = await MuteCommand.mute(
+        const hasSentMessage = await MuteCommand.mute(
             member,
             reason,
             time,
@@ -53,16 +53,16 @@ export default class MuteCommand implements Command {
             `Du har blivit mutead i SGC.\nAnledningen är **${reason}**`,
         );
 
-        const mute_embed = CreateModLogEmbed(
+        const muteEmbed = CreateModLogEmbed(
             "mute",
             `${member.user.username} har blivit mutead i ${time}`,
             reason,
             this.name,
             interaction,
-            has_sent_message,
+            hasSentMessage,
         );
 
-        interaction.editReply({ embeds: [mute_embed] });
+        interaction.editReply({ embeds: [muteEmbed] });
     }
     public static async mute(
         member: GuildMember,
@@ -71,11 +71,11 @@ export default class MuteCommand implements Command {
         authorId: string,
         message: string,
     ) {
-        const profile_data = await GamerBotAPIInstance.models.get_profile_data(
+        const userData = await GamerBotAPIInstance.models.getUserData(
             member.id,
         );
 
-        const mod_log = new ModLog(
+        const modLog = new ModLog(
             "mute",
             member.id,
             member.user.username,
@@ -84,14 +84,14 @@ export default class MuteCommand implements Command {
             Date.now(),
             authorId,
         );
-        profile_data.modLogs.push(modLogToObject(mod_log));
-        profile_data.save();
+        userData.modLogs.push(modLogToObject(modLog));
+        userData.save();
 
-        let has_sent_message = true;
+        let hasSentMessage = true;
         await member.send(message).catch(() => {
-            has_sent_message = false;
+            hasSentMessage = false;
         });
         await member.timeout(ms(time), reason);
-        return has_sent_message;
+        return hasSentMessage;
     }
 }

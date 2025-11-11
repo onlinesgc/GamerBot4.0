@@ -35,47 +35,47 @@ export default class KickCommand implements Command {
         const member = interaction.options.get("user", true)
             .member as GuildMember;
         const reason = interaction.options.get("reason", true).value as string;
-        const has_sent_message = await this.kick(
+        const hasSentMessage = await this.kick(
             member,
             reason,
             interaction.user.id,
         );
 
-        const kick_embed = CreateModLogEmbed(
+        const kickEmbed = CreateModLogEmbed(
             "kick",
             `${member.user.username} har blivit kickad`,
             reason,
             this.name,
             interaction,
-            has_sent_message,
+            hasSentMessage,
         );
 
-        await interaction.editReply({ embeds: [kick_embed] });
+        await interaction.editReply({ embeds: [kickEmbed] });
     }
-    async kick(member: GuildMember, reason: string, author_id: string) {
-        const profile_data = await GamerBotAPIInstance.models.get_profile_data(
+    async kick(member: GuildMember, reason: string, authorId: string) {
+        const userData = await GamerBotAPIInstance.models.getUserData(
             member.user.id,
         );
 
-        const mod_log = new ModLog(
+        const modLog = new ModLog(
             "kick",
             member.user.id,
             member.user.username,
             reason,
             null,
             Date.now(),
-            author_id,
+            authorId,
         );
-        profile_data.modLogs.push(mod_log);
-        profile_data.save();
+        userData.modLogs.push(modLog);
+        userData.save();
 
-        let has_sent_message = true;
+        let hasSentMessage = true;
         await member
             .send(
                 `Du har blivit kickad från SGC,\nAnledningen är **${reason}**`,
             )
-            .catch(() => (has_sent_message = false));
+            .catch(() => (hasSentMessage = false));
         member.kick(reason);
-        return has_sent_message;
+        return hasSentMessage;
     }
 }

@@ -35,48 +35,48 @@ export default class WarnCommand implements Command {
         const member = interaction.options.get("user", true)
             .member as GuildMember;
         const reason = interaction.options.get("reason", true).value as string;
-        const has_sent_message = await this.warn(
+        const hasSentMessage = await this.warn(
             member,
             reason,
             interaction.user.id,
         );
 
-        const warn_embed = CreateModLogEmbed(
+        const warnEmbed = CreateModLogEmbed(
             "warn",
             `${member.user.username} har blivit varnad`,
             reason,
             this.name,
             interaction,
-            has_sent_message,
+            hasSentMessage,
         );
 
-        await interaction.editReply({ embeds: [warn_embed] });
+        await interaction.editReply({ embeds: [warnEmbed] });
     }
-    async warn(member: GuildMember, reason: string, author_id: string) {
-        const profile_data = await GamerBotAPIInstance.models.get_profile_data(
+    async warn(member: GuildMember, reason: string, authorId: string) {
+        const userData = await GamerBotAPIInstance.models.getUserData(
             member.user.id,
         );
 
-        const mod_log = new ModLog(
+        const modLog = new ModLog(
             "warn",
             member.user.id,
             member.user.username,
             reason,
             null,
             Date.now(),
-            author_id,
+            authorId,
         );
-        profile_data.modLogs.push(mod_log);
-        profile_data.save();
+        userData.modLogs.push(modLog);
+        userData.save();
 
-        let has_sent_message = true;
+        let hasSentMessage = true;
 
         await member
             .send(
                 `Du har fått en regelpåminnelse från SGC.\nPåminnelsen lyder: **${reason}**`,
             )
-            .catch(() => (has_sent_message = false));
+            .catch(() => (hasSentMessage = false));
 
-        return has_sent_message;
+        return hasSentMessage;
     }
 }

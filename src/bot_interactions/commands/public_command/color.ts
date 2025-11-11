@@ -3,7 +3,7 @@ import {
     CommandInteraction,
     GuildMemberRoleManager,
 } from "discord.js";
-import { PorfileData } from "gamerbot-module";
+import { UserData } from "gamerbot-module";
 import { Command } from "../../../classes/command.js";
 
 const ROLES_PERMISSION = [
@@ -59,7 +59,7 @@ export default class ColorCommand implements Command {
                 .setRequired(false)
                 .addChoices(formattedRoles),
         );
-    async execute(interaction: CommandInteraction, profileData: PorfileData) {
+    async execute(interaction: CommandInteraction) {
         //eslint-disable-next-line
         const roleOption = interaction.options.get(
             "färg",

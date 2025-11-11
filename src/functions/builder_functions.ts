@@ -4,20 +4,20 @@ export function CreateModLogEmbed(
     title: string,
     description: string,
     reason: string,
-    command_name: string,
+    commandName: string,
     interaction: CommandInteraction,
-    got_message: boolean,
+    gotMessage: boolean,
 ) {
     return new EmbedBuilder()
         .setTitle(
             title +
                 " | " +
                 description +
-                (got_message ? "" : "\n(Personen har stängt av DMs)"),
+                (gotMessage ? "" : "\n(Personen har stängt av DMs)"),
         )
         .setDescription(`Anledning: ${reason}`)
         .setFooter({
-            text: command_name,
+            text: commandName,
             iconURL: interaction.client.user.avatarURL()?.toString(),
         })
         .setTimestamp()
@@ -44,11 +44,11 @@ export function createCommandEmbed(
 
 export function createButtonRow(...buttons : {style: ButtonStyle, label:string, id:string, emoji?:string}[]) {
 
-    const btn_action_row = new ActionRowBuilder<ButtonBuilder>();
+    const btnActionRow = new ActionRowBuilder<ButtonBuilder>();
 
     buttons.forEach((button) => {
         if(!button.emoji){
-            btn_action_row.addComponents(
+            btnActionRow.addComponents(
                 new ButtonBuilder()
                     .setStyle(button.style)
                     .setLabel(button.label)
@@ -56,7 +56,7 @@ export function createButtonRow(...buttons : {style: ButtonStyle, label:string, 
             );
         }
         else {
-            btn_action_row.addComponents(
+            btnActionRow.addComponents(
                 new ButtonBuilder()
                     .setStyle(button.style)
                     .setLabel(button.label)
@@ -66,13 +66,13 @@ export function createButtonRow(...buttons : {style: ButtonStyle, label:string, 
         }
     });
 
-    return btn_action_row;
+    return btnActionRow;
 }
 
-export function createModal(modal_title: string, modal_id: string, ...texts:{label:string,placeholder:string,style:TextInputStyle,text_id:string, requierd:boolean}[]){
+export function createModal(modalTitle: string, modalId: string, ...texts:{label:string,placeholder:string,style:TextInputStyle,textId:string, requierd:boolean}[]){
     const modal = new ModalBuilder();
-    modal.setTitle(modal_title);
-    modal.setCustomId(modal_id);
+    modal.setTitle(modalTitle);
+    modal.setCustomId(modalId);
     texts.forEach((text) => {
         modal.addComponents(
             new ActionRowBuilder<TextInputBuilder>().addComponents(
@@ -80,7 +80,7 @@ export function createModal(modal_title: string, modal_id: string, ...texts:{lab
                     .setLabel(text.label)
                     .setPlaceholder(text.placeholder)
                     .setStyle(text.style)
-                    .setCustomId(text.text_id)
+                    .setCustomId(text.textId)
                     .setRequired(text.requierd)
             )
         )

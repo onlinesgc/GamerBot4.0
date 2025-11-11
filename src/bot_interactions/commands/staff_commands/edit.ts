@@ -34,12 +34,12 @@ export default class EditMessageCommand implements Command {
                 .setRequired(true),
         );
     async execute(interaction: CommandInteraction) {
-        const message_id = interaction.options.get("message_id", true)
+        const messageId = interaction.options.get("message_id", true)
             .value as string;
         const channel = interaction.options.get("channel", true)
             .channel as BaseGuildTextChannel;
 
-        const message = await channel.messages.fetch(message_id);
+        const message = await channel.messages.fetch(messageId);
 
         const modal = new ModalBuilder()
             .setTitle("Edit message")
@@ -58,12 +58,12 @@ export default class EditMessageCommand implements Command {
             i.customId.split(":")[1] === interaction.id;
         interaction
             .awaitModalSubmit({ filter, time: 1000 * 60 * 10 })
-            .then(async (modal_submit) => {
-                const new_content = modal_submit.fields.getTextInputValue(
+            .then(async (modalSubmit) => {
+                const newContent = modalSubmit.fields.getTextInputValue(
                     "send_message_message",
                 );
-                await message.edit(new_content);
-                await modal_submit.reply(`Message edited in ${channel}`);
+                await message.edit(newContent);
+                await modalSubmit.reply(`Message edited in ${channel}`);
             });
     }
 }

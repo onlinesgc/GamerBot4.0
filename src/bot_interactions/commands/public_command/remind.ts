@@ -1,7 +1,7 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
 import { Command } from "../../../classes/command.js";
 import ms from "ms";
-import { PorfileData } from "gamerbot-module";
+import { UserData } from "gamerbot-module";
 import { GamerbotClient } from "../../../index.js";
 
 export default class RemindCommand implements Command {
@@ -25,25 +25,25 @@ export default class RemindCommand implements Command {
                 .setDescription("Ge tiden som du vill ska ta, Som 7d, 5m, 10h")
                 .setRequired(true),
         );
-    async execute(interaction: CommandInteraction, profileData: PorfileData) {
+    async execute(interaction: CommandInteraction, userData: UserData) {
         const reminder = interaction.options.get("reminder", true)
             .value as string;
         const time = interaction.options.get("time", true).value as string;
 
-        const time_ms = ms(time);
-        if (time_ms == undefined)
+        const timeMs = ms(time);
+        if (!timeMs)
             return interaction.editReply("Felaktig tid angiven, försök igen!");
 
-        const remindTimestamp = Date.now() + time_ms;
-        profileData.reminders.push({
+        const remindTimestamp = Date.now() + timeMs;
+        userData.reminders.push({
             message: reminder,
             remindTimestamp: remindTimestamp,
         });
-        profileData.save();
+        userData.save();
         (interaction.client as GamerbotClient).reminderList.push({
             message: reminder,
             remindTimestamp: remindTimestamp,
-            user_id: interaction.user.id,
+            userId: interaction.user.id,
         });
         interaction.editReply(
             `Jag kommer påminna dig om ${reminder} om ${time}!`,

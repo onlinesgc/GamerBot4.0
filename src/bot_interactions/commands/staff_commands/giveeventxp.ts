@@ -23,26 +23,26 @@ export default class GiveEventXp implements Command {
         .setDescription(this.description)
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
     async execute(interaction: CommandInteraction) {
-        const user_select = new UserSelectMenuBuilder()
+        const userSelect = new UserSelectMenuBuilder()
             .setCustomId("users")
             .setPlaceholder("Välj användare")
             .setMinValues(1)
             .setMaxValues(25);
-        const select_row =
+        const selectRow =
             new ActionRowBuilder<UserSelectMenuBuilder>().addComponents(
-                user_select,
+                userSelect,
             );
-        const submit_button = new ButtonBuilder()
+        const submitButton = new ButtonBuilder()
             .setCustomId("submit")
             .setLabel("Ge xp")
             .setStyle(ButtonStyle.Success);
-        const button_row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-            submit_button,
+        const buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+            submitButton,
         );
 
         const message = await interaction.editReply({
             content: "Välj användare som ska få xp",
-            components: [select_row, button_row],
+            components: [selectRow, buttonRow],
         });
 
         const collector = message.createMessageComponentCollector({
@@ -53,14 +53,14 @@ export default class GiveEventXp implements Command {
         collector.on("collect", async (messageComponentInteraction) => {
             if (messageComponentInteraction.customId === "submit") {
                 users.forEach(async (user) => {
-                    const profile_data =
-                        await GamerBotAPIInstance.models.get_profile_data(
+                    const userData =
+                        await GamerBotAPIInstance.models.getUserData(
                             user.id,
                         );
-                    profile_data.xp += Math.floor(
-                        profile_data.level ** 2 * 0.1,
+                    userData.levelSystem.xp += Math.floor(
+                        userData.levelSystem.xp ** 2 * 0.1,
                     );
-                    await profile_data.save();
+                    await userData.save();
                 });
                 interaction.editReply({
                     content: "Xp har givits till användarna",

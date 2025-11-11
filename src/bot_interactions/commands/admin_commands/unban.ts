@@ -39,14 +39,14 @@ export default class UnbanCommand implements Command {
         const ban = await interaction.guild?.bans.fetch(user.id);
         if (!ban) return interaction.editReply("Användaren är inte bannad");
 
-        const [has_sent_message, is_unbaned] = await this.unBan(
+        const [hasSentMessage, isUnbaned] = await this.unBan(
             user,
             reason,
             interaction.user.id,
             interaction,
         );
 
-        if (is_unbaned === undefined || is_unbaned == null)
+        if (isUnbaned === undefined || isUnbaned == null)
             return interaction.editReply("Kunde inte unbanna användaren");
 
         const embed = CreateModLogEmbed(
@@ -55,7 +55,7 @@ export default class UnbanCommand implements Command {
             reason,
             this.name,
             interaction,
-            has_sent_message as boolean,
+            hasSentMessage as boolean,
         );
 
         interaction.editReply({ embeds: [embed] });
@@ -66,7 +66,7 @@ export default class UnbanCommand implements Command {
         authorId: string,
         interaction: CommandInteraction,
     ) {
-        const profile_data = await GamerBotAPIInstance.models.get_profile_data(
+        const userData = await GamerBotAPIInstance.models.getUserData(
             user.id,
         );
         const modlog = new ModLog(
@@ -79,19 +79,19 @@ export default class UnbanCommand implements Command {
             authorId,
         );
 
-        profile_data.modLogs.push(modlog);
-        profile_data.save();
+        userData.modLogs.push(modlog);
+        userData.save();
 
-        let has_sent_message = true;
+        let hasSentMessage = true;
 
         await user
             .send(
                 `Du har blivit unbannad i SGC.\nAnledningen är **${reason}**\nhttps://discord.sgc.se to join`,
             )
-            .catch(() => (has_sent_message = false));
+            .catch(() => (hasSentMessage = false));
 
-        const is_unbaned = await interaction.guild?.members.unban(user.id);
+        const isUnbaned = await interaction.guild?.members.unban(user.id);
 
-        return [has_sent_message, is_unbaned];
+        return [hasSentMessage, isUnbaned];
     }
 }

@@ -54,7 +54,7 @@ export default class ChannelCommand implements Command {
 
         const guild = interaction.guild as Guild;
 
-        const channel_embed = new EmbedBuilder().setTimestamp().setFooter({
+        const channelEmbed = new EmbedBuilder().setTimestamp().setFooter({
             text: this.name,
             iconURL: interaction.client.user.avatarURL()?.toString(),
         });
@@ -62,49 +62,49 @@ export default class ChannelCommand implements Command {
         switch (type) {
             case "relocate": {
                 if (!parent) {
-                    channel_embed.setTitle(
+                    channelEmbed.setTitle(
                         "Du måste ange en kategori att flytta till!",
                     );
-                    await interaction.editReply({ embeds: [channel_embed] });
+                    await interaction.editReply({ embeds: [channelEmbed] });
                     return;
                 }
                 channel.setParent(parent);
-                channel_embed.setTitle(`Kanalen har flyttats till ${parent}`);
+                channelEmbed.setTitle(`Kanalen har flyttats till ${parent}`);
                 break;
             }
             case "hide": {
                 channel.permissionOverwrites.edit(guild.roles.everyone.id, {
                     ViewChannel: false,
                 });
-                channel_embed.setTitle("Kanalen har gömts!");
+                channelEmbed.setTitle("Kanalen har gömts!");
                 break;
             }
             case "show": {
                 channel.permissionOverwrites.edit(guild.roles.everyone.id, {
                     ViewChannel: true,
                 });
-                channel_embed.setTitle("Kanalen har visats!");
+                channelEmbed.setTitle("Kanalen har visats!");
                 break;
             }
             case "lock": {
                 channel.permissionOverwrites.edit(guild.roles.everyone.id, {
                     SendMessages: false,
                 });
-                channel_embed.setTitle("Kanalen har låsts!");
+                channelEmbed.setTitle("Kanalen har låsts!");
                 break;
             }
             case "unlock": {
                 channel.permissionOverwrites.edit(guild.roles.everyone.id, {
                     SendMessages: true,
                 });
-                channel_embed.setTitle("Kanalen har låsts upp!");
+                channelEmbed.setTitle("Kanalen har låsts upp!");
                 break;
             }
             default: {
-                channel_embed.setTitle("Något gick fel!");
+                channelEmbed.setTitle("Något gick fel!");
                 break;
             }
         }
-        await interaction.editReply({ embeds: [channel_embed] });
+        await interaction.editReply({ embeds: [channelEmbed] });
     }
 }

@@ -11,7 +11,7 @@ import {
     TextInputStyle,
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
-import { PorfileData } from "gamerbot-module";
+import { UserData } from "gamerbot-module";
 import bcrypt from "bcrypt";
 
 export default class SverokCommand implements Command {
@@ -24,10 +24,10 @@ export default class SverokCommand implements Command {
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description);
-    async execute(interaction: CommandInteraction, profileData: PorfileData) {
-        const sverok_role_id = "1016685055357222942";
+    async execute(interaction: CommandInteraction, userData: UserData) {
+        const sverokRoleId = "1016685055357222942";
         const SVEROK_FRAME_ID = "19";
-        const email_modal = new ModalBuilder()
+        const emailModal = new ModalBuilder()
             .setTitle("Sverok koppling")
             .setCustomId(`sverok:${interaction.id}`)
             .addComponents(
@@ -58,7 +58,7 @@ export default class SverokCommand implements Command {
                 time: 1000 * 5 * 60,
             })
             .then(async (button) => {
-                await button.showModal(email_modal);
+                await button.showModal(emailModal);
                 const filter = (i: ModalSubmitInteraction) =>
                     i.customId.split(":")[1] === interaction.id;
                 button
@@ -67,10 +67,10 @@ export default class SverokCommand implements Command {
                         const email = modal.fields.getTextInputValue("email");
                         const TOKEN = process.env.SVEROK_API_TOKEN;
                         if (
-                            profileData.hashed_email != undefined &&
+                            userData.hashedEmail != undefined &&
                             (await this.compare(
                                 email,
-                                profileData.hashed_email,
+                                userData.hashedEmail,
                             ))
                         ) {
                             interaction.editReply({
@@ -103,9 +103,9 @@ export default class SverokCommand implements Command {
                             .then(async (res) => res.json())
                             .then(async (data) => {
                                 if (data.response.member_found) {
-                                    profileData.hashed_email =
+                                    userData.hashedEmail =
                                         (await this.hashEmail(email)) as string;
-                                    await profileData.save();
+                                    await userData.save();
                                     modal.reply(
                                         "Ditt sverok konto är nu kopplat till discord och du har fått en sverok roll!",
                                     );
@@ -115,16 +115,16 @@ export default class SverokCommand implements Command {
                                     ) {
                                         interaction.guild?.members.cache
                                             .get(interaction.user.id)
-                                            ?.roles.add(sverok_role_id);
+                                            ?.roles.add(sverokRoleId);
                                         if (
-                                            !profileData.exclusiveFrames.includes(
+                                            !userData.frameData.frames.includes(
                                                 SVEROK_FRAME_ID,
                                             )
                                         ) {
-                                            profileData.exclusiveFrames.push(
+                                            userData.frameData.frames.push(
                                                 SVEROK_FRAME_ID,
                                             );
-                                            profileData.save();
+                                            userData.save();
                                         }
                                     }
                                 } else {

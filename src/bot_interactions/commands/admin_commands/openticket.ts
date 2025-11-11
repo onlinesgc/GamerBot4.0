@@ -26,7 +26,7 @@ export default class OpenTicketCommand implements Command {
         const user = interaction.options.get("user", true).user;
         if (user == null)
             return interaction.editReply("Användaren finns inte!");
-        await new Ticket().open_ticket(
+        await new Ticket().openTicket(
             interaction,
             user,
             `Vi har öppnat en ticket för dig! <@` +

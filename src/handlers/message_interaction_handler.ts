@@ -9,17 +9,17 @@ import path from "path";
 export default class MessageInteractionHandler implements Handler {
     constructor() {}
     async run(client: GamerbotClient) {
-        const message_interactions_files_and_dirs = fs.readdirSync(
+        const messageInteractionsFilesAndDirs = fs.readdirSync(
             path.join(_dirname, "/bot_interactions/message_interactions"),
             { withFileTypes: true },
         );
         //Get all directories
-        const message_interaction_dirs =
-            message_interactions_files_and_dirs.filter((file) =>
+        const messageInteractionDirs =
+            messageInteractionsFilesAndDirs.filter((file) =>
                 file.isDirectory(),
             );
         //Get all files from top level
-        const message_files = message_interactions_files_and_dirs
+        const messageFiles = messageInteractionsFilesAndDirs
             .filter(
                 (file) =>
                     (file.name.endsWith(".ts") || file.name.endsWith(".js")) &&
@@ -30,8 +30,8 @@ export default class MessageInteractionHandler implements Handler {
                     "../bot_interactions/message_interactions/" + file.name,
             );
         //Get all files from sub directories
-        for (const dir of message_interaction_dirs) {
-            message_files.push(
+        for (const dir of messageInteractionDirs) {
+            messageFiles.push(
                 ...fs
                     .readdirSync(
                         path.join(
@@ -53,7 +53,7 @@ export default class MessageInteractionHandler implements Handler {
             );
         }
         //Import all files
-        message_files.forEach((file) => {
+        messageFiles.forEach((file) => {
             import(file).then((_message_interaction) => {
                 const message = new _message_interaction.default();
                 client.messageInteractions.set(message.name, message);
