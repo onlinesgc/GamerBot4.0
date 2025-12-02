@@ -79,7 +79,6 @@ export default class messageCreate implements Event {
             parseInt(process.env.CONFIG_ID as string),
         );
 
-        //eslint-disable-next-line
         configData.levelSystem.levels.forEach((level: Level) => {
             if (
                 userData.levelSystem.level - 1 == level.level &&
