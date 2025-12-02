@@ -9,7 +9,7 @@ import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
 import { modLogToObject } from "../../../functions/moglogFunctions.js";
 import ms, { StringValue } from "ms";
-import { CreateModLogEmbed } from "../../../functions/builderFunctions.js";
+import { createModLogEmbed } from "../../../functions/builderFunctions.js";
 
 export default class MuteCommand implements Command {
     name = "mute";
@@ -53,7 +53,7 @@ export default class MuteCommand implements Command {
             `Du har blivit mutead i SGC.\nAnledningen är **${reason}**`,
         );
 
-        const muteEmbed = CreateModLogEmbed(
+        const muteEmbed = createModLogEmbed(
             "mute",
             `${member.user.username} har blivit mutead i ${time}`,
             reason,

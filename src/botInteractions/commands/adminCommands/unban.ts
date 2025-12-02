@@ -8,7 +8,7 @@ import {
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
-import { CreateModLogEmbed } from "../../../functions/builderFunctions.js";
+import { createModLogEmbed } from "../../../functions/builderFunctions.js";
 
 export default class UnbanCommand implements Command {
     name = "unban";
@@ -50,7 +50,7 @@ export default class UnbanCommand implements Command {
         if (isUnbaned === undefined || isUnbaned == null)
             return interaction.editReply("Kunde inte unbanna användaren");
 
-        const embed = CreateModLogEmbed(
+        const embed = createModLogEmbed(
             "unban",
             `${user.tag} har unbannats`,
             reason,

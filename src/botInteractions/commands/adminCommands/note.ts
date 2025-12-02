@@ -7,7 +7,7 @@ import {
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
-import { CreateModLogEmbed } from "../../../functions/builderFunctions.js";
+import { createModLogEmbed } from "../../../functions/builderFunctions.js";
 
 export default class NoteCommand implements Command {
     name = "note";
@@ -37,7 +37,7 @@ export default class NoteCommand implements Command {
         const reason = interaction.options.get("reason", true).value as string;
         this.noteUser(member, reason, interaction.user.id);
 
-        const noteEmbed = CreateModLogEmbed(
+        const noteEmbed = createModLogEmbed(
             "note",
             "Du har nu laggt en notering på " + member.user.username,
             reason,

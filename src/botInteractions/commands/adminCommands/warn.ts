@@ -7,7 +7,7 @@ import {
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
-import { CreateModLogEmbed } from "../../../functions/builderFunctions.js";
+import { createModLogEmbed } from "../../../functions/builderFunctions.js";
 
 export default class WarnCommand implements Command {
     name = "warn";
@@ -41,7 +41,7 @@ export default class WarnCommand implements Command {
             interaction.user.id,
         );
 
-        const warnEmbed = CreateModLogEmbed(
+        const warnEmbed = createModLogEmbed(
             "warn",
             `${member.user.username} har blivit varnad`,
             reason,

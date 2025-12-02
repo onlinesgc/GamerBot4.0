@@ -1,6 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CommandInteraction, EmbedBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 
-export function CreateModLogEmbed(
+export function createModLogEmbed(
     title: string,
     description: string,
     reason: string,

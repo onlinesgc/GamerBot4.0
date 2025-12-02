@@ -9,7 +9,7 @@ import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
 import { modLogToObject } from "../../../functions/moglogFunctions.js";
 import ms, { StringValue } from "ms";
-import { CreateModLogEmbed } from "../../../functions/builderFunctions.js";
+import { createModLogEmbed } from "../../../functions/builderFunctions.js";
 
 export default class BanCommand implements Command {
     name = "ban";
@@ -61,7 +61,7 @@ export default class BanCommand implements Command {
             interaction.user.id,
             messages,
         );
-        const banEmbed = CreateModLogEmbed(
+        const banEmbed = createModLogEmbed(
             "Ban",
             `${member.user.username} har blivit bannad`,
             reason,

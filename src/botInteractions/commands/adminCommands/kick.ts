@@ -7,7 +7,7 @@ import {
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
-import { CreateModLogEmbed } from "../../../functions/builderFunctions.js";
+import { createModLogEmbed } from "../../../functions/builderFunctions.js";
 
 export default class KickCommand implements Command {
     name = "kick";
@@ -41,7 +41,7 @@ export default class KickCommand implements Command {
             interaction.user.id,
         );
 
-        const kickEmbed = CreateModLogEmbed(
+        const kickEmbed = createModLogEmbed(
             "kick",
             `${member.user.username} har blivit kickad`,
             reason,

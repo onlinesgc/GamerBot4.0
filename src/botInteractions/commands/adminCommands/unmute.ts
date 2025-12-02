@@ -7,7 +7,7 @@ import {
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
-import { CreateModLogEmbed } from "../../../functions/builderFunctions.js";
+import { createModLogEmbed } from "../../../functions/builderFunctions.js";
 
 export default class UnMuteCommand implements Command {
     name = "unmute";
@@ -44,7 +44,7 @@ export default class UnMuteCommand implements Command {
             interaction.user.id,
         );
 
-        const embed = CreateModLogEmbed(
+        const embed = createModLogEmbed(
             "unmute",
             `${member.user.username} har unmutats`,
             reason,

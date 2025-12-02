@@ -7,7 +7,7 @@ export async function updateLevelRoles(
     userData: UserData,
 ) {
     const botConfig = await GamerBotAPIInstance.models.getConfigData(
-        process.env.CONFIG_ID as unknown as number,
+        parseInt(process.env.CONFIG_ID!),
     );
 
     const xpConfig = botConfig.levelSystem;
@@ -16,11 +16,11 @@ export async function updateLevelRoles(
         console.log("User leveled up but there are no level-roles configured");
         return;
     }
-
-    const roles = await findRoles(xpConfig.levels, userData.levelSystem.level);
+    const xpConfigLevels = JSON.parse(JSON.stringify(xpConfig.levels));
+    const roles = findRoles(xpConfigLevels, userData.levelSystem.level);
 
     for (const level of xpConfig.levels) {
-        if ((level.ids as string[]).some((id: string) => roles.includes(id)))
+        if (level.ids.some((id: string) => roles.includes(id)))
             continue;
         await member.roles.remove(level.ids);
     }
@@ -30,7 +30,7 @@ export async function updateLevelRoles(
     await Promise.all(
         member.roles.cache.map(async (t) => {
             if (t.id == blockRoleUpdateRoleId) {
-                await roles.splice(roles.indexOf("818809151257575464"), 1);
+                roles.splice(roles.indexOf("818809151257575464"), 1);
             }
         }),
     );

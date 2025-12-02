@@ -6,7 +6,7 @@ import {
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
 import MuteCommand from "./mute.js";
-import { CreateModLogEmbed } from "../../../functions/builderFunctions.js";
+import { createModLogEmbed } from "../../../functions/builderFunctions.js";
 
 export default class EmuteCommand implements Command {
     name = "emute";
@@ -55,7 +55,7 @@ export default class EmuteCommand implements Command {
             `Du har blivit tystad i SGC.\n**Du är jättevälkommen tillbaka igen efter ${time}. Kom ihåg respektera alla på servern och lyssna på staffsens regelpåminnelser.**`,
         );
 
-        const muteEmbed = CreateModLogEmbed(
+        const muteEmbed = createModLogEmbed(
             "mute",
             `${member.user.username} har blivit tystad i ${time}`,
             reason,
