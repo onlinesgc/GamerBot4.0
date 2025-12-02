@@ -6,7 +6,7 @@ import {
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
 import MuteCommand from "./mute.js";
-import { CreateModLogEmbed } from "../../../functions/builder_functions.js";
+import { CreateModLogEmbed } from "../../../functions/builderFunctions.js";
 
 export default class EmuteCommand implements Command {
     name = "emute";

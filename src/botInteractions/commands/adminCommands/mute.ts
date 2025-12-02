@@ -7,13 +7,15 @@ import {
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
-import { CreateModLogEmbed } from "../../../functions/builder_functions.js";
+import { modLogToObject } from "../../../functions/moglogFunctions.js";
+import ms, { StringValue } from "ms";
+import { CreateModLogEmbed } from "../../../functions/builderFunctions.js";
 
-export default class WarnCommand implements Command {
-    name = "warn";
+export default class MuteCommand implements Command {
+    name = "mute";
     ephemeral = false;
     defer = true;
-    description = "Varna en person!";
+    description = "Timar ut personen en viss tid.";
     aliases = [];
     data = new SlashCommandBuilder()
         .setName(this.name)
@@ -22,61 +24,74 @@ export default class WarnCommand implements Command {
         .addUserOption((option) =>
             option
                 .setName("user")
-                .setDescription("Personen du vill varna")
+                .setDescription("Personen du vill muta")
                 .setRequired(true),
         )
         .addStringOption((option) =>
             option
                 .setName("reason")
-                .setDescription("Anledning till varningen")
+                .setDescription("Anledning till mutet")
+                .setRequired(true),
+        )
+        .addStringOption((option) =>
+            option
+                .setName("time")
+                .setDescription("Tid du mutar en person")
                 .setRequired(true),
         );
     async execute(interaction: ChatInputCommandInteraction) {
         const member = interaction.options.get("user", true)
             .member as GuildMember;
         const reason = interaction.options.get("reason", true).value as string;
-        const hasSentMessage = await this.warn(
+        const time =
+            (interaction.options.get("time", false)?.value as string) || "0";
+        const hasSentMessage = await MuteCommand.mute(
             member,
             reason,
+            time,
             interaction.user.id,
+            `Du har blivit mutead i SGC.\nAnledningen är **${reason}**`,
         );
 
-        const warnEmbed = CreateModLogEmbed(
-            "warn",
-            `${member.user.username} har blivit varnad`,
+        const muteEmbed = CreateModLogEmbed(
+            "mute",
+            `${member.user.username} har blivit mutead i ${time}`,
             reason,
             this.name,
             interaction,
             hasSentMessage,
         );
 
-        await interaction.editReply({ embeds: [warnEmbed] });
+        interaction.editReply({ embeds: [muteEmbed] });
     }
-    async warn(member: GuildMember, reason: string, authorId: string) {
+    public static async mute(
+        member: GuildMember,
+        reason: string,
+        time: string,
+        authorId: string,
+        message: string,
+    ) {
         const userData = await GamerBotAPIInstance.models.getUserData(
-            member.user.id,
+            member.id,
         );
 
         const modLog = new ModLog(
-            "warn",
-            member.user.id,
+            "mute",
+            member.id,
             member.user.username,
             reason,
-            null,
+            time,
             Date.now(),
             authorId,
         );
-        userData.modLogs.push(modLog);
+        userData.modLogs.push(modLogToObject(modLog));
         userData.save();
 
         let hasSentMessage = true;
-
-        await member
-            .send(
-                `Du har fått en regelpåminnelse från SGC.\nPåminnelsen lyder: **${reason}**`,
-            )
-            .catch(() => (hasSentMessage = false));
-
+        await member.send(message).catch(() => {
+            hasSentMessage = false;
+        });
+        await member.timeout(ms(time as StringValue), reason);
         return hasSentMessage;
     }
 }

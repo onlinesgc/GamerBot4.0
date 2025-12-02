@@ -30,7 +30,7 @@ const ROLES = {
     Säsongsrollen: "893819391517556736",
 };
 
-const formattedRoles: any[] = [];
+const formattedRoles: { name: string; value: string }[] = [];
 for (const roleName in ROLES) {
     const role = ROLES[roleName as keyof typeof ROLES];
 
@@ -59,11 +59,10 @@ export default class ColorCommand implements Command {
                 .addChoices(formattedRoles),
         );
     async execute(interaction: ChatInputCommandInteraction) {
-        //eslint-disable-next-line
         const roleOption = interaction.options.get(
             "färg",
             false,
-        ) as unknown as any;
+        ) as unknown as { value: string } | null;
 
         if (interaction.member == null) return;
 

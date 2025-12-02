@@ -10,7 +10,7 @@ export default class MessageInteractionHandler implements Handler {
     constructor() {}
     async run(client: GamerbotClient) {
         const messageInteractionsFilesAndDirs = fs.readdirSync(
-            path.join(_dirname, "/bot_interactions/message_interactions"),
+            path.join(_dirname, "/botInteractions/messageInteractions"),
             { withFileTypes: true },
         );
         //Get all directories
@@ -27,7 +27,7 @@ export default class MessageInteractionHandler implements Handler {
             )
             .map(
                 (file) =>
-                    "../bot_interactions/message_interactions/" + file.name,
+                    "../botInteractions/messageInteractions/" + file.name,
             );
         //Get all files from sub directories
         for (const dir of messageInteractionDirs) {
@@ -36,7 +36,7 @@ export default class MessageInteractionHandler implements Handler {
                     .readdirSync(
                         path.join(
                             _dirname,
-                            "/bot_interactions/message_interactions/" +
+                            "/botInteractions/messageInteractions/" +
                                 dir.name,
                         ),
                     )
@@ -45,7 +45,7 @@ export default class MessageInteractionHandler implements Handler {
                     )
                     .map(
                         (file) =>
-                            "../bot_interactions/message_interactions/" +
+                            "../botInteractions/messageInteractions/" +
                             dir.name +
                             "/" +
                             file,

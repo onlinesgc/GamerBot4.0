@@ -7,13 +7,13 @@ import {
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
-import { CreateModLogEmbed } from "../../../functions/builder_functions.js";
+import { CreateModLogEmbed } from "../../../functions/builderFunctions.js";
 
-export default class UnMuteCommand implements Command {
-    name = "unmute";
+export default class NoteCommand implements Command {
+    name = "note";
     ephemeral = false;
     defer = true;
-    description = "Unmutar en användare";
+    description = "Lägg till en notering på en användare";
     aliases = [];
     data = new SlashCommandBuilder()
         .setName(this.name)
@@ -22,46 +22,39 @@ export default class UnMuteCommand implements Command {
         .addUserOption((option) =>
             option
                 .setName("user")
-                .setDescription("Personen du vill unmuta")
+                .setDescription("Personen du vill lägga till en notering på")
                 .setRequired(true),
         )
         .addStringOption((option) =>
             option
                 .setName("reason")
-                .setDescription("Anledning till unmutet")
+                .setDescription("Anledning till noteringen")
                 .setRequired(true),
         );
     async execute(interaction: ChatInputCommandInteraction) {
         const member = interaction.options.get("user", true)
             .member as GuildMember;
         const reason = interaction.options.get("reason", true).value as string;
+        this.noteUser(member, reason, interaction.user.id);
 
-        if (!member) return interaction.editReply("Användaren finns inte");
-
-        const hasSentMessage = await this.unMute(
-            member,
-            reason,
-            interaction.user.id,
-        );
-
-        const embed = CreateModLogEmbed(
-            "unmute",
-            `${member.user.username} har unmutats`,
+        const noteEmbed = CreateModLogEmbed(
+            "note",
+            "Du har nu laggt en notering på " + member.user.username,
             reason,
             this.name,
             interaction,
-            hasSentMessage,
+            true,
         );
 
-        interaction.editReply({ embeds: [embed] });
+        await interaction.editReply({ embeds: [noteEmbed] });
     }
-    async unMute(member: GuildMember, reason: string, authorId: string) {
+    async noteUser(member: GuildMember, reason: string, authorId: string) {
         const userData = await GamerBotAPIInstance.models.getUserData(
-            member.id,
+            member.user.id,
         );
-        const modlog = new ModLog(
-            "unmute",
-            member.id,
+        const modLog = new ModLog(
+            "note",
+            member.user.id,
             member.user.username,
             reason,
             null,
@@ -69,17 +62,7 @@ export default class UnMuteCommand implements Command {
             authorId,
         );
 
-        userData.modLogs.push(modlog);
+        userData.modLogs.push(modLog);
         userData.save();
-
-        let hasSentMessage = true;
-
-        await member
-            .send(`Du har blivit unmutad i SGC.\nAnledningen är **${reason}**`)
-            .catch(() => (hasSentMessage = false));
-
-        member.timeout(null);
-
-        return hasSentMessage;
     }
 }

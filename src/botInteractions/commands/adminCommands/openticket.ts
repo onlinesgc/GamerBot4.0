@@ -4,7 +4,7 @@ import {
     ChatInputCommandInteraction,
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
-import Ticket from "../../button_interactions/ticket.js";
+import Ticket from "../../buttonInteractions/ticket.js";
 
 export default class OpenTicketCommand implements Command {
     name = "openticket";

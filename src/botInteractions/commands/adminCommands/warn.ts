@@ -1,19 +1,19 @@
 import {
-    SlashCommandBuilder,
+    ChatInputCommandInteraction,
     GuildMember,
     PermissionFlagsBits,
-    ChatInputCommandInteraction,
+    SlashCommandBuilder,
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
-import { CreateModLogEmbed } from "../../../functions/builder_functions.js";
+import { CreateModLogEmbed } from "../../../functions/builderFunctions.js";
 
-export default class KickCommand implements Command {
-    name = "kick";
+export default class WarnCommand implements Command {
+    name = "warn";
     ephemeral = false;
     defer = true;
-    description = "Kicka en person från servern!";
+    description = "Varna en person!";
     aliases = [];
     data = new SlashCommandBuilder()
         .setName(this.name)
@@ -22,43 +22,43 @@ export default class KickCommand implements Command {
         .addUserOption((option) =>
             option
                 .setName("user")
-                .setDescription("Personen du vill kicka")
+                .setDescription("Personen du vill varna")
                 .setRequired(true),
         )
         .addStringOption((option) =>
             option
                 .setName("reason")
-                .setDescription("Anledning till kicket")
+                .setDescription("Anledning till varningen")
                 .setRequired(true),
         );
     async execute(interaction: ChatInputCommandInteraction) {
         const member = interaction.options.get("user", true)
             .member as GuildMember;
         const reason = interaction.options.get("reason", true).value as string;
-        const hasSentMessage = await this.kick(
+        const hasSentMessage = await this.warn(
             member,
             reason,
             interaction.user.id,
         );
 
-        const kickEmbed = CreateModLogEmbed(
-            "kick",
-            `${member.user.username} har blivit kickad`,
+        const warnEmbed = CreateModLogEmbed(
+            "warn",
+            `${member.user.username} har blivit varnad`,
             reason,
             this.name,
             interaction,
             hasSentMessage,
         );
 
-        await interaction.editReply({ embeds: [kickEmbed] });
+        await interaction.editReply({ embeds: [warnEmbed] });
     }
-    async kick(member: GuildMember, reason: string, authorId: string) {
+    async warn(member: GuildMember, reason: string, authorId: string) {
         const userData = await GamerBotAPIInstance.models.getUserData(
             member.user.id,
         );
 
         const modLog = new ModLog(
-            "kick",
+            "warn",
             member.user.id,
             member.user.username,
             reason,
@@ -70,12 +70,13 @@ export default class KickCommand implements Command {
         userData.save();
 
         let hasSentMessage = true;
+
         await member
             .send(
-                `Du har blivit kickad från SGC,\nAnledningen är **${reason}**`,
+                `Du har fått en regelpåminnelse från SGC.\nPåminnelsen lyder: **${reason}**`,
             )
             .catch(() => (hasSentMessage = false));
-        member.kick(reason);
+
         return hasSentMessage;
     }
 }

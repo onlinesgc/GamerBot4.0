@@ -9,7 +9,7 @@ import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
 import { modLogToObject } from "../../../functions/moglogFunctions.js";
 import ms, { StringValue } from "ms";
-import { CreateModLogEmbed } from "../../../functions/builder_functions.js";
+import { CreateModLogEmbed } from "../../../functions/builderFunctions.js";
 
 export default class BanCommand implements Command {
     name = "ban";

@@ -3,7 +3,6 @@ import {
     ButtonInteraction,
     ChatInputCommandInteraction,
     Client,
-    CommandInteraction,
     Interaction,
     TextChannel,
 } from "discord.js";

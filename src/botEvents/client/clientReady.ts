@@ -2,7 +2,7 @@ import { Client, REST, Routes } from "discord.js";
 import { Event } from "../../classes/event.js";
 import { GamerBotAPIInstance, GamerbotClient } from "../../index.js";
 import { ConfigData, Reminder, UserData } from "gamerbot-module";
-import UnBanTimer from "../custom_events/unbanTimer.js";
+import UnBanTimer from "../customEvents/unbanTimer.js";
 /**
  * Ready is called when the bot is turned on.
  * @param client - Discord client
@@ -53,11 +53,10 @@ export default class ready implements Event {
         configData: ConfigData,
     ) {
         // Register commands here
-        const rest = new REST({ version: "9" }).setToken(
+        const rest = new REST({ version: "10" }).setToken(
             process.env.TOKEN as string,
         );
         let routesFunc;
-
         if (!configData.debugGuildId) {
             routesFunc = Routes.applicationCommands(client.user?.id as string);
         } else {

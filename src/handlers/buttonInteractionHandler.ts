@@ -10,7 +10,7 @@ export default class CommandHandler implements Handler {
     constructor() {}
     async run(client: GamerbotClient) {
         const buttonFilesAndDirs = fs.readdirSync(
-            path.join(_dirname, "/bot_interactions/button_interactions"),
+            path.join(_dirname, "/botInteractions/buttonInteractions"),
             { withFileTypes: true },
         );
         //Get all directories
@@ -25,7 +25,7 @@ export default class CommandHandler implements Handler {
                     !file.isDirectory(),
             )
             .map(
-                (file) => "/bot_interactions/button_interactions/" + file.name,
+                (file) => "/botInteractions/buttonInteractions/" + file.name,
             );
 
         //Get all files from sub directories
@@ -35,7 +35,7 @@ export default class CommandHandler implements Handler {
                     .readdirSync(
                         path.join(
                             _dirname,
-                            "/bot_interactions/button_interactions/" + dir.name,
+                            "/botInteractions/buttonInteractions/" + dir.name,
                         ),
                     )
                     .filter(
@@ -43,7 +43,7 @@ export default class CommandHandler implements Handler {
                     )
                     .map(
                         (file) =>
-                            "/bot_interactions/button_interactions/" +
+                            "/botInteractions/buttonInteractions/" +
                             dir.name +
                             "/" +
                             file,

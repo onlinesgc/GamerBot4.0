@@ -10,7 +10,7 @@ import {
     TextInputStyle,
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
-import { createModal } from "../../../functions/builder_functions.js";
+import { createModal } from "../../../functions/builderFunctions.js";
 
 export default class SendMessageCommand implements Command {
     name = "sendmessage";

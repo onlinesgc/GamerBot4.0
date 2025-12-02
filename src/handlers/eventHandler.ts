@@ -13,16 +13,16 @@ export default class EventHandler implements Handler {
     async run(client: GamerbotClient) {
         console.log("Loading events...");
         ["client", "guild"].forEach((dir) => this.loadDir(dir, client));
-        ["custom_events"].forEach((dir) => this.loadCustomEvent(dir, client));
+        ["customEvents"].forEach((dir) => this.loadCustomEvent(dir, client));
     }
 
     private loadDir(dir: string, client: GamerbotClient) {
         const eventFiles = fs
-            .readdirSync(path.join(_dirname, "/bot_events/" + dir))
+            .readdirSync(path.join(_dirname, "/botEvents/" + dir))
             .filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
         for (const file of eventFiles) {
             console.log(`Loading ${dir}/${file}`);
-            import(`../bot_events/${dir}/${file}`).then((_event) => {
+            import(`../botEvents/${dir}/${file}`).then((_event) => {
                 const event = new _event.default();
                 client.on(file.split(".")[0], (...args) =>
                     event.runEvent(client, ...args),
@@ -33,11 +33,11 @@ export default class EventHandler implements Handler {
 
     private loadCustomEvent(dir: string, client: GamerbotClient) {
         const customEventFiles = fs
-            .readdirSync(path.join(_dirname, "/bot_events/" + dir))
+            .readdirSync(path.join(_dirname, "/botEvents/" + dir))
             .filter((file) => file.endsWith(".ts") || file.endsWith(".js"));
         for (const file of customEventFiles) {
             console.log(`Loading ${dir}/${file}`);
-            import(`../bot_events/${dir}/${file}`).then((_event) => {
+            import(`../botEvents/${dir}/${file}`).then((_event) => {
                 const event = new _event.default();
                 event.emitor(client);
             });

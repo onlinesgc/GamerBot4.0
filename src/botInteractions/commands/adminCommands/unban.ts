@@ -8,7 +8,7 @@ import {
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
-import { CreateModLogEmbed } from "../../../functions/builder_functions.js";
+import { CreateModLogEmbed } from "../../../functions/builderFunctions.js";
 
 export default class UnbanCommand implements Command {
     name = "unban";

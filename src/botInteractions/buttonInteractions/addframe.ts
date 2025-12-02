@@ -22,9 +22,8 @@ export default class AddFrame implements Button {
             interaction.user.send("Du har fått en ny ram!").catch(() => {});
             return;
         } else {
-            //eslint-disable-next-line
             interaction.user.send(
-                `Du har redan fått ${(guildData.frames[parseInt(args[0])] as any).name}!`,
+                `Du har redan fått ${(guildData.frames[parseInt(args[0])]).name}!`,
             ).catch(() => {});
             return;
         }

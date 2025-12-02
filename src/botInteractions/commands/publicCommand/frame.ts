@@ -28,11 +28,11 @@ export default class FrameCommand implements Command {
     async execute(interaction: ChatInputCommandInteraction, userData: UserData) {
         const frames = userData.frameData.frames;
         const frameConfig = await GamerBotAPIInstance.models.getFrameConfig();
-
         const loadedFrames = frameConfig.filter((frame) => frames.includes(frame.id.toString()))
 
-        let selectedFrame = userData.frameData.selectedFrame;
-
+        let selectedFrame = loadedFrames.findIndex(frame => frame.id === userData.frameData.selectedFrame);
+        if (selectedFrame === -1) selectedFrame = 0;
+        
         let link = loadedFrames[selectedFrame].frameLink;
 
         if (link.includes("localhost"))
