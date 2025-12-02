@@ -1,38 +1,38 @@
 export class ModLog {
     type: string;
-    userID: string;
-    userName: string;
-    Reason: string;
+    userId: string;
+    username: string;
+    reason: string;
     length: string | null;
     //eslint-disable-next-line
-    date: any;
-    authorID: string;
+    timestamp: any;
+    authorId: string;
     constructor(
         type: string,
         userId: string,
-        userName: string,
-        Reason: string,
+        username: string,
+        reason: string,
         length: string | null,
-        date: number,
+        timestamp: number,
         authorId: string,
     ) {
         this.type = type;
-        this.userID = userId;
-        this.userName = userName;
-        this.Reason = Reason;
+        this.userId = userId;
+        this.username = username;
+        this.reason = reason;
         this.length = length;
-        this.date = date;
-        this.authorID = authorId;
+        this.timestamp = timestamp;
+        this.authorId = authorId;
     }
 
     getFormattedUserName() {
-        return `<@${this.userID}>${this.userName || this.userName == null ? "" : `(${this.userName})`}`;
+        return `<@${this.userId}>${this.username || this.username == null ? "" : `(${this.username})`}`;
     }
 
-    getEmbedField(mod_log_number: number) {
+    getEmbedField(modLogNumber: number) {
         const obj = {
-            name: `Mod log ${mod_log_number + 1}`,
-            value: `Log Typ: ${this.type}\nAnvändare: ${this.getFormattedUserName()}\nAnledning: ${this.Reason}\nTid: ${this.date}\n Moderator: <@${this.authorID}>`,
+            name: `Mod log ${modLogNumber + 1}`,
+            value: `Log Typ: ${this.type}\nAnvändare: ${this.getFormattedUserName()}\nAnledning: ${this.reason}\nTid: ${new Date(this.timestamp).toDateString()}\n Moderator: <@${this.authorId}>`,
         };
         if (this.length) obj.value += `\nLängd: ${this.length}`;
         return obj;

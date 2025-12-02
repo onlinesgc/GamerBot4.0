@@ -1,6 +1,6 @@
 import { Client, GatewayIntentBits, Collection, Partials } from "discord.js";
 import dot_env from "dotenv";
-import { GamerBotAPI } from "gamerbot-module";
+import { GamerBotAPI, Reminder } from "gamerbot-module";
 import { Command } from "./classes/command.js";
 import fs from "fs";
 import { Button } from "./classes/button.js";
@@ -26,8 +26,8 @@ export interface GamerbotClient extends Client {
     commands: Collection<string, Command>;
     buttons: Collection<string, Button>;
     messageInteractions: Collection<string, MessageInteraction>;
-    command_array: Array<object>;
-    reminder_list: Array<object>;
+    commandArray: Array<object>;
+    reminderList: Array<Reminder>;
     frameChoices: Array<object>;
 }
 
@@ -37,7 +37,6 @@ const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.GuildEmojisAndStickers,
         GatewayIntentBits.DirectMessages,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMessageReactions,
@@ -51,8 +50,8 @@ const client = new Client({
 client.commands = new Collection();
 client.buttons = new Collection();
 client.messageInteractions = new Collection();
-client.command_array = [];
-client.reminder_list = [];
+client.commandArray = [];
+client.reminderList = [];
 client.frameChoices = [];
 
 //load and run all handlers

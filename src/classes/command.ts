@@ -1,10 +1,11 @@
 import {
     AutocompleteInteraction,
+    ChatInputCommandInteraction,
     CommandInteraction,
     SlashCommandBuilder,
     SlashCommandOptionsOnlyBuilder,
 } from "discord.js";
-import { PorfileData } from "gamerbot-module";
+import { UserData } from "gamerbot-module";
 
 export interface Command {
     name: string;
@@ -20,8 +21,8 @@ export interface Command {
      * @returns
      */
     execute: (
-        interaction: CommandInteraction,
-        profileData: PorfileData,
+        interaction: ChatInputCommandInteraction,
+        profileData: UserData,
     ) => void;
 
     autoComplete?: (interaction: AutocompleteInteraction) => void;
