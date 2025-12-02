@@ -1,7 +1,7 @@
 import {
     ActionRowBuilder,
     BaseGuildTextChannel,
-    CommandInteraction,
+    ChatInputCommandInteraction,
     ModalBuilder,
     ModalSubmitInteraction,
     PermissionFlagsBits,
@@ -33,7 +33,7 @@ export default class EditMessageCommand implements Command {
                 .setDescription("The channel where the message is")
                 .setRequired(true),
         );
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const messageId = interaction.options.get("message_id", true)
             .value as string;
         const channel = interaction.options.get("channel", true)

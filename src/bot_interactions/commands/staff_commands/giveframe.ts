@@ -1,6 +1,6 @@
 import {
     AutocompleteInteraction,
-    CommandInteraction,
+    ChatInputCommandInteraction,
     PermissionFlagsBits,
     SlashCommandBuilder,
 } from "discord.js";
@@ -41,7 +41,7 @@ export default class GiveFrameCommand implements Command {
                     { name: "remove", value: "remove" },
                 ),
         );
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const user = interaction.options.get("user", true).user;
         const frame = interaction.options.get("frame", true).value as string;
         const action = interaction.options.get("action", true).value as string;

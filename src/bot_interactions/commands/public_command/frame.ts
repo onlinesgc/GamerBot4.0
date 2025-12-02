@@ -1,6 +1,5 @@
 import {
     SlashCommandBuilder,
-    CommandInteraction,
     EmbedBuilder,
     StringSelectMenuBuilder,
     ActionRowBuilder,
@@ -11,6 +10,7 @@ import {
     ModalBuilder,
     TextInputBuilder,
     TextInputStyle,
+    ChatInputCommandInteraction,
 } from "discord.js";
 import { UserData } from "gamerbot-module";
 import { Command } from "../../../classes/command.js";
@@ -25,7 +25,7 @@ export default class FrameCommand implements Command {
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description);
-    async execute(interaction: CommandInteraction, userData: UserData) {
+    async execute(interaction: ChatInputCommandInteraction, userData: UserData) {
         const frames = userData.frameData.frames;
         const frameConfig = await GamerBotAPIInstance.models.getFrameConfig();
 

@@ -1,8 +1,8 @@
 import {
     SlashCommandBuilder,
-    CommandInteraction,
     GuildMember,
     PermissionFlagsBits,
+    ChatInputCommandInteraction,
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
@@ -31,7 +31,7 @@ export default class KickCommand implements Command {
                 .setDescription("Anledning till kicket")
                 .setRequired(true),
         );
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const member = interaction.options.get("user", true)
             .member as GuildMember;
         const reason = interaction.options.get("reason", true).value as string;

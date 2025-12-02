@@ -1,5 +1,5 @@
 import {
-    CommandInteraction,
+    ChatInputCommandInteraction,
     EmbedBuilder,
     PermissionFlagsBits,
     SlashCommandBuilder,
@@ -27,7 +27,7 @@ export default class Maintenance implements Command {
                 ),
         )
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const status = interaction.options.get("status", true).value as string;
         interaction.editReply(
             `Maintenance mode är nu ${status == "on" ? "på" : "av"}`,

@@ -1,5 +1,5 @@
 import {
-    CommandInteraction,
+    ChatInputCommandInteraction,
     GuildMember,
     PermissionFlagsBits,
     SlashCommandBuilder,
@@ -7,8 +7,8 @@ import {
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
-import { modLogToObject } from "../../../functions/moglog_functions.js";
-import ms from "ms";
+import { modLogToObject } from "../../../functions/moglogFunctions.js";
+import ms, { StringValue } from "ms";
 import { CreateModLogEmbed } from "../../../functions/builder_functions.js";
 
 export default class MuteCommand implements Command {
@@ -39,7 +39,7 @@ export default class MuteCommand implements Command {
                 .setDescription("Tid du mutar en person")
                 .setRequired(true),
         );
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const member = interaction.options.get("user", true)
             .member as GuildMember;
         const reason = interaction.options.get("reason", true).value as string;
@@ -91,7 +91,7 @@ export default class MuteCommand implements Command {
         await member.send(message).catch(() => {
             hasSentMessage = false;
         });
-        await member.timeout(ms(time), reason);
+        await member.timeout(ms(time as StringValue), reason);
         return hasSentMessage;
     }
 }

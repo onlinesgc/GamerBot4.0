@@ -1,10 +1,10 @@
 import {
     SlashCommandBuilder,
-    CommandInteraction,
     PermissionFlagsBits,
     EmbedBuilder,
     GuildChannel,
     Guild,
+    ChatInputCommandInteraction,
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
 
@@ -45,7 +45,7 @@ export default class ChannelCommand implements Command {
                 )
                 .setRequired(false),
         );
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const channel = interaction.options.get("channel", true)
             .channel as GuildChannel;
         const type = interaction.options.get("type", true).value as string;

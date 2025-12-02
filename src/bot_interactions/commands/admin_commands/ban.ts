@@ -1,5 +1,5 @@
 import {
-    CommandInteraction,
+    ChatInputCommandInteraction,
     GuildMember,
     PermissionFlagsBits,
     SlashCommandBuilder,
@@ -7,8 +7,8 @@ import {
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
-import { modLogToObject } from "../../../functions/moglog_functions.js";
-import ms from "ms";
+import { modLogToObject } from "../../../functions/moglogFunctions.js";
+import ms, { StringValue } from "ms";
 import { CreateModLogEmbed } from "../../../functions/builder_functions.js";
 
 export default class BanCommand implements Command {
@@ -47,15 +47,12 @@ export default class BanCommand implements Command {
                 )
                 .setRequired(false),
         );
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const member = interaction.options.get("user", true)
             .member as GuildMember;
         const reason = interaction.options.get("reason", true).value as string;
-        const time =
-            (interaction.options.get("time", false)?.value as string) || "0";
-        const messages =
-            (interaction.options.get("messages", false)?.value as string) ||
-            "0s";
+        const time = (interaction.options.get("time", false)?.value as string) || "0";
+        const messages = (interaction.options.get("messages", false)?.value as string) || "0s";
 
         const hasSentMessage = await this.banUser(
             member,
@@ -116,13 +113,13 @@ export default class BanCommand implements Command {
                 );
             guildData.autoModeration.bannedUsers.push({
                 userID: member.id,
-                unbantime: Number(Date.now() + ms(time)),
+                unbantime: Number(Date.now() + ms(time as StringValue)),
             });
             guildData.save();
         }
         await member.guild.bans.create(member.id, {
             reason: reason,
-            deleteMessageSeconds: ms(messages) / 1000,
+            deleteMessageSeconds: ms(messages as StringValue) / 1000,
         });
         return hasSentMessage;
     }

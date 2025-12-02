@@ -1,7 +1,7 @@
 import { Client, REST, Routes } from "discord.js";
 import { Event } from "../../classes/event.js";
 import { GamerBotAPIInstance, GamerbotClient } from "../../index.js";
-import { ConfigData, UserData } from "gamerbot-module";
+import { ConfigData, Reminder, UserData } from "gamerbot-module";
 import UnBanTimer from "../custom_events/unbanTimer.js";
 /**
  * Ready is called when the bot is turned on.
@@ -88,8 +88,8 @@ export default class ready implements Event {
                 const reminderTemp = {
                     userId: profile.userId,
                     message: reminder.message,
-                    remindTimestamp: reminder.remindTimestamp,
-                };
+                    timestamp: reminder.timestamp,
+                } as Reminder;
                 client.reminderList.push(reminderTemp);
             });
         });

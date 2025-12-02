@@ -2,7 +2,7 @@ import {
     ActionRowBuilder,
     ButtonBuilder,
     ButtonStyle,
-    CommandInteraction,
+    ChatInputCommandInteraction,
     PermissionFlagsBits,
     SlashCommandBuilder,
     User,
@@ -22,7 +22,7 @@ export default class GiveEventXp implements Command {
         .setName(this.name)
         .setDescription(this.description)
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const userSelect = new UserSelectMenuBuilder()
             .setCustomId("users")
             .setPlaceholder("Välj användare")

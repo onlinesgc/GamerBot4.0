@@ -6,10 +6,11 @@ import {
     ButtonBuilder,
     ButtonStyle,
     EmbedBuilder,
+    ChatInputCommandInteraction,
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
-import { objectToModLog } from "../../../functions/moglog_functions.js";
+import { objectToModLog } from "../../../functions/moglogFunctions.js";
 
 export default class ModLogCommand implements Command {
     name = "modlog";
@@ -27,7 +28,7 @@ export default class ModLogCommand implements Command {
                 .setDescription("Personen du vill se loggar för")
                 .setRequired(true),
         );
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const user = interaction.options.get("user", true).user;
         if (!user) return interaction.editReply("Användaren finns inte");
 

@@ -1,5 +1,5 @@
 import {
-    CommandInteraction,
+    ChatInputCommandInteraction,
     EmbedBuilder,
     SlashCommandBuilder,
 } from "discord.js";
@@ -23,7 +23,7 @@ export default class CalcCommand implements Command {
                 .setDescription("Det matematiska uttrycket")
                 .setRequired(true),
         );
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const expression = interaction.options.get("expression", false)
             ?.value as string;
 

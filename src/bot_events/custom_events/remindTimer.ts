@@ -1,5 +1,5 @@
 import { Client } from "discord.js";
-import { CustomEvent } from "../../classes/custom_event.js";
+import { CustomEvent } from "../../classes/customEvent.js";
 import { GamerBotAPIInstance, GamerbotClient } from "../../index.js";
 
 /**

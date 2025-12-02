@@ -1,5 +1,5 @@
 import {
-    CommandInteraction,
+    ChatInputCommandInteraction,
     EmbedBuilder,
     GuildMember,
     PermissionFlagsBits,
@@ -80,7 +80,7 @@ export default class VoiceCommand implements Command {
                 .setDescription("Max antal personer i kanalen")
                 .setRequired(false),
         );
-    async execute(interaction: CommandInteraction, userData: UserData) {
+    async execute(interaction: ChatInputCommandInteraction, userData: UserData) {
         const guildMember = interaction.member as GuildMember;
 
         if (userData.voiceData.voiceChannelId !== guildMember.voice.channelId) {

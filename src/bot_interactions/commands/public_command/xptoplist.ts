@@ -1,10 +1,10 @@
 import {
     SlashCommandBuilder,
-    CommandInteraction,
     EmbedBuilder,
     ActionRowBuilder,
     ButtonBuilder,
     ButtonStyle,
+    ChatInputCommandInteraction,
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
@@ -22,7 +22,7 @@ export default class XptoplistCommand implements Command {
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description);
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const maxUsers = 300;
         const usersPerPage = 10;
         let pointer = 0;

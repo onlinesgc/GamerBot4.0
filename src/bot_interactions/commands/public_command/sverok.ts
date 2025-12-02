@@ -2,7 +2,7 @@ import {
     ActionRowBuilder,
     ButtonBuilder,
     ButtonStyle,
-    CommandInteraction,
+    ChatInputCommandInteraction,
     ComponentType,
     ModalBuilder,
     ModalSubmitInteraction,
@@ -24,7 +24,7 @@ export default class SverokCommand implements Command {
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description);
-    async execute(interaction: CommandInteraction, userData: UserData) {
+    async execute(interaction: ChatInputCommandInteraction, userData: UserData) {
         const sverokRoleId = "1016685055357222942";
         const SVEROK_FRAME_ID = "19";
         const emailModal = new ModalBuilder()

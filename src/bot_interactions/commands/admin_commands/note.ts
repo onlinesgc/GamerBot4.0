@@ -1,5 +1,5 @@
 import {
-    CommandInteraction,
+    ChatInputCommandInteraction,
     GuildMember,
     PermissionFlagsBits,
     SlashCommandBuilder,
@@ -31,7 +31,7 @@ export default class NoteCommand implements Command {
                 .setDescription("Anledning till noteringen")
                 .setRequired(true),
         );
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const member = interaction.options.get("user", true)
             .member as GuildMember;
         const reason = interaction.options.get("reason", true).value as string;

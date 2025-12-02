@@ -1,5 +1,5 @@
 import {
-    CommandInteraction,
+    ChatInputCommandInteraction,
     PermissionFlagsBits,
     SlashCommandBuilder,
 } from "discord.js";
@@ -21,7 +21,7 @@ export default class giveshrimpsandwich implements Command {
                 .setDescription("Personen som ska få räckmackan")
                 .setRequired(true),
         );
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const user = interaction.options.get("user", true).user;
         if (user == null) return interaction.editReply("Användaren finns inte");
         interaction.guild?.members.cache

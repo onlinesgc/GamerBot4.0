@@ -1,5 +1,5 @@
 import {
-    CommandInteraction,
+    ChatInputCommandInteraction,
     GuildMember,
     PermissionFlagsBits,
     PresenceStatus,
@@ -24,7 +24,7 @@ export default class UserInfoCommand implements Command {
                 .setDescription("Personen du vill hämta information om")
                 .setRequired(true),
         );
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const member = interaction.options.get("user", true)
             .member as GuildMember;
 

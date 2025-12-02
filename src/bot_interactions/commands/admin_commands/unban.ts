@@ -1,4 +1,5 @@
 import {
+    ChatInputCommandInteraction,
     CommandInteraction,
     PermissionFlagsBits,
     SlashCommandBuilder,
@@ -31,7 +32,7 @@ export default class UnbanCommand implements Command {
                 .setDescription("Anledning till unbannet")
                 .setRequired(true),
         );
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const user = interaction.options.get("user", true).user;
         const reason = interaction.options.get("reason", true).value as string;
         if (!user) return interaction.editReply("Användaren finns inte");

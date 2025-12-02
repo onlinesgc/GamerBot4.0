@@ -1,5 +1,6 @@
 import {
     AutocompleteInteraction,
+    ChatInputCommandInteraction,
     CommandInteraction,
     SlashCommandBuilder,
     SlashCommandOptionsOnlyBuilder,
@@ -20,7 +21,7 @@ export interface Command {
      * @returns
      */
     execute: (
-        interaction: CommandInteraction,
+        interaction: ChatInputCommandInteraction,
         profileData: UserData,
     ) => void;
 

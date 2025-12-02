@@ -1,8 +1,8 @@
 import {
     SlashCommandBuilder,
-    CommandInteraction,
     PermissionFlagsBits,
     GuildMember,
+    ChatInputCommandInteraction,
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
@@ -23,7 +23,7 @@ export default class TopicCommand implements Command {
                 .setDescription("Lägg till en ny (Admin command)")
                 .setRequired(false),
         );
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const guild_config = await GamerBotAPIInstance.models.getGuildData(
             interaction.guildId as string,
         );

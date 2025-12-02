@@ -1,7 +1,6 @@
 import {
     AttachmentBuilder,
-    BufferResolvable,
-    CommandInteraction,
+    ChatInputCommandInteraction,
     SlashCommandBuilder,
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
@@ -26,23 +25,16 @@ export default class LvlCommand implements Command {
                 .setDescription("Titta på en annan medlems lvl")
                 .setRequired(false),
         );
-    async execute(interaction: CommandInteraction, userData: UserData) {
+    async execute(interaction: ChatInputCommandInteraction, userData: UserData) {
         const user =
             interaction.options.get("user", false)?.user || interaction.user;
         if (userData.userId != user.id)
             userData = await GamerBotAPIInstance.models.getUserData(
                 user.id as string,
             );
-        const file = new AttachmentBuilder(
-            (await GamerBotAPIInstance.models.getUserFrame(
-                user.id as string,
-                user.username as string,
-                user.avatarURL({ extension: "png" }) as string,
-                true,
-            )) as BufferResolvable,
-        );
+        const file = new AttachmentBuilder(await GamerBotAPIInstance.models.getUserFrame(user.id, user.username, user.avatarURL()));
         file.setDescription(
-            `${interaction.member?.user.username} är i level ${userData.levelSystem.xp - 1} och har ${userData.levelSystem.xp} xp!`,
+            `${interaction.member?.user.username} är i level ${userData.levelSystem.level} och har ${userData.levelSystem.xp} xp!`,
         );
         interaction.editReply({ files: [file] });
     }

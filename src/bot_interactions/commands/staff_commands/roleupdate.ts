@@ -1,8 +1,8 @@
 import {
     SlashCommandBuilder,
-    CommandInteraction,
     PermissionFlagsBits,
     GuildMember,
+    ChatInputCommandInteraction,
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
@@ -24,7 +24,7 @@ export default class RoleUpdate implements Command {
                 .setDescription("Användaren som ska uppdateras")
                 .setRequired(true),
         );
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const user = interaction.options.get("user", true)
             .member as GuildMember;
         const userData = await GamerBotAPIInstance.models.getUserData(

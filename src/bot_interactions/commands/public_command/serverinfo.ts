@@ -1,5 +1,5 @@
 import {
-    CommandInteraction,
+    ChatInputCommandInteraction,
     EmbedBuilder,
     Guild,
     PresenceUpdateStatus,
@@ -19,7 +19,7 @@ export default class ServerInfoCommand implements Command {
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description);
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const guild = interaction.guild as Guild;
         const serverData = await this.getServersData();
         const serverInfoEmbed = new EmbedBuilder()

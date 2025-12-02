@@ -1,5 +1,5 @@
 import {
-    CommandInteraction,
+    ChatInputCommandInteraction,
     GuildMember,
     PermissionFlagsBits,
     SlashCommandBuilder,
@@ -41,7 +41,7 @@ export default class EmuteCommand implements Command {
                     { name: "long", value: "20h" },
                 ),
         );
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const member = interaction.options.get("user", true)
             .member as GuildMember;
         const reason = interaction.options.get("reason", true).value as string;

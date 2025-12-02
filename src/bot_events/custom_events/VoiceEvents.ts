@@ -7,7 +7,7 @@ import {
     VoiceChannel,
     VoiceState,
 } from "discord.js";
-import { CustomEvent } from "../../classes/custom_event.js";
+import { CustomEvent } from "../../classes/customEvent.js";
 import { GamerBotAPIInstance } from "../../index.js";
 
 export default class VoiceEvents implements CustomEvent {

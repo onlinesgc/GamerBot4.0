@@ -1,5 +1,5 @@
 import {
-    CommandInteraction,
+    ChatInputCommandInteraction,
     PermissionFlagsBits,
     SlashCommandBuilder,
 } from "discord.js";
@@ -22,7 +22,7 @@ export default class LinkWhitelistCommand implements Command {
                 .setRequired(true),
         )
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const link = interaction.options.get("link", true).value as string;
         const guildConfig = await GamerBotAPIInstance.models.getGuildData(
             interaction.guildId as string,

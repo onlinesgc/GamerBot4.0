@@ -1,6 +1,7 @@
 import {
     AutocompleteInteraction,
     ButtonInteraction,
+    ChatInputCommandInteraction,
     Client,
     CommandInteraction,
     Interaction,
@@ -22,7 +23,7 @@ export default class interactionCreate implements Event {
         if (!interaction.inGuild()) return;
         if (interaction.isCommand()) {
             this.onCommand(
-                interaction as CommandInteraction,
+                interaction as ChatInputCommandInteraction,
                 client as GamerbotClient,
             );
         }
@@ -83,7 +84,7 @@ export default class interactionCreate implements Event {
     }
 
     private async onCommand(
-        interaction: CommandInteraction,
+        interaction: ChatInputCommandInteraction,
         client: GamerbotClient,
     ) {
         let command: Command = client.commands.get(

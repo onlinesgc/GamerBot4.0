@@ -1,7 +1,7 @@
 import {
     SlashCommandBuilder,
     PermissionFlagsBits,
-    CommandInteraction,
+    ChatInputCommandInteraction,
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
 import Ticket from "../../button_interactions/ticket.js";
@@ -22,7 +22,7 @@ export default class OpenTicketCommand implements Command {
                 .setDescription("Personen du vill öppna en ticket för")
                 .setRequired(true),
         );
-    async execute(interaction: CommandInteraction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const user = interaction.options.get("user", true).user;
         if (user == null)
             return interaction.editReply("Användaren finns inte!");
