@@ -18,12 +18,14 @@ export async function updateLevelRoles(
     }
     const xpConfigLevels = JSON.parse(JSON.stringify(xpConfig.levels));
     const roles = findRoles(xpConfigLevels, userData.levelSystem.level);
-
+    
+    const rolesToRemove: string[] = [];
     for (const level of xpConfig.levels) {
-        if (level.ids.some((id: string) => roles.includes(id)))
-            continue;
-        await member.roles.remove(level.ids);
+        if (level.ids.every((id: string) => roles.includes(id))) continue;
+        rolesToRemove.push(...level.ids);
     }
+    console.log("Removing roles: ", rolesToRemove);
+    await member.roles.remove(rolesToRemove);
 
     const blockRoleUpdateRoleId = "1082393287731708015";
 
@@ -34,7 +36,7 @@ export async function updateLevelRoles(
             }
         }),
     );
-
+    console.log("Adding roles: ", roles);
     await member.roles.add(roles);
 }
 
