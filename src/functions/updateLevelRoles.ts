@@ -43,7 +43,7 @@ export async function updateLevelRoles(
 function findRoles(levels: Level[], lvl: number) {
     if (!levels.length) {
         return [];
-    } else if (levels[levels.length - 1].level > lvl - 1) {
+    } else if (levels[levels.length - 1].level > lvl) {
         levels.pop();
         return findRoles(levels, lvl);
     } else {
