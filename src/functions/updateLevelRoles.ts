@@ -24,7 +24,6 @@ export async function updateLevelRoles(
         if (level.ids.every((id: string) => roles.includes(id))) continue;
         rolesToRemove.push(...level.ids);
     }
-    console.log("Removing roles: ", rolesToRemove);
     await member.roles.remove(rolesToRemove);
 
     const blockRoleUpdateRoleId = "1082393287731708015";
@@ -36,7 +35,6 @@ export async function updateLevelRoles(
             }
         }),
     );
-    console.log("Adding roles: ", roles);
     await member.roles.add(roles);
 }
 
