@@ -114,7 +114,7 @@ export default class XptoplistCommand implements Command {
                 name: (starterPointer + i).toString(),
                 value: `
                 Användare: <@!${profile.userId}>
-                Level: \`${level - 1}\`- (\`${Math.round((profile.levelSystem.xp / (level < 31 ? level ** 2 : 31 ** 2)) * 100)}%\`)`,
+                Level: \`${level}\`- (\`${Math.round((profile.levelSystem.xp / (level < 31 ? level ** 2 : 31 ** 2)) * 100)}%\`)`,
             });
             i++;
         }
