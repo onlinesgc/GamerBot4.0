@@ -129,12 +129,19 @@ export default class VoiceEvents implements CustomEvent {
         ) as VoiceChannel;
 
         if (voiceChannel == undefined) return;
+        
+        if (!userData.voiceData.voiceChannelThreadId){
+            userData.voiceData.voiceChannelId = "";
+            userData.voiceData.voiceChannelThreadId = "";
+            await userData.save();
+        }
 
         const threedChannel = (
             member.guild.channels.cache.get(
                 guildData.voiceChannelData.infoChatId,
             ) as TextChannel
         ).threads.cache.get(userData.voiceData.voiceChannelThreadId);
+
         if (
             voiceChannel.id != userData.voiceData.voiceChannelId
         )
