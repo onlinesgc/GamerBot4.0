@@ -129,7 +129,7 @@ export default class VoiceEvents implements CustomEvent {
         ) as VoiceChannel;
 
         if (voiceChannel == undefined) return;
-        
+        if (!userData.voiceData) return;
         if (!userData.voiceData.voiceChannelThreadId){
             userData.voiceData.voiceChannelId = "";
             userData.voiceData.voiceChannelThreadId = "";
