@@ -72,7 +72,7 @@ export default class messageCreate implements Event {
 
         userData.save();
     }
-    private async sendLvlText(userData: UserData, message: Message) {
+    async sendLvlText(userData: UserData, message: Message) {
         let levelText = `Du levlade upp till level \`${userData.levelSystem.level}\` i Onlineföreningen SGCs discord. Grattis!`;
 
         const configData = await GamerBotAPIInstance.models.getConfigData(

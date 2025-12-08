@@ -3,14 +3,15 @@ import {
     ButtonBuilder,
     ButtonStyle,
     ChatInputCommandInteraction,
+    GuildMember,
     PermissionFlagsBits,
     SlashCommandBuilder,
-    User,
     UserSelectMenuBuilder,
     UserSelectMenuInteraction,
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
+import { updateLevelRoles } from "../../../functions/updateLevelRoles.js";
 
 export default class GiveEventXp implements Command {
     name = "giveeventxp";
@@ -49,7 +50,7 @@ export default class GiveEventXp implements Command {
             time: 1000 * 60 * 10,
         });
 
-        const users = new Set<User>();
+        const users = new Set<GuildMember>();
         collector.on("collect", async (messageComponentInteraction) => {
             if (messageComponentInteraction.customId === "submit") {
                 users.forEach(async (user) => {
@@ -60,7 +61,14 @@ export default class GiveEventXp implements Command {
                     userData.levelSystem.xp += Math.floor(
                         userData.levelSystem.xp ** 2 * 0.1,
                     );
+                    const lvlCap = 31;
+                    if ((userData.levelSystem.level ** 2 < userData.levelSystem.xp && userData.levelSystem.level <= 31) || (lvlCap ** 2 < userData.levelSystem.xp && userData.levelSystem.level > 31)) {
+                        userData.levelSystem.xp = 0;
+                        userData.levelSystem.level += 1;
+                        await updateLevelRoles(user, userData);
+                    }
                     await userData.save();
+
                 });
                 interaction.editReply({
                     content: "Xp har givits till användarna",
@@ -71,7 +79,7 @@ export default class GiveEventXp implements Command {
                     messageComponentInteraction as UserSelectMenuInteraction;
                 const values = userSelectInteraction.users;
                 values.forEach((value) => {
-                    users.add(value);
+                    users.add(value as unknown as GuildMember);
                 });
                 userSelectInteraction.deferUpdate();
             }
