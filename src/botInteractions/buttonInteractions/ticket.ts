@@ -139,12 +139,13 @@ export default class Ticket implements Button {
         const message = interaction.channel?.messages.cache.get(messageId);
         const channel = interaction.channel as GuildChannel;
 
-        await channel?.permissionOverwrites.edit(member?.id as string, {
-            ViewChannel: false,
-            SendMessages: false,
-            AttachFiles: false,
-        });
-
+        if (member){
+            await channel?.permissionOverwrites.edit(member?.id as string, {
+                ViewChannel: false,
+                SendMessages: false,
+                AttachFiles: false,
+            });
+        }
         const closeRow = createButtonRow(
             {emoji:"📝", style:ButtonStyle.Secondary, label:"Notera och radera", id:`ticket;note;${messageId};${userId}`},
             {emoji:"💾", style:ButtonStyle.Secondary, label:"Notera och arkivera", id:`ticket;archive;${messageId};${userId}`},
