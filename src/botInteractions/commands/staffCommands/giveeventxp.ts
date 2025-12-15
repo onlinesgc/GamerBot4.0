@@ -77,7 +77,10 @@ export default class GiveEventXp implements Command {
             } else if (messageComponentInteraction.customId === "users") {
                 const userSelectInteraction =
                     messageComponentInteraction as UserSelectMenuInteraction;
-                const values = userSelectInteraction.users;
+                const values = interaction.guild?.members.cache.filter((member) =>
+                    userSelectInteraction.values.includes(member.id),
+                );
+                if (!values) return;
                 values.forEach((value) => {
                     users.add(value as unknown as GuildMember);
                 });
