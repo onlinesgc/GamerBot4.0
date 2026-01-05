@@ -50,7 +50,12 @@ export default class SverokCommand implements Command {
         }).then(async (button) => {
             await button.showModal(emailModal);
             const filter = (i: ModalSubmitInteraction) => i.customId === `sverok:${interaction.id}`;
-            const modalSubmit = await button.awaitModalSubmit({ filter, time: 1000 * 5 * 60 });
+            const modalSubmit = await button.awaitModalSubmit({ filter, time: 1000 * 5 * 60 }).catch(() => null);
+
+            if (!modalSubmit) {
+                await interaction.followUp({ content: "Tiden för att fylla i mailet har gått ut, försök igen.", ephemeral: true });
+                return;
+            }
 
             const email = modalSubmit.fields.getTextInputValue("email");
             const SVEROK_TOKEN = process.env.SVEROK_API_TOKEN;
