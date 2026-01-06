@@ -11,7 +11,7 @@ import { modLogToObject } from "../../../functions/moglogFunctions.js";
 import ms, { StringValue } from "ms";
 import { createModLogEmbed } from "../../../functions/builderFunctions.js";
 
-export default class BanCommand implements Command {
+export default class BanCommand implements Command<ChatInputCommandInteraction> {
     name = "ban";
     ephemeral = false;
     defer = true;

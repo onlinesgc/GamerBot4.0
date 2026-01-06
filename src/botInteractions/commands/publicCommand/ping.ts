@@ -8,7 +8,7 @@ import { Command } from "../../../classes/command.js";
 /**
  * Ping command that replies with pong! and the time it took to respond.
  */
-export default class PingCommand implements Command {
+export default class PingCommand implements Command<ChatInputCommandInteraction> {
     constructor() {}
     name = "ping";
     ephemeral = false;

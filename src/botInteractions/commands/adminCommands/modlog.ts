@@ -12,7 +12,7 @@ import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { objectToModLog } from "../../../functions/moglogFunctions.js";
 
-export default class ModLogCommand implements Command {
+export default class ModLogCommand implements Command<ChatInputCommandInteraction> {
     name = "modlog";
     ephemeral = false;
     defer = true;

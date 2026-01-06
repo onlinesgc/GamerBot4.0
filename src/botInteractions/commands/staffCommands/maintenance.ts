@@ -7,7 +7,7 @@ import {
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
 
-export default class Maintenance implements Command {
+export default class Maintenance implements Command<ChatInputCommandInteraction> {
     name = "maintenance";
     ephemeral = false;
     defer = true;

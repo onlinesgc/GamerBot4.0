@@ -5,7 +5,7 @@ import {
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
 
-export default class giveshrimpsandwich implements Command {
+export default class giveshrimpsandwich implements Command<ChatInputCommandInteraction> {
     name = "giveshrimpsandwich";
     ephemeral = false;
     defer = true;

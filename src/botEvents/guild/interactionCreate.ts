@@ -3,6 +3,7 @@ import {
     ButtonInteraction,
     ChatInputCommandInteraction,
     Client,
+    ContextMenuCommandInteraction,
     Interaction,
     TextChannel,
 } from "discord.js";
@@ -22,7 +23,7 @@ export default class interactionCreate implements Event {
         if (!interaction.inGuild()) return;
         if (interaction.isCommand()) {
             this.onCommand(
-                interaction as ChatInputCommandInteraction,
+                interaction as ChatInputCommandInteraction | ContextMenuCommandInteraction,
                 client as GamerbotClient,
             );
         }
@@ -83,12 +84,14 @@ export default class interactionCreate implements Event {
     }
 
     private async onCommand(
-        interaction: ChatInputCommandInteraction,
+        interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction,
         client: GamerbotClient,
     ) {
-        let command: Command = client.commands.get(
-            interaction.commandName,
-        ) as Command;
+        let command;
+        if(interaction instanceof ChatInputCommandInteraction)
+            command = client.commands.get(interaction.commandName)
+        else if(interaction instanceof ContextMenuCommandInteraction)
+            command = client.contextCommands.get(interaction.commandName)
         if (!command) {
             client.commands.forEach((cmd) => {
                 if (cmd.aliases.includes(interaction.commandName)) {

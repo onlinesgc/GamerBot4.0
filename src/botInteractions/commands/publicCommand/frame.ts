@@ -16,7 +16,7 @@ import { UserData } from "gamerbot-module";
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 
-export default class FrameCommand implements Command {
+export default class FrameCommand implements Command<ChatInputCommandInteraction> {
     name = "frame";
     ephemeral = false;
     description = "Ändra på din ram och bakgrundsfärg";

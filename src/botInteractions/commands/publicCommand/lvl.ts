@@ -10,7 +10,7 @@ import { UserData } from "gamerbot-module";
 /**
  * Lvl command that shows the level of the user in a frame
  */
-export default class LvlCommand implements Command {
+export default class LvlCommand implements Command<ChatInputCommandInteraction> {
     name = "lvl";
     ephemeral = false;
     defer = true;

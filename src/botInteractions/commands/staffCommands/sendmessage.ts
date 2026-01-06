@@ -12,7 +12,7 @@ import {
 import { Command } from "../../../classes/command.js";
 import { createModal } from "../../../functions/builderFunctions.js";
 
-export default class SendMessageCommand implements Command {
+export default class SendMessageCommand implements Command<ChatInputCommandInteraction> {
     name = "sendmessage";
     ephemeral = false;
     description = "Skicka ett meddelande till en användare!";

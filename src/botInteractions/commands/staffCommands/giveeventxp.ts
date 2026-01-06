@@ -13,7 +13,7 @@ import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { updateLevelRoles } from "../../../functions/updateLevelRoles.js";
 
-export default class GiveEventXp implements Command {
+export default class GiveEventXp implements Command<ChatInputCommandInteraction> {
     name = "giveeventxp";
     description = "Ge xp till till personer som har varit på event";
     aliases = [];

@@ -8,7 +8,7 @@ import { Command } from "../../../classes/command.js";
 import MuteCommand from "./mute.js";
 import { createModLogEmbed } from "../../../functions/builderFunctions.js";
 
-export default class EmuteCommand implements Command {
+export default class EmuteCommand implements Command<ChatInputCommandInteraction> {
     name = "emute";
     ephemeral = false;
     defer = true;

@@ -24,6 +24,7 @@ export const GamerBotAPIInstance = new GamerBotAPI(
 //Extends the client to add new properties
 export interface GamerbotClient extends Client {
     commands: Collection<string, Command>;
+    contextCommands: Collection<string, Command>;
     buttons: Collection<string, Button>;
     messageInteractions: Collection<string, MessageInteraction>;
     commandArray: Array<object>;
@@ -48,6 +49,7 @@ const client = new Client({
 
 //Create collections
 client.commands = new Collection();
+client.contextCommands = new Collection();
 client.buttons = new Collection();
 client.messageInteractions = new Collection();
 client.commandArray = [];

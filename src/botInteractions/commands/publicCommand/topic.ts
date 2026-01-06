@@ -8,7 +8,7 @@ import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { getRndInteger } from "../../../functions/getRndInt.js";
 
-export default class TopicCommand implements Command {
+export default class TopicCommand implements Command<ChatInputCommandInteraction> {
     name = "topic";
     ephemeral = false;
     defer = true;

@@ -6,7 +6,7 @@ import {
 import { Command } from "../../../classes/command.js";
 import Ticket from "../../buttonInteractions/ticket.js";
 
-export default class OpenTicketCommand implements Command {
+export default class OpenTicketCommand implements Command<ChatInputCommandInteraction> {
     name = "openticket";
     ephemeral = false;
     description = "Öppna en ticket för en användare på discorden!";

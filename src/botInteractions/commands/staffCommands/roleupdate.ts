@@ -8,7 +8,7 @@ import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { updateLevelRoles } from "../../../functions/updateLevelRoles.js";
 
-export default class RoleUpdate implements Command {
+export default class RoleUpdate implements Command<ChatInputCommandInteraction> {
     name = "roleupdate";
     ephemeral = false;
     description = "Uppdatera levelrollerna för en användare";

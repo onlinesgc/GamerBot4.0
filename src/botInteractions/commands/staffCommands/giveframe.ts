@@ -8,7 +8,7 @@ import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance, GamerbotClient } from "../../../index.js";
 import { getAllFrames } from "../../../functions/getAllFrames.js";
 
-export default class GiveFrameCommand implements Command {
+export default class GiveFrameCommand implements Command<ChatInputCommandInteraction> {
     name = "giveframe";
     ephemeral = false;
     description = "Give a frame to a user";

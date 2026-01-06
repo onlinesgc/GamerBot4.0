@@ -4,7 +4,7 @@ import { createHmac } from "crypto";
 import { GamerBotAPIInstance } from "../../../index.js";
 import { UserData } from "gamerbot-module";
 
-export default class SverokCommand implements Command {
+export default class SverokCommand implements Command<ChatInputCommandInteraction> {
     name = "sverok";
     ephemeral = true;
     description =

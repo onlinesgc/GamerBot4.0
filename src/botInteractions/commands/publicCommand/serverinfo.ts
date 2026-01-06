@@ -10,7 +10,7 @@ import { Command } from "../../../classes/command.js";
 /**
  * Serverinfo command that shows information about the server
  */
-export default class ServerInfoCommand implements Command {
+export default class ServerInfoCommand implements Command<ChatInputCommandInteraction> {
     name = "serverinfo";
     ephemeral = false;
     defer = true;

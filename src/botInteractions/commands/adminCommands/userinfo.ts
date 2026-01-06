@@ -8,7 +8,7 @@ import {
 import { Command } from "../../../classes/command.js";
 import { EmbedBuilder } from "@discordjs/builders";
 
-export default class UserInfoCommand implements Command {
+export default class UserInfoCommand implements Command<ChatInputCommandInteraction> {
     name = "userinfo";
     ephemeral = false;
     defer = true;

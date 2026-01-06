@@ -13,7 +13,7 @@ import { UserData } from "gamerbot-module";
 /**
  * Xptoplist command that shows the top list of xp
  */
-export default class XptoplistCommand implements Command {
+export default class XptoplistCommand implements Command<ChatInputCommandInteraction> {
     name = "xptoplist";
     ephemeral = false;
     defer = true;

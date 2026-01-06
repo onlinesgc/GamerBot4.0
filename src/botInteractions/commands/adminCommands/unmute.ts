@@ -9,7 +9,7 @@ import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
 import { createModLogEmbed } from "../../../functions/builderFunctions.js";
 
-export default class UnMuteCommand implements Command {
+export default class UnMuteCommand implements Command<ChatInputCommandInteraction> {
     name = "unmute";
     ephemeral = false;
     defer = true;

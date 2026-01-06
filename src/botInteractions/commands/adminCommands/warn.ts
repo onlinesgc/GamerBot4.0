@@ -9,7 +9,7 @@ import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
 import { createModLogEmbed } from "../../../functions/builderFunctions.js";
 
-export default class WarnCommand implements Command {
+export default class WarnCommand implements Command<ChatInputCommandInteraction> {
     name = "warn";
     ephemeral = false;
     defer = true;

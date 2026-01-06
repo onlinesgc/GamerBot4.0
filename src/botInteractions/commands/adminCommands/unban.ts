@@ -10,7 +10,7 @@ import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
 import { createModLogEmbed } from "../../../functions/builderFunctions.js";
 
-export default class UnbanCommand implements Command {
+export default class UnbanCommand implements Command<ChatInputCommandInteraction> {
     name = "unban";
     ephemeral = false;
     defer = true;

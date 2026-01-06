@@ -9,7 +9,7 @@ import { msToString } from "../../../functions/msToString.js";
 /**
  * Ping command that replies with pong! and the time it took to respond.
  */
-export default class UptimeCommand implements Command {
+export default class UptimeCommand implements Command<ChatInputCommandInteraction> {
     constructor() {}
     name = "uptime";
     ephemeral = false;

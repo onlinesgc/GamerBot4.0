@@ -40,7 +40,7 @@ for (const roleName in ROLES) {
     });
 }
 
-export default class ColorCommand implements Command {
+export default class ColorCommand implements Command<ChatInputCommandInteraction> {
     name = "color";
     ephemeral = false;
     description = "Ändra din färg ifall du är i tillräckligt hög level";

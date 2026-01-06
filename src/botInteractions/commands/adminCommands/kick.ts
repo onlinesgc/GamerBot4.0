@@ -9,7 +9,7 @@ import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
 import { createModLogEmbed } from "../../../functions/builderFunctions.js";
 
-export default class KickCommand implements Command {
+export default class KickCommand implements Command<ChatInputCommandInteraction> {
     name = "kick";
     ephemeral = false;
     defer = true;

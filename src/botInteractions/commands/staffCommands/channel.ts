@@ -8,7 +8,7 @@ import {
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
 
-export default class ChannelCommand implements Command {
+export default class ChannelCommand implements Command<ChatInputCommandInteraction> {
     name = "channel";
     ephemeral = false;
     defer = true;

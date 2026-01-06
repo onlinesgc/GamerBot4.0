@@ -11,7 +11,7 @@ import { Command } from "../../../classes/command.js";
 import { UserData } from "gamerbot-module";
 import { GamerBotAPIInstance } from "../../../index.js";
 
-export default class VoiceCommand implements Command {
+export default class VoiceCommand implements Command<ChatInputCommandInteraction> {
     name = "voice";
     ephemeral = false;
     defer = true;

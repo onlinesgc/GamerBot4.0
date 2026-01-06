@@ -6,7 +6,7 @@ import {
 import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance } from "../../../index.js";
 
-export default class LinkWhitelistCommand implements Command {
+export default class LinkWhitelistCommand implements Command<ChatInputCommandInteraction> {
     name = "linkwhitelist";
     ephemeral = false;
     defer = true;

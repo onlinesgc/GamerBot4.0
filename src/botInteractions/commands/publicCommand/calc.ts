@@ -8,7 +8,7 @@ import { Command } from "../../../classes/command.js";
 /**
  * Calc command that calculates a math expression.
  */
-export default class CalcCommand implements Command {
+export default class CalcCommand implements Command<ChatInputCommandInteraction> {
     name = "calc";
     ephemeral = false;
     defer = true;

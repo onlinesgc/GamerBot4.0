@@ -4,7 +4,7 @@ import ms, { StringValue } from "ms";
 import { UserData } from "gamerbot-module";
 import { GamerbotClient } from "../../../index.js";
 
-export default class RemindCommand implements Command {
+export default class RemindCommand implements Command<ChatInputCommandInteraction> {
     name = "remind";
     ephemeral = false;
     defer = true;

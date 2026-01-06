@@ -11,7 +11,7 @@ import { modLogToObject } from "../../../functions/moglogFunctions.js";
 import ms, { StringValue } from "ms";
 import { createModLogEmbed } from "../../../functions/builderFunctions.js";
 
-export default class MuteCommand implements Command {
+export default class MuteCommand implements Command<ChatInputCommandInteraction> {
     name = "mute";
     ephemeral = false;
     defer = true;

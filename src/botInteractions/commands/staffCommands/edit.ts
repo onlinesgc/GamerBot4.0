@@ -11,7 +11,7 @@ import {
 } from "discord.js";
 import { Command } from "../../../classes/command.js";
 
-export default class EditMessageCommand implements Command {
+export default class EditMessageCommand implements Command<ChatInputCommandInteraction> {
     name = "edit";
     ephemeral = false;
     description = "Edit a message";

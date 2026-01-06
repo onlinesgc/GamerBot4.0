@@ -9,7 +9,7 @@ import { GamerBotAPIInstance } from "../../../index.js";
 import { ModLog } from "../../../classes/modlog.js";
 import { createModLogEmbed } from "../../../functions/builderFunctions.js";
 
-export default class NoteCommand implements Command {
+export default class NoteCommand implements Command<ChatInputCommandInteraction> {
     name = "note";
     ephemeral = false;
     defer = true;
