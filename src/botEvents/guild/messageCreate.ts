@@ -73,7 +73,7 @@ export default class messageCreate implements Event {
         userData.save();
     }
     async sendLvlText(userData: UserData, message: Message) {
-        let levelText = `Du levlade upp till level \`${userData.levelSystem.level}\` i Onlineföreningen SGCs discord. Grattis!`;
+        let levelText = `Du levlade upp till level \`${userData.levelSystem.level}\` i Onlineföreningen SGCs discord. Grattis!\n`;
 
         const configData = await GamerBotAPIInstance.models.getConfigData(
             parseInt(process.env.CONFIG_ID as string),
@@ -81,7 +81,7 @@ export default class messageCreate implements Event {
 
         configData.levelSystem.levels.forEach((level: Level) => {
             if (
-                userData.levelSystem.level - 1 == level.level &&
+                userData.levelSystem.level == level.level &&
                 level.message != undefined
             ) {
                 levelText += level.message;
