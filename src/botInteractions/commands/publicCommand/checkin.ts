@@ -104,7 +104,7 @@ export default class CheckInCommand implements Command<ChatInputCommandInteracti
 
         const guildData = await GamerBotAPIInstance.models.getGuildData(interaction.guildId);
 
-        const checkedInEmails: Array<{email: string, firstName: string, lastName: string}> = guildData.extraObjects.get("checkedInEmails") as Array<{email: string, firstName: string, lastName: string}> || [];
+        const checkedInEmails: Array<{email: string, firstName: string, lastName: string, username: string}> = guildData.extraObjects.get("checkedInEmails") as Array<{email: string, firstName: string, lastName: string, username: string}> || [];
 
         if (checkedInEmails.some(entry => entry.email === email)) {
             await modalSubmit.reply({ content: "Denna email har redan checkat in!", ephemeral: true });
@@ -114,6 +114,7 @@ export default class CheckInCommand implements Command<ChatInputCommandInteracti
         checkedInEmails.push(
             {
                 email: email,
+                username: interaction.user.username,
                 firstName: firstNameValue,
                 lastName: lastNameValue,
             }
