@@ -14,11 +14,11 @@ export default class CheckInCommand implements Command<ChatInputCommandInteracti
     async execute(interaction: ChatInputCommandInteraction) {
         if (!interaction.inGuild()) return;
 
-        if(!(interaction.member.roles as GuildMemberRoleManager).cache.has("820403975806386207")) 
-            return interaction.editReply("Du måste vara medlem i föreningen för att checka in!");
+        if(!(interaction.member.roles as GuildMemberRoleManager).cache.has("1016685055357222942")) 
+            return interaction.reply("Du måste vara medlem i föreningen för att checka in!");
 
         if((interaction.member.roles as GuildMemberRoleManager).cache.has("1468327480611045396")) 
-            return interaction.editReply("Du är redan incheckad!");
+            return interaction.reply("Du är redan incheckad!");
 
         const emailInput = new TextInputBuilder()
             .setCustomId("email")
