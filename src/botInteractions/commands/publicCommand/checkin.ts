@@ -1,3 +1,6 @@
+//Only used for årsmöten
+
+/*
 import { SlashCommandBuilder, ChatInputCommandInteraction, GuildMemberRoleManager, ModalBuilder, TextInputBuilder, TextInputStyle, LabelBuilder, ModalSubmitInteraction } from "discord.js";
 import { Command } from "../../../classes/command";
 import { GamerBotAPIInstance } from "../../../index.js";
@@ -130,3 +133,4 @@ export default class CheckInCommand implements Command<ChatInputCommandInteracti
 
     }
 }
+*/
