@@ -23,45 +23,51 @@ export default class VoiceCommand implements Command<ChatInputCommandInteraction
         .addUserOption((option) =>
             option
                 .setName("invite")
-                .setDescription("Personen du vill bjuda in till samtalet")
+                .setDescription(
+                    "La personne que vous souhaitez inviter à l'appel",
+                )
                 .setRequired(false),
         )
         .addUserOption((option) =>
             option
                 .setName("kick")
-                .setDescription("Personen du vill sparka från samtalet")
+                .setDescription(
+                    "La personne que vous voulez exclure de la conversation",
+                )
                 .setRequired(false),
         )
         .addUserOption((option) =>
             option
                 .setName("give")
-                .setDescription("Ge ägandeskapet till en annan person")
+                .setDescription(
+                    "Attribuez la responsabilité à une autre personne de la conversation",
+                )
                 .setRequired(false),
         )
         .addStringOption((option) =>
             option
                 .setName("name")
-                .setDescription("Namnet på din voice kanal")
+                .setDescription("Le nom de votre canal vocal")
                 .setRequired(false),
         )
         .addStringOption((option) =>
             option
                 .setName("lock")
-                .setDescription("Lås kanalen")
+                .setDescription("Verrouiller la chaîne")
                 .setRequired(false)
                 .addChoices({ name: "Lock channel", value: "lock" }),
         )
         .addStringOption((option) =>
             option
                 .setName("unlock")
-                .setDescription("Lås upp kanalen")
+                .setDescription("Débloquez la chaîne")
                 .setRequired(false)
                 .addChoices({ name: "Unlock channel", value: "unlock" }),
         )
         .addStringOption((option) =>
             option
                 .setName("inviterole")
-                .setDescription("Bjud in en hel rol")
+                .setDescription("Invitez tout un casting")
                 .setRequired(false)
                 .addChoices(
                     { name: "Alla trusted", value: "AllTrusted" },
@@ -77,15 +83,18 @@ export default class VoiceCommand implements Command<ChatInputCommandInteraction
         .addIntegerOption((option) =>
             option
                 .setName("limit")
-                .setDescription("Max antal personer i kanalen")
+                .setDescription("Nombre maximal de personnes sur la chaîne")
                 .setRequired(false),
         );
-    async execute(interaction: ChatInputCommandInteraction, userData: UserData) {
+    async execute(
+        interaction: ChatInputCommandInteraction,
+        userData: UserData,
+    ) {
         const guildMember = interaction.member as GuildMember;
 
         if (userData.voiceData.voiceChannelId !== guildMember.voice.channelId) {
             interaction.editReply(
-                "Du måste vara i din privata kanal som tillhör dig för att använda det här kommandot",
+                "Vous devez vous trouver sur votre canal privé pour utiliser cette commande.",
             );
             return;
         }
@@ -95,9 +104,9 @@ export default class VoiceCommand implements Command<ChatInputCommandInteraction
         if (interaction.options.data.length == 0) {
             const voiceMembersEmbed = new EmbedBuilder()
                 .setColor("#2DD21C")
-                .setTitle(`${guildMember.displayName}'s röstkanal`)
+                .setTitle(`${guildMember.displayName}'s canal vocal`)
                 .addFields({
-                    name: "inbjudna",
+                    name: "invité",
                     value: await this.getVoiceMembers(voiceChannel),
                 })
                 .setTimestamp()
@@ -131,7 +140,7 @@ export default class VoiceCommand implements Command<ChatInputCommandInteraction
                     Connect: true,
                 });
                 interaction.editReply(
-                    `Du har bjudit in ${member.displayName} till din kanal!`,
+                    `Vous avez invité ${member.displayName} à votre chaîne !`,
                 );
                 break;
             }
@@ -144,7 +153,7 @@ export default class VoiceCommand implements Command<ChatInputCommandInteraction
                 await voiceChannel.permissionOverwrites.delete(member.id);
                 await member.voice.disconnect();
                 interaction.editReply(
-                    `Du har sparkat ${member.displayName} från din kanal!`,
+                    `Tu as donné un coup de pied ${member.displayName} de ta chaîne !`,
                 );
                 break;
             }
@@ -153,14 +162,13 @@ export default class VoiceCommand implements Command<ChatInputCommandInteraction
                     .member as GuildMember;
                 if (!voiceChannel.members.has(member.id))
                     return interaction.editReply(
-                        "Personen du vill ge ägandeskapet till är inte i kanalen",
+                        "La personne à qui vous souhaitez céder la propriété n'est pas sur la chaîne.",
                     );
                 userData.voiceData.voiceChannelId = "";
                 await userData.save();
-                const giveMember =
-                    await GamerBotAPIInstance.models.getUserData(
-                        member.id,
-                    );
+                const giveMember = await GamerBotAPIInstance.models.getUserData(
+                    member.id,
+                );
                 giveMember.voiceData.voiceChannelId = voiceChannel.id;
                 giveMember.voiceData.voiceChannelThreadId =
                     userData.voiceData.voiceChannelThreadId;
@@ -171,7 +179,7 @@ export default class VoiceCommand implements Command<ChatInputCommandInteraction
                     .get(userData.voiceData.voiceChannelThreadId)
                     ?.members.add(member.id);
                 interaction.editReply(
-                    `Du har gett ägandeskapet till ${member.displayName}`,
+                    `Vous avez cédé la propriété à ${member.displayName}`,
                 );
                 break;
             }
@@ -179,9 +187,7 @@ export default class VoiceCommand implements Command<ChatInputCommandInteraction
                 const name = interaction.options.get("name", true)
                     .value as string;
                 voiceChannel.setName(name);
-                interaction.editReply(
-                    `Du har bytt namn på kanalen till ${name}`,
-                );
+                interaction.editReply(`Vous avez renommé la chaîne en ${name}`);
                 break;
             }
             case "lock": {
@@ -189,7 +195,7 @@ export default class VoiceCommand implements Command<ChatInputCommandInteraction
                     interaction.guild?.roles.everyone.id as string,
                     { ViewChannel: false, Speak: false, Connect: false },
                 );
-                interaction.editReply("Kanalen är nu låst!");
+                interaction.editReply("La chaîne est désormais verrouillée !");
                 break;
             }
             case "unlock": {
@@ -197,7 +203,9 @@ export default class VoiceCommand implements Command<ChatInputCommandInteraction
                     interaction.guild?.roles.everyone.id as string,
                     { ViewChannel: true, Speak: true, Connect: true },
                 );
-                interaction.editReply("Kanalen är nu upplåst!");
+                interaction.editReply(
+                    "La chaîne est désormais déverrouillée !",
+                );
                 break;
             }
             case "limit": {
@@ -205,7 +213,7 @@ export default class VoiceCommand implements Command<ChatInputCommandInteraction
                     .value as number;
                 voiceChannel.setUserLimit(limit);
                 interaction.editReply(
-                    `Du har satt en gräns på ${limit} personer i kanalen!`,
+                    `Vous avez fixé une limite sur ${limit} des gens sur la chaîne !`,
                 );
                 break;
             }
@@ -249,7 +257,7 @@ export default class VoiceCommand implements Command<ChatInputCommandInteraction
                         Connect: true,
                     });
                     interaction.editReply(
-                        `Du har bjudit in alla med rollen ${interaction.guild?.roles.cache.get(role)?.name} till kanalen!`,
+                        `Vous avez invité toutes les personnes ayant ce rôle ${interaction.guild?.roles.cache.get(role)?.name} à la chaîne !`,
                     );
                 } else {
                     const role = MultipleRoles.find(
@@ -263,7 +271,7 @@ export default class VoiceCommand implements Command<ChatInputCommandInteraction
                         });
                     });
                     interaction.editReply(
-                        `Du har bjudit in alla med rollen ${value} till kanalen!`,
+                        `Vous avez invité toutes les personnes ayant ce rôle ${value} à la chaîne !`,
                     );
                 }
                 break;

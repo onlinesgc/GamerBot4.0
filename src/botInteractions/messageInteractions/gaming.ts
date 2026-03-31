@@ -6,7 +6,7 @@ export default class Gaming implements MessageInteraction {
     execute(interaction: Message) {
         if (!interaction.channel.isSendable()) return;
         if (Math.floor(Math.random() * 100) > 86) {
-            interaction.channel.send("**GAMING! 🎮**");
+            interaction.channel.send("**JEUX! 🎮**");
         }
     }
 }

@@ -8,7 +8,7 @@ export default class RemindCommand implements Command<ChatInputCommandInteractio
     name = "remind";
     ephemeral = false;
     defer = true;
-    description = "Påminn dig själv om något!";
+    description = "Rappelle-toi quelque chose !";
     aliases = [];
     data = new SlashCommandBuilder()
         .setName(this.name)
@@ -16,23 +16,30 @@ export default class RemindCommand implements Command<ChatInputCommandInteractio
         .addStringOption((option) =>
             option
                 .setName("reminder")
-                .setDescription("Det du vill bli påmind om")
+                .setDescription("Ce dont vous voulez vous souvenir")
                 .setRequired(true),
         )
         .addStringOption((option) =>
             option
                 .setName("time")
-                .setDescription("Ge tiden som du vill ska ta, Som 7d, 5m, 10h")
+                .setDescription(
+                    "Indiquez le temps que vous souhaitez que cela prenne, par exemple 7 jours, 5 mois et 10 heures.",
+                )
                 .setRequired(true),
         );
-    async execute(interaction: ChatInputCommandInteraction, userData: UserData) {
+    async execute(
+        interaction: ChatInputCommandInteraction,
+        userData: UserData,
+    ) {
         const reminder = interaction.options.get("reminder", true)
             .value as string;
         const time = interaction.options.get("time", true).value as string;
 
         const timeMs = ms(time as StringValue);
         if (!timeMs)
-            return interaction.editReply("Felaktig tid angiven, försök igen!");
+            return interaction.editReply(
+                "Heure saisie incorrecte, veuillez réessayer !",
+            );
 
         const remindTimestamp = Date.now() + timeMs;
         userData.reminders.push({
@@ -47,7 +54,7 @@ export default class RemindCommand implements Command<ChatInputCommandInteractio
             userId: interaction.user.id,
         });
         interaction.editReply(
-            `Jag kommer påminna dig om ${reminder} om ${time}!`,
+            `Je vous le rappellerai. ${reminder} si ${time}!`,
         );
     }
 }

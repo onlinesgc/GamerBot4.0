@@ -3,6 +3,8 @@ import { Event } from "../../classes/event.js";
 import { GamerBotAPIInstance, GamerbotClient } from "../../index.js";
 import { GuildData, Level, UserData } from "gamerbot-module";
 import { updateLevelRoles } from "../../functions/updateLevelRoles.js";
+import { francAll } from "franc";
+import { getRndInteger } from "../../functions/getRndInt.js";
 
 export default class messageCreate implements Event {
     constructor() {}
@@ -18,6 +20,13 @@ export default class messageCreate implements Event {
         this.xpCalculation(message, guildData);
         this.messageInteraction(message);
         this.removeLink(message, guildData);
+
+        const isFrench = this.isFrenchMessage(message);
+        if (!isFrench && getRndInteger(0, 100) > 92) {
+            message.reply(
+                "Ceci est un serveur français, veuillez écrire en français !",
+            );
+        }
     }
 
     private async xpCalculation(message: Message, guildData: GuildData) {
@@ -38,18 +47,24 @@ export default class messageCreate implements Event {
         );
 
         //returns until time is calculated
-        if (userData.levelSystem.xpTimeoutUntil > message.createdTimestamp) return;
+        if (userData.levelSystem.xpTimeoutUntil > message.createdTimestamp)
+            return;
 
         const timeOut = 10 * 60 * 1000; // ten mins
 
         //adds timeout
-        userData.levelSystem.xpTimeoutUntil = message.createdTimestamp + timeOut;
+        userData.levelSystem.xpTimeoutUntil =
+            message.createdTimestamp + timeOut;
 
         //Gives xp, if similar word only give 1 xp.
         if (userData.levelSystem.oldMessages.length >= 3)
             userData.levelSystem.oldMessages.shift();
 
-        if (userData.levelSystem.oldMessages.includes(message.content.toLowerCase())) {
+        if (
+            userData.levelSystem.oldMessages.includes(
+                message.content.toLowerCase(),
+            )
+        ) {
             userData.levelSystem.xp += 1;
         } else {
             userData.levelSystem.xp += 3;
@@ -62,7 +77,8 @@ export default class messageCreate implements Event {
         if (
             (userData.levelSystem.level ** 2 < userData.levelSystem.xp &&
                 userData.levelSystem.level <= 31) ||
-            (lvlCap ** 2 < userData.levelSystem.xp && userData.levelSystem.level > 31)
+            (lvlCap ** 2 < userData.levelSystem.xp &&
+                userData.levelSystem.level > 31)
         ) {
             userData.levelSystem.xp = 0;
             userData.levelSystem.level += 1;
@@ -91,16 +107,29 @@ export default class messageCreate implements Event {
     }
 
     private messageInteraction(message: Message) {
+        const client = message.client as GamerbotClient;
+        const content = message.content.toLowerCase();
 
-        const messageInteraction = (
-            message.client as GamerbotClient
-        ).messageInteractions.find(
-            (messageInteraction) =>
-                message.content.toLowerCase().includes(messageInteraction.name),
-        );
-        if (messageInteraction) {
-            messageInteraction.execute(message);
+        const interaction = client.messageInteractions.find((inter) => {
+            const nameMatch = content.includes(inter.name.toLowerCase());
+
+            const aliasMatch = inter.aliases?.some((alias) =>
+                content.includes(alias.toLowerCase()),
+            );
+
+            return nameMatch || aliasMatch;
+        });
+
+        if (interaction) {
+            interaction.execute(message);
         }
+    }
+
+    private isFrenchMessage(message: Message) {
+        const lang = francAll(message.content);
+        return lang.some(
+            ([langCode, confidence]) => langCode === "fra" && confidence > 0.9,
+        );
     }
 
     async removeLink(message: Message, guildData: GuildData) {
@@ -143,10 +172,10 @@ export default class messageCreate implements Event {
 
         notAllowed(message);
     }
-    
+
     //Move function to a more dynamic place TODO
     async addReaction(message: Message) {
-        if(message.channel.id == "1352009789378662492"){
+        if (message.channel.id == "1352009789378662492") {
             await message.react("❤");
             await message.react("💬");
             await message.react("🔁");

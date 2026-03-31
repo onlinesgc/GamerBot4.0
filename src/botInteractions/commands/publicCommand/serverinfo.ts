@@ -14,7 +14,7 @@ export default class ServerInfoCommand implements Command<ChatInputCommandIntera
     name = "serverinfo";
     ephemeral = false;
     defer = true;
-    description = "Visar information om servern";
+    description = "Affiche des informations sur le serveur";
     aliases = [];
     data = new SlashCommandBuilder()
         .setName(this.name)
@@ -31,29 +31,29 @@ export default class ServerInfoCommand implements Command<ChatInputCommandIntera
                 iconURL: interaction.client.user.avatarURL() as string,
             })
             .addFields(
-                { name: "Medlemmar", value: `\`${guild.memberCount}\`` },
+                { name: "Membres", value: `\`${guild.memberCount}\`` },
                 {
-                    name: "Status",
+                    name: "Statut",
                     value: `
-                    🟢 \`${guild.members.cache.filter((m) => m.presence && m.presence.status === PresenceUpdateStatus.Online).size}\` medlemmar är online!
-                    🟡 \`${guild.members.cache.filter((m) => m.presence && m.presence.status === PresenceUpdateStatus.Idle).size}\` personer är idle.
-                    🔴 \`${guild.members.cache.filter((m) => m.presence && m.presence.status === PresenceUpdateStatus.DoNotDisturb).size}\` personer är stör ej.
-                    ⚫ \`${guild.members.cache.filter((m) => m.presence == null || m.presence.status === PresenceUpdateStatus.Offline || m.presence.status == PresenceUpdateStatus.Invisible).size}\` personer är offline.
+                    🟢 \`${guild.members.cache.filter((m) => m.presence && m.presence.status === PresenceUpdateStatus.Online).size}\` les membres sont en ligne !
+                    🟡 \`${guild.members.cache.filter((m) => m.presence && m.presence.status === PresenceUpdateStatus.Idle).size}\` les gens sont oisifs.
+                    🔴 \`${guild.members.cache.filter((m) => m.presence && m.presence.status === PresenceUpdateStatus.DoNotDisturb).size}\` Les gens ne sont pas dérangés.
+                    ⚫ \`${guild.members.cache.filter((m) => m.presence == null || m.presence.status === PresenceUpdateStatus.Offline || m.presence.status == PresenceUpdateStatus.Invisible).size}\` les gens sont hors ligne.
 
-                    🟣 \`${guild.members.cache.filter((m) => m.premiumSince).size}\` Personer som bostar servern
-                    
-                    🕓 \`${guild.members.cache.filter((m) => m.presence && m.presence.status === PresenceUpdateStatus.Online && m.permissions.has("Administrator") && !m.user.bot).size}\` admins är tillgängliga!`,
+                    🟣 \`${guild.members.cache.filter((m) => m.premiumSince).size}\` Les personnes qui vivent sur le serveur
+
+                    🕓 \`${guild.members.cache.filter((m) => m.presence && m.presence.status === PresenceUpdateStatus.Online && m.permissions.has("Administrator") && !m.user.bot).size}\` Des administrateurs sont disponibles !`,
                 },
                 {
-                    name: "Minecraft servers",
+                    name: "Serveurs Minecraft",
                     value: `
                     **Trusted:** ${serverData[0].online ? `\`${serverData[0].players.online}\` / \`${serverData[0].players.max}\`` : "Servern är offline"}
                     **Creative:** ${serverData[1].online ? `\`${serverData[1].players.online}\` / \`${serverData[1].players.max}\`` : "Servern är offline"}
-                    **Parkour servern:** ${serverData[2].online ? `\`${serverData[2].players.online}\` / \`${serverData[2].players.max}\`` : "Servern är offline"}
+                    **Parkour le serveur:** ${serverData[2].online ? `\`${serverData[2].players.online}\` / \`${serverData[2].players.max}\`` : "Servern är offline"}
                     `,
                 },
                 {
-                    name: "Boost nivå",
+                    name: "Niveau de boost",
                     value: `\`${guild.premiumTier}\``,
                 },
             );

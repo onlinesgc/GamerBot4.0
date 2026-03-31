@@ -14,7 +14,7 @@ export default class LvlCommand implements Command<ChatInputCommandInteraction> 
     name = "lvl";
     ephemeral = false;
     defer = true;
-    description = "Titta vilken nivå du är på discorden!";
+    description = "Consultez votre niveau sur Discord !";
     aliases = ["me"];
     data = new SlashCommandBuilder()
         .setName(this.name)
@@ -22,19 +22,28 @@ export default class LvlCommand implements Command<ChatInputCommandInteraction> 
         .addUserOption((option) =>
             option
                 .setName("user")
-                .setDescription("Titta på en annan medlems lvl")
+                .setDescription("Regardez le niveau d'un autre membre")
                 .setRequired(false),
         );
-    async execute(interaction: ChatInputCommandInteraction, userData: UserData) {
+    async execute(
+        interaction: ChatInputCommandInteraction,
+        userData: UserData,
+    ) {
         const user =
             interaction.options.get("user", false)?.user || interaction.user;
         if (userData.userId != user.id)
             userData = await GamerBotAPIInstance.models.getUserData(
                 user.id as string,
             );
-        const file = new AttachmentBuilder(await GamerBotAPIInstance.models.getUserFrame(user.id, user.username, user.avatarURL()));
+        const file = new AttachmentBuilder(
+            await GamerBotAPIInstance.models.getUserFrame(
+                user.id,
+                user.username,
+                user.avatarURL(),
+            ),
+        );
         file.setDescription(
-            `${interaction.member?.user.username} är i level ${userData.levelSystem.level} och har ${userData.levelSystem.xp} xp!`,
+            `${interaction.member?.user.username} est au niveau ${userData.levelSystem.level} et avoir ${userData.levelSystem.xp} xp!`,
         );
         interaction.editReply({ files: [file] });
     }

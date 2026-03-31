@@ -19,20 +19,27 @@ import { GamerBotAPIInstance } from "../../../index.js";
 export default class FrameCommand implements Command<ChatInputCommandInteraction> {
     name = "frame";
     ephemeral = false;
-    description = "Ändra på din ram och bakgrundsfärg";
+    description = "Changez la couleur de votre cadre et de votre fond.";
     aliases = [];
     defer = true;
     data = new SlashCommandBuilder()
         .setName(this.name)
         .setDescription(this.description);
-    async execute(interaction: ChatInputCommandInteraction, userData: UserData) {
+    async execute(
+        interaction: ChatInputCommandInteraction,
+        userData: UserData,
+    ) {
         const frames = userData.frameData.frames;
         const frameConfig = await GamerBotAPIInstance.models.getFrameConfig();
-        const loadedFrames = frameConfig.filter((frame) => frames.includes(frame.id.toString()))
+        const loadedFrames = frameConfig.filter((frame) =>
+            frames.includes(frame.id.toString()),
+        );
 
-        let selectedFrame = loadedFrames.findIndex(frame => frame.id === userData.frameData.selectedFrame);
+        let selectedFrame = loadedFrames.findIndex(
+            (frame) => frame.id === userData.frameData.selectedFrame,
+        );
         if (selectedFrame === -1) selectedFrame = 0;
-        
+
         let link = loadedFrames[selectedFrame].frameLink;
 
         if (link.includes("localhost"))
@@ -45,32 +52,28 @@ export default class FrameCommand implements Command<ChatInputCommandInteraction
         let currentSide = 0;
 
         const embed = new EmbedBuilder()
-            .setTitle("Du kan välja ram igenom menyn nedan")
+            .setTitle("Vous pouvez choisir un cadre via le menu ci-dessous.")
             .setColor("#2DD21C")
             .setImage(link)
             .setFooter({
-                text: `${selectedFrame + 1}/${loadedFrames.length} - Nuvarande ram`,
+                text: `${selectedFrame + 1}/${loadedFrames.length} - Image actuelle`,
             })
             .setTimestamp();
         const actionRow =
             new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
                 new StringSelectMenuBuilder()
                     .setCustomId("frame_select")
-                    .setPlaceholder("Välj ram")
+                    .setPlaceholder("Sélectionnez le cadre")
                     .addOptions(
-                        await this.autoSliceSelect(
-                            loadedOptions,
-                            currentSide,
-                        ),
+                        await this.autoSliceSelect(loadedOptions, currentSide),
                     ),
             );
-        const colorButton =
-            new ActionRowBuilder<ButtonBuilder>().addComponents(
-                new ButtonBuilder()
-                    .setCustomId("color_select")
-                    .setLabel("Välj färg")
-                    .setStyle(ButtonStyle.Success),
-            );
+        const colorButton = new ActionRowBuilder<ButtonBuilder>().addComponents(
+            new ButtonBuilder()
+                .setCustomId("color_select")
+                .setLabel("Sélectionnez la couleur")
+                .setStyle(ButtonStyle.Success),
+        );
 
         const message = await interaction.editReply({
             embeds: [embed],
@@ -130,7 +133,8 @@ export default class FrameCommand implements Command<ChatInputCommandInteraction
                     });
                     interaction.editReply({ embeds: [embed] });
 
-                    userData.frameData.selectedFrame = loadedFrames[selectedFrame].id;
+                    userData.frameData.selectedFrame =
+                        loadedFrames[selectedFrame].id;
                     await userData.save();
 
                     embed.setFooter({
@@ -143,13 +147,15 @@ export default class FrameCommand implements Command<ChatInputCommandInteraction
                     messageComponentInteraction.customId === "color_select"
                 ) {
                     const colorModal = new ModalBuilder()
-                        .setTitle("Välj färg")
+                        .setTitle("Sélectionnez la couleur")
                         .setCustomId(`color:${messageComponentInteraction.id}`)
                         .addComponents(
                             new ActionRowBuilder<TextInputBuilder>().addComponents(
                                 new TextInputBuilder()
                                     .setCustomId("hex")
-                                    .setLabel("Skriv din hex kod här")
+                                    .setLabel(
+                                        "Saisissez votre code hexadécimal ici",
+                                    )
                                     .setStyle(TextInputStyle.Short),
                             ),
                         );
@@ -161,12 +167,14 @@ export default class FrameCommand implements Command<ChatInputCommandInteraction
                         .then(async (modal) => {
                             const hex = modal.fields.getTextInputValue("hex");
                             if (!hex.match(/^#[0-9A-F]{6}$/i)) {
-                                await modal.reply("Fel format på hex koden");
+                                await modal.reply(
+                                    "Format incorrect du code hexadécimal",
+                                );
                                 return;
                             }
                             userData.frameData.frameColorHexCode = hex;
                             await userData.save();
-                            await modal.reply("Färg sparad");
+                            await modal.reply("Couleur enregistrée");
                         })
                         .catch(async () => {});
                 }

@@ -17,7 +17,7 @@ export default class XptoplistCommand implements Command<ChatInputCommandInterac
     name = "xptoplist";
     ephemeral = false;
     defer = true;
-    description = "Vissar topplistan för xp";
+    description = "Bien sûr, le classement pour l'XP";
     aliases = [];
     data = new SlashCommandBuilder()
         .setName(this.name)
@@ -113,8 +113,8 @@ export default class XptoplistCommand implements Command<ChatInputCommandInterac
             fields.push({
                 name: (starterPointer + i).toString(),
                 value: `
-                Användare: <@!${profile.userId}>
-                Level: \`${level}\`- (\`${Math.round((profile.levelSystem.xp / (level < 31 ? level ** 2 : 31 ** 2)) * 100)}%\`)`,
+                Utilisateur: <@!${profile.userId}>
+                Baguette Niveau: \`${level}\`- (\`${Math.round((profile.levelSystem.xp / (level < 31 ? level ** 2 : 31 ** 2)) * 100)}%\`)`,
             });
             i++;
         }

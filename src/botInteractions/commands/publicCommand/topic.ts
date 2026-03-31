@@ -12,7 +12,7 @@ export default class TopicCommand implements Command<ChatInputCommandInteraction
     name = "topic";
     ephemeral = false;
     defer = true;
-    description = "Få ett ämne man kan diskutera i chatten";
+    description = "Choisissez un sujet de discussion pour le chat.";
     aliases = [];
     data = new SlashCommandBuilder()
         .setName(this.name)
@@ -20,7 +20,7 @@ export default class TopicCommand implements Command<ChatInputCommandInteraction
         .addStringOption((option) =>
             option
                 .setName("topic")
-                .setDescription("Lägg till en ny (Admin command)")
+                .setDescription("Ajouter un nouveau (Commande administrateur)")
                 .setRequired(false),
         );
     async execute(interaction: ChatInputCommandInteraction) {
@@ -35,17 +35,17 @@ export default class TopicCommand implements Command<ChatInputCommandInteraction
                 )
             ) {
                 interaction.reply(
-                    "Du måste vara admin för att kunna lägga till ett nytt ämne!",
+                    "Vous devez être administrateur pour ajouter un nouveau sujet !",
                 );
                 return;
             }
             guild_config.topics.push(topic as string);
             guild_config.save();
-            interaction.editReply("Ämnet har lagts till!");
+            interaction.editReply("Le sujet a été ajouté !");
         } else {
             if (guild_config.topics.length == 0)
                 return interaction.editReply(
-                    "Det finns inga topics i systemet! Lägg till några :)",
+                    "Aucun sujet n'est enregistré ! Ajoutez-en :)",
                 );
             await interaction.editReply(
                 guild_config.topics[

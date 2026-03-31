@@ -14,7 +14,7 @@ export default class UptimeCommand implements Command<ChatInputCommandInteractio
     name = "uptime";
     ephemeral = false;
     defer = true;
-    description = "Titta på hur länge boten har varit igång!";
+    description = "Regardez depuis combien de temps le bot fonctionne !";
     aliases = [];
     data = new SlashCommandBuilder()
         .setName(this.name)
@@ -26,19 +26,19 @@ export default class UptimeCommand implements Command<ChatInputCommandInteractio
         const embed = new EmbedBuilder()
             .setColor("#2DD21C")
             .setTitle("Uptime")
-            .setDescription("Här kommer upptiden för botten!")
+            .setDescription("Voici venu le moment du fond !")
             .setThumbnail(interaction.client.user.avatarURL())
             .addFields(
                 {
-                    name: "Tid:",
+                    name: "Temps:",
                     value: await msToString(interaction.client.uptime),
                 },
                 {
-                    name: "Totala millisekunder:",
+                    name: "Nombre total de millisecondes :",
                     value: interaction.client.uptime.toString(),
                 },
                 {
-                    name: "Omstart skedde vid:",
+                    name: "Le redémarrage a eu lieu à :",
                     value:
                         restartTime.toLocaleDateString().toString() +
                         " " +

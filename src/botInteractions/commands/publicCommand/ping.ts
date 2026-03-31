@@ -13,7 +13,7 @@ export default class PingCommand implements Command<ChatInputCommandInteraction>
     name = "ping";
     ephemeral = false;
     defer = true;
-    description = "Replies with pong!";
+    description = "Réponds avec pong !";
     aliases = [];
     data = new SlashCommandBuilder()
         .setName(this.name)

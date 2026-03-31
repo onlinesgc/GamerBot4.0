@@ -12,7 +12,7 @@ export default class CalcCommand implements Command<ChatInputCommandInteraction>
     name = "calc";
     ephemeral = false;
     defer = true;
-    description = "Räkna ut en matematisk uttryck";
+    description = "Calculer une expression mathématique";
     aliases = [];
     data = new SlashCommandBuilder()
         .setName(this.name)
@@ -20,7 +20,7 @@ export default class CalcCommand implements Command<ChatInputCommandInteraction>
         .addStringOption((option) =>
             option
                 .setName("expression")
-                .setDescription("Det matematiska uttrycket")
+                .setDescription("L'expression mathématique")
                 .setRequired(true),
         );
     async execute(interaction: ChatInputCommandInteraction) {
@@ -29,8 +29,10 @@ export default class CalcCommand implements Command<ChatInputCommandInteraction>
 
         const mathEmbed = new EmbedBuilder()
             .setColor("#2DD21C")
-            .setTitle(`${interaction.member?.user.username} | Matte tal`)
-            .setDescription(`Calculating ${"`"}${expression.trim()}${"`"}`)
+            .setTitle(
+                `${interaction.member?.user.username} | Numéros mathématiques`,
+            )
+            .setDescription(`Calculatrice ${"`"}${expression.trim()}${"`"}`)
             .setFooter({
                 text: this.name,
                 iconURL: interaction.client.user.avatarURL()?.toString(),
@@ -42,7 +44,7 @@ export default class CalcCommand implements Command<ChatInputCommandInteraction>
             `http://api.mathjs.org/v4/?expr=${encodeURIComponent(expression)}`,
         ).then(async (data) => {
             mathEmbed.setDescription(
-                `Calculated ${"`"}${expression.trim()}${"`"}\nAnswer ${"`"}${await data.text()}${"`"}`,
+                `Calculé ${"`"}${expression.trim()}${"`"}\nRépondre ${"`"}${await data.text()}${"`"}`,
             );
             interaction.editReply({ embeds: [mathEmbed] });
         });

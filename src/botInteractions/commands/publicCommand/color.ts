@@ -43,7 +43,8 @@ for (const roleName in ROLES) {
 export default class ColorCommand implements Command<ChatInputCommandInteraction> {
     name = "color";
     ephemeral = false;
-    description = "Ändra din färg ifall du är i tillräckligt hög level";
+    description =
+        "Changez de couleur si vous avez atteint un niveau suffisamment élevé.";
     aliases = [];
     defer = true;
     data = new SlashCommandBuilder()
@@ -51,16 +52,16 @@ export default class ColorCommand implements Command<ChatInputCommandInteraction
         .setDescription(this.description)
         .addStringOption((option) =>
             option
-                .setName("färg")
+                .setName("peinture")
                 .setDescription(
-                    "Välj vilken färg du vill ha, lämna denna blank ifall du vill ta bort din roll",
+                    "Choisissez la couleur souhaitée, laissez ce champ vide si vous souhaitez supprimer votre rôle",
                 )
                 .setRequired(false)
                 .addChoices(formattedRoles),
         );
     async execute(interaction: ChatInputCommandInteraction) {
         const roleOption = interaction.options.get(
-            "färg",
+            "peinture",
             false,
         ) as unknown as { value: string } | null;
 
@@ -73,7 +74,7 @@ export default class ColorCommand implements Command<ChatInputCommandInteraction
         ) {
             interaction.editReply({
                 content:
-                    "Du har inte tillräckligt hög level för att ändra din färg!",
+                    "Vous n'avez pas le niveau requis pour changer de couleur !",
             });
             return;
         }
@@ -94,7 +95,9 @@ export default class ColorCommand implements Command<ChatInputCommandInteraction
         );
 
         if (!roleOption) {
-            interaction.editReply({ content: "Din färg har tagits bort!" });
+            interaction.editReply({
+                content: "Votre couleur a été supprimée !",
+            });
             return;
         }
 
@@ -103,7 +106,7 @@ export default class ColorCommand implements Command<ChatInputCommandInteraction
         );
 
         interaction.editReply({
-            content: `Gav dig rollen <@&${roleOption.value}>!`,
+            content: `Je t'ai donné le rôle <@&${roleOption.value}>!`,
         });
     }
 }

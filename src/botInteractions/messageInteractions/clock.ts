@@ -25,7 +25,7 @@ export default class ClockInteraction implements MessageInteraction {
                 interaction.channel.send(
                     `<a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594>**Klockan är 13:37:37!**<a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594><a:vibecat:813405042887491594>`,
                 );
-            else interaction.channel.send(`Klockan är ${datetime}`);
+            else interaction.channel.send(`Il est temps ${datetime}`);
         }
     }
 }
