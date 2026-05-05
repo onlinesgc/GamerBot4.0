@@ -19,6 +19,5 @@ COPY package*.json ./
 RUN npm ci --omit=dev
 
 COPY --from=builder /usr/src/app/dist ./dist
-COPY --from=builder /usr/src/app/assets ./assets
 
 CMD ["npm", "start"]
