@@ -7,6 +7,7 @@ import { Button } from "./classes/button.js";
 import { MessageInteraction } from "./classes/messageInteraction.js";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
+import { MinecraftServer } from "mc-server-management";
 
 dot_env.config();
 
@@ -30,6 +31,7 @@ export interface GamerbotClient extends Client {
     commandArray: Array<object>;
     reminderList: Array<Reminder>;
     frameChoices: Array<object>;
+    minecraftConnection: MinecraftServer
 }
 
 //Creates the client that is going to do all actions!

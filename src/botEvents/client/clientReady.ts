@@ -3,6 +3,7 @@ import { Event } from "../../classes/event.js";
 import { GamerBotAPIInstance, GamerbotClient } from "../../index.js";
 import { ConfigData, Reminder, UserData } from "gamerbot-module";
 import UnBanTimer from "../customEvents/unbanTimer.js";
+import { MinecraftServer, WebSocketConnection } from "mc-server-management";
 /**
  * Ready is called when the bot is turned on.
  * @param client - Discord client
@@ -41,6 +42,10 @@ export default class ready implements Event {
         // load unbantimer
         const unbanTimer = new UnBanTimer();
         unbanTimer.emitor(client);
+
+        // load minecraft connection
+        const connection = await WebSocketConnection.connect("wss://parkour-management.sgc.se:25585", process.env.PARKOUR_MANAGEMENT_TOKEN as string);
+        (client as GamerbotClient).minecraftConnection = new MinecraftServer(connection);
     }
 
     /**
