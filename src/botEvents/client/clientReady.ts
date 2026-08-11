@@ -44,8 +44,12 @@ export default class ready implements Event {
         unbanTimer.emitor(client);
 
         // load minecraft connection
-        const connection = await WebSocketConnection.connect("wss://parkour-management.sgc.se:25585", process.env.PARKOUR_MANAGEMENT_TOKEN as string);
-        (client as GamerbotClient).minecraftConnection = new MinecraftServer(connection);
+        try {
+            const connection = await WebSocketConnection.connect("wss://parkour-management.sgc.se:25585", process.env.PARKOUR_MANAGEMENT_TOKEN as string);
+            (client as GamerbotClient).minecraftConnection = new MinecraftServer(connection);
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     /**
