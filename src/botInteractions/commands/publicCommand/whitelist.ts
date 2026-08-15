@@ -3,7 +3,7 @@ import { Command } from "../../../classes/command.js";
 import { GamerBotAPIInstance, GamerbotClient } from "../../../index.js";
 import { Player } from "mc-server-management";
 
-const SVEROK_ROLE_ID = "1013577257870184559"
+const SVEROK_ROLE_ID = "1016685055357222942"
 
 export default class WhitelistCommand implements Command<ChatInputCommandInteraction> {
     constructor() {}
